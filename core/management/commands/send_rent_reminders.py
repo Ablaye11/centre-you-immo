@@ -15,7 +15,7 @@ class Command(BaseCommand):
         sent_count = 0
 
         # ---- 1. Overdue Invoice Reminders ----
-        overdue_invoices = Invoice.objects.filter(status='overdue')
+        overdue_invoices = Invoice.objects.select_related('tenant', 'shop').filter(status='overdue')
         self.stdout.write(f"Found {overdue_invoices.count()} overdue invoices.")
 
         for invoice in overdue_invoices:
@@ -60,7 +60,7 @@ class Command(BaseCommand):
 
         # ---- 2. Expiring Lease Reminders (to admin) ----
         expiring_leases = []
-        for lease in Lease.objects.filter(status='active'):
+        for lease in Lease.objects.select_related('tenant', 'shop').filter(status='active'):
             if lease.is_expiring_soon:
                 expiring_leases.append(lease)
 
@@ -91,7 +91,7 @@ class Command(BaseCommand):
                     admin_subject,
                     admin_message,
                     settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@youimmo.com',
-                    ['admin@youimmo.com'],
+                    [getattr(settings, 'ADMIN_EMAIL', 'admin@youimmo.com')],
                     fail_silently=False,
                 )
                 sent_count += 1

@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-unsafe-secret-key')
 
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = ['*']  # Attention: Pensez à configurer cela aussi dans le .env en production
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -125,4 +125,7 @@ DEFAULT_FROM_EMAIL = 'noreply@youimmo.com'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'votreemail@gmail.com'
 # EMAIL_HOST_PASSWORD = 'votre-mot-de-passe-application'
+
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@youimmo.com')
+
 

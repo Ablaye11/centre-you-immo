@@ -1641,3 +1641,31 @@ textarea.form-control {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(148, 163, 184, 0.4);
 }
+
+/* ---- Pagination ---- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-sm) 0;
+    gap: var(--spacing-md);
+}
+
+.pagination .step-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.pagination .current {
+    font-weight: 500;
+    color: var(--text-primary);
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+

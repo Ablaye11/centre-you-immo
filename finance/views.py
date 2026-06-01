@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from .models import Invoice, Expense
 from tenants.models import Tenant, Shop
-from django.db.models import Sum
+from django.db.models import Sum, Prefetch, Q
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
 
@@ -29,9 +29,27 @@ class FinanceOverviewView(LoginRequiredMixin, TemplateView):
         # Balance calculations
         context['net_balance'] = context['total_collected'] - context['total_expenses']
 
-        # Lists
-        context['invoices'] = Invoice.objects.all().order_by('-issue_date')[:15]
-        context['expenses'] = Expense.objects.all().order_by('-date')[:15]
+        # Lists with select_related and search filter
+        q = self.request.GET.get('q')
+        invoices = Invoice.objects.select_related('tenant', 'shop').order_by('-issue_date')
+        expenses = Expense.objects.all().order_by('-date')
+
+        if q:
+            invoices = invoices.filter(
+                Q(invoice_number__icontains=q) |
+                Q(tenant__first_name__icontains=q) |
+                Q(tenant__last_name__icontains=q) |
+                Q(shop__shop_number__icontains=q) |
+                Q(shop__name__icontains=q)
+            )
+            expenses = expenses.filter(
+                Q(title__icontains=q) |
+                Q(category__icontains=q) |
+                Q(supplier__icontains=q)
+            )
+
+        context['invoices'] = invoices[:15]
+        context['expenses'] = expenses[:15]
         
         return context
 
@@ -112,9 +130,9 @@ class ExportInvoicesExcelView(LoginRequiredMixin, View):
         for i, width in enumerate(col_widths, 1):
             ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = width
 
-        # Data rows
+        # Data rows with select_related to avoid N+1 queries
         status_map = {'paid': 'Payee', 'pending': 'En attente', 'overdue': 'En retard', 'cancelled': 'Annulee'}
-        for inv in Invoice.objects.all().order_by('-issue_date'):
+        for inv in Invoice.objects.select_related('tenant', 'shop').order_by('-issue_date'):
             ws.append([
                 inv.invoice_number,
                 inv.tenant.full_name,
@@ -158,8 +176,16 @@ class ExportTenantsExcelView(LoginRequiredMixin, View):
         for i, width in enumerate(col_widths, 1):
             ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = width
 
-        for tenant in Tenant.objects.all().order_by('last_name'):
-            lease = tenant.leases.filter(status='active').first()
+        from tenants.models import Lease
+        active_leases_prefetch = Prefetch(
+            'leases',
+            queryset=Lease.objects.select_related('shop').filter(status='active'),
+            to_attr='active_leases'
+        )
+        tenants = Tenant.objects.prefetch_related(active_leases_prefetch).order_by('last_name')
+
+        for tenant in tenants:
+            lease = tenant.active_leases[0] if tenant.active_leases else None
             ws.append([
                 tenant.full_name,
                 tenant.phone,

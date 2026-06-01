@@ -9,6 +9,10 @@ class MaintenanceListView(LoginRequiredMixin, ListView):
     model = MaintenanceRequest
     template_name = 'maintenance/maintenance_list.html'
     context_object_name = 'requests'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return MaintenanceRequest.objects.select_related('reported_by').all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

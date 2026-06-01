@@ -68,6 +68,17 @@
     </div>
 </div>
 
+<!-- Filters -->
+<div class="filter-bar animate-in mb-3">
+    <form method="get" class="flex gap-2" style="width: 100%;">
+        <div class="search-input">
+            <i data-lucide="search" class="icon"></i>
+            <input type="text" name="q" placeholder="Rechercher une facture (N°, locataire...) ou dépense (titre, catégorie, fournisseur)..." value="{{ request.GET.q }}">
+        </div>
+        <button type="submit" class="btn btn-outline">Filtrer</button>
+    </form>
+</div>
+
 <div class="grid-2 mb-3">
     <!-- Invoices List -->
     <div class="card animate-in">

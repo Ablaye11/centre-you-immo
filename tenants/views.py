@@ -10,6 +10,7 @@ class TenantListView(LoginRequiredMixin, ListView):
     model = Tenant
     template_name = 'tenants/tenant_list.html'
     context_object_name = 'tenants'
+    paginate_by = 20
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -18,7 +19,7 @@ class TenantListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Tenant.objects.prefetch_related('leases')
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(first_name__icontains=query) | queryset.filter(last_name__icontains=query) | queryset.filter(company_name__icontains=query)
