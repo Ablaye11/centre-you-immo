@@ -6,6 +6,7 @@ Centre Commercial YOU IMMO - Logiciel de Gestion
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -71,15 +72,14 @@ WSGI_APPLICATION = 'youimmo.wsgi.application'
 
 
 # Database
+# Default to local PostgreSQL. In production, use DATABASE_URL environment variable.
+local_db_url = f"postgres://postgres:{os.getenv('DB_PASSWORD', 'Dakar202300')}@127.0.0.1:5432/youimmo_db"
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'youimmo_db',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('DB_PASSWORD', 'Dakar202300'),
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=local_db_url,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
