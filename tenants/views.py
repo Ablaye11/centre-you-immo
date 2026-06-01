@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -72,6 +72,21 @@ class TenantUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+class TenantDeleteView(LoginRequiredMixin, DeleteView):
+    model = Tenant
+    template_name = 'tenants/tenant_confirm_delete.html'
+    success_url = reverse_lazy('tenant_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'tenants'
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Le locataire '{self.object.full_name}' a été supprimé.")
+        return super().form_valid(form)
+
+
 class ShopListView(LoginRequiredMixin, TemplateView):
     """Visual map of all shops showing occupied vs available."""
     template_name = 'tenants/shop_list.html'
@@ -107,7 +122,7 @@ class ShopListView(LoginRequiredMixin, TemplateView):
         return context
 
 
-from django.views.generic import DeleteView
+
 
 class ShopCreateView(LoginRequiredMixin, CreateView):
     """Create a new shop/boutique."""

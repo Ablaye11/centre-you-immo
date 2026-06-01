@@ -5,4 +5,5 @@ urlpatterns = [
     path('', views.MaintenanceListView.as_view(), name='maintenance_list'),
     path('creer/', views.MaintenanceCreateView.as_view(), name='maintenance_create'),
     path('<int:pk>/modifier/', views.MaintenanceUpdateView.as_view(), name='maintenance_update'),
+    path('<int:pk>/supprimer/', views.MaintenanceDeleteView.as_view(), name='maintenance_delete'),
 ]

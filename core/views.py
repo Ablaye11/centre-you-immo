@@ -3,10 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.views import View
-from tenants.models import Shop, Lease
+from django.contrib import messages
+from django.core.management import call_command
+from tenants.models import Shop, Lease, Tenant, Floor
 from maintenance.models import MaintenanceRequest
-from parking.models import ParkingSpace
+from parking.models import ParkingSpace, ParkingSubscription
 from finance.models import Invoice, Expense
+from employees.models import Employee, Department
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
@@ -101,3 +104,48 @@ class CustomLogoutView(View):
     def post(self, request):
         logout(request)
         return redirect('login')
+
+
+class ResetDatabaseView(LoginRequiredMixin, View):
+    """Deletes all operational database entries (except the active superuser/user)."""
+    def post(self, request):
+        if not (request.user.is_staff or request.user.is_superuser):
+            messages.error(request, "Permission refusée.")
+            return redirect('dashboard')
+        try:
+            # Delete operational models
+            Lease.objects.all().delete()
+            Tenant.objects.all().delete()
+            Shop.objects.all().delete()
+            Floor.objects.all().delete()
+            Employee.objects.all().delete()
+            Department.objects.all().delete()
+            MaintenanceRequest.objects.all().delete()
+            Expense.objects.all().delete()
+            Invoice.objects.all().delete()
+            ParkingSubscription.objects.all().delete()
+            ParkingSpace.objects.all().delete()
+            
+            # Delete all other users except current user
+            User = request.user.__class__
+            User.objects.exclude(pk=request.user.pk).delete()
+            
+            messages.success(request, "La base de données a été remise à zéro avec succès (les données opérationnelles et autres comptes utilisateurs ont été supprimés).")
+        except Exception as e:
+            messages.error(request, f"Erreur lors de la remise à zéro : {str(e)}")
+        return redirect('dashboard')
+
+
+class RestoreDatabaseView(LoginRequiredMixin, View):
+    """Runs seed_data command to restore database demo entries."""
+    def post(self, request):
+        if not (request.user.is_staff or request.user.is_superuser):
+            messages.error(request, "Permission refusée.")
+            return redirect('dashboard')
+        try:
+            call_command('seed_data')
+            messages.success(request, "La base de données a été restaurée avec succès. Veuillez vous reconnecter avec les identifiants de test (admin / admin123).")
+        except Exception as e:
+            messages.error(request, f"Erreur lors de la restauration : {str(e)}")
+        return redirect('dashboard')
+

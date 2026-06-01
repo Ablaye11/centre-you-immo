@@ -10,6 +10,7 @@ urlpatterns = [
     path('<int:pk>/', views.TenantDetailView.as_view(), name='tenant_detail'),
     path('creer/', views.TenantCreateView.as_view(), name='tenant_create'),
     path('<int:pk>/modifier/', views.TenantUpdateView.as_view(), name='tenant_update'),
+    path('<int:pk>/supprimer/', views.TenantDeleteView.as_view(), name='tenant_delete'),
     
     path('etages/', views.FloorListView.as_view(), name='floor_list'),
     path('etages/creer/', views.FloorCreateView.as_view(), name='floor_create'),

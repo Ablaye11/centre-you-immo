@@ -58,6 +58,9 @@
                                         <a href="{% url 'tenant_update' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier">
                                             <i data-lucide="edit"></i>
                                         </a>
+                                        <a href="{% url 'tenant_delete' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Supprimer" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                                            <i data-lucide="trash-2"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

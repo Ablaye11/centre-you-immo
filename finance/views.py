@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, CreateView, View
+from django.views.generic import TemplateView, CreateView, View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -202,3 +202,34 @@ class ExportTenantsExcelView(LoginRequiredMixin, View):
         response['Content-Disposition'] = 'attachment; filename="locataires_youimmo.xlsx"'
         wb.save(response)
         return response
+
+
+class InvoiceDeleteView(LoginRequiredMixin, DeleteView):
+    model = Invoice
+    template_name = 'finance/invoice_confirm_delete.html'
+    success_url = reverse_lazy('finance_overview')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'finance'
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, f"La facture '{self.object.invoice_number}' a été supprimée.")
+        return super().form_valid(form)
+
+
+class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
+    model = Expense
+    template_name = 'finance/expense_confirm_delete.html'
+    success_url = reverse_lazy('finance_overview')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'finance'
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, f"La dépense '{self.object.title}' a été supprimée.")
+        return super().form_valid(form)
+

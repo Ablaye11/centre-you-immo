@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -56,3 +56,19 @@ class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "La fiche de l'employé a été mise à jour.")
         return super().form_valid(form)
+
+
+class EmployeeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Employee
+    template_name = 'employees/employee_confirm_delete.html'
+    success_url = reverse_lazy('employee_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'employees'
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, f"L'employé '{self.object.full_name}' a été supprimé.")
+        return super().form_valid(form)
+

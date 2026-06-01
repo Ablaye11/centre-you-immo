@@ -74,6 +74,12 @@
 
                 <div class="nav-section" style="margin-top: auto;">
                     <div class="nav-section-title">Système</div>
+                    {% if user.is_staff or user.is_superuser %}
+                    <a href="/admin/" target="_blank" class="nav-item">
+                        <i data-lucide="settings" class="nav-icon"></i>
+                        <span>Administration (Django)</span>
+                    </a>
+                    {% endif %}
                     <form action="{% url 'logout' %}" method="post" id="logoutForm" style="display: none;">
                         {% csrf_token %}
                     </form>

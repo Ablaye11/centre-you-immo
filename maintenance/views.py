@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -53,3 +53,19 @@ class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "La demande de maintenance a été mise à jour.")
         return super().form_valid(form)
+
+
+class MaintenanceDeleteView(LoginRequiredMixin, DeleteView):
+    model = MaintenanceRequest
+    template_name = 'maintenance/maintenance_confirm_delete.html'
+    success_url = reverse_lazy('maintenance_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'maintenance'
+        return context
+
+    def form_valid(self, form):
+        messages.success(self.request, f"La demande d'intervention '{self.object.title}' a été supprimée.")
+        return super().form_valid(form)
+

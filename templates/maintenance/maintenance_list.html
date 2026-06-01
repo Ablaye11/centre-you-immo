@@ -52,9 +52,14 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{% url 'maintenance_update' req.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier/Assigner">
-                                    <i data-lucide="edit"></i>
-                                </a>
+                                <div class="flex gap-1">
+                                    <a href="{% url 'maintenance_update' req.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier/Assigner">
+                                        <i data-lucide="edit"></i>
+                                    </a>
+                                    <a href="{% url 'maintenance_delete' req.pk %}" class="btn btn-outline btn-sm btn-icon" title="Supprimer" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                                        <i data-lucide="trash-2"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
