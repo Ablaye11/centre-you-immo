@@ -8,22 +8,6 @@
     <div>
         <p>Bienvenue dans l'espace de gestion du Centre Commercial YOU IMMO.</p>
     </div>
-    {% if user.is_superuser or user.is_staff %}
-    <div class="page-actions">
-        <form method="post" action="{% url 'reset_database' %}" style="display: inline;" onsubmit="return confirm('ATTENTION : Voulez-vous vraiment SUPPRIMER toutes les données de la base ? (Boutiques, Locataires, Employés, Incidents, Factures...)');">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">
-                <i data-lucide="trash-2"></i> Remettre à zéro
-            </button>
-        </form>
-        <form method="post" action="{% url 'restore_database' %}" style="display: inline;" onsubmit="return confirm('Voulez-vous charger les données de démonstration par défaut ? Cela va remplacer toutes les données actuelles.');">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-accent">
-                <i data-lucide="database"></i> Restaurer la démo
-            </button>
-        </form>
-    </div>
-    {% endif %}
 </div>
 
 <div class="stats-grid">

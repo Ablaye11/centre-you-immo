@@ -79,6 +79,22 @@
                         <i data-lucide="settings" class="nav-icon"></i>
                         <span>Administration (Django)</span>
                     </a>
+                    
+                    <form action="{% url 'reset_database' %}" method="post" id="resetDbForm" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    <a href="#" onclick="if(confirm('ATTENTION : Voulez-vous vraiment SUPPRIMER toutes les données de la base ? (Boutiques, Locataires, Employés, Incidents, Factures...)')) { document.getElementById('resetDbForm').submit(); } return false;" class="nav-item" style="color: var(--danger);">
+                        <i data-lucide="trash-2" class="nav-icon"></i>
+                        <span>Remettre à zéro</span>
+                    </a>
+                    
+                    <form action="{% url 'restore_database' %}" method="post" id="restoreDbForm" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    <a href="#" onclick="if(confirm('Voulez-vous charger les données de démonstration par défaut ? Cela va remplacer toutes les données actuelles.')) { document.getElementById('restoreDbForm').submit(); } return false;" class="nav-item" style="color: var(--accent-500);">
+                        <i data-lucide="database" class="nav-icon"></i>
+                        <span>Restaurer la démo</span>
+                    </a>
                     {% endif %}
                     <form action="{% url 'logout' %}" method="post" id="logoutForm" style="display: none;">
                         {% csrf_token %}
