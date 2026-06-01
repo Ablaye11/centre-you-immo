@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Parking{% endblock %}
+{% block page_title %}Gestion du Parking{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Visualisez en temps réel l'occupation des places de parking et gérez les abonnements réservés aux locataires.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card blue animate-in">
+        <div class="stat-icon blue">
+            <i data-lucide="parking-circle"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Places Totales</div>
+            <div class="stat-value">{{ total_spaces }}</div>
+        </div>
+    </div>
+
+    <div class="stat-card green animate-in">
+        <div class="stat-icon green">
+            <i data-lucide="check-circle-2"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Places Libres</div>
+            <div class="stat-value">{{ available_spaces }}</div>
+        </div>
+    </div>
+
+    <div class="stat-card red animate-in">
+        <div class="stat-icon red">
+            <i data-lucide="alert-circle"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Places Occupées</div>
+            <div class="stat-value">{{ occupied_spaces }}</div>
+        </div>
+    </div>
+
+    <div class="stat-card gold animate-in">
+        <div class="stat-icon gold">
+            <i data-lucide="lock"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Places Réservées (Abonnés)</div>
+            <div class="stat-value">{{ reserved_spaces }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Visual Spot Grid Layout -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Carte du Parking en Temps Réel</h3>
+        </div>
+        <div class="card-body">
+            <div class="parking-legend">
+                <div class="legend-item">
+                    <div class="legend-dot available"></div>
+                    <span>Libre</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot occupied"></div>
+                    <span>Occupé</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot reserved"></div>
+                    <span>Réservé / Abonné</span>
+                </div>
+            </div>
+
+            <div class="parking-grid mt-2">
+                {% for space in spaces %}
+                <div class="parking-spot {{ space.status }}" title="Place {{ space.space_number }} - {{ space.get_space_type_display }}">
+                    <span class="spot-number">{{ space.space_number }}</span>
+                    <span class="spot-status">{{ space.get_status_display }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Parking Subscriptions List -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Abonnements de Parking Actifs</h3>
+        </div>
+        <div class="card-body">
+            {% if subscriptions %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Locataire</th>
+                                <th>Place</th>
+                                <th>Véhicule</th>
+                                <th>Type</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sub in subscriptions %}
+                            <tr>
+                                <td class="font-bold">{{ sub.tenant.full_name }}</td>
+                                <td><span class="badge badge-info">P-{{ sub.space.space_number }}</span></td>
+                                <td>{{ sub.vehicle_plate }} <br> <span style="font-size: 0.75rem; color: var(--text-muted);">{{ sub.vehicle_type }}</span></td>
+                                <td>{{ sub.get_subscription_type_display }}</td>
+                                <td>
+                                    <span class="badge {% if sub.is_active %}badge-success{% else %}badge-secondary{% endif %}">
+                                        {% if sub.is_active %}Actif{% else %}Expiré{% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i data-lucide="folder-open"></i>
+                    <h3>Aucun abonnement enregistré</h3>
+                    <p>Les locataires peuvent souscrire à un abonnement mensuel/annuel pour réserver une place de parking.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

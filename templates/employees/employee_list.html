@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Employés{% endblock %}
+{% block page_title %}Gestion des Employés{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Gérez le personnel opérationnel du centre commercial (sécurité, nettoyage, maintenance, administration).</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'employee_create' %}" class="btn btn-primary">
+            <i data-lucide="user-plus"></i> Nouvel Employé
+        </a>
+    </div>
+</div>
+
+<div class="filter-bar animate-in">
+    <form method="get" class="flex gap-2" style="width: 100%;">
+        <div class="search-input">
+            <i data-lucide="search" class="icon"></i>
+            <input type="text" name="q" placeholder="Rechercher par nom, prénom, poste..." value="{{ request.GET.q }}">
+        </div>
+        <button type="submit" class="btn btn-outline">Rechercher</button>
+    </form>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header">
+        <h3 class="card-title">Liste du Personnel</h3>
+    </div>
+    <div class="card-body">
+        {% if employees %}
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nom complet</th>
+                            <th>Département</th>
+                            <th>Poste</th>
+                            <th>Contrat</th>
+                            <th>Salaire</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emp in employees %}
+                        <tr>
+                            <td class="font-bold">{{ emp.full_name }}</td>
+                            <td>{{ emp.department.name|default:"-" }}</td>
+                            <td>{{ emp.position }}</td>
+                            <td><span class="badge badge-secondary">{{ emp.get_contract_type_display }}</span></td>
+                            <td>{{ emp.salary }} FCFA</td>
+                            <td>
+                                <span class="badge {% if emp.status == 'active' %}badge-success{% elif emp.status == 'on_leave' %}badge-warning{% else %}badge-danger{% endif %}">
+                                    {{ emp.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'employee_update' emp.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier">
+                                    <i data-lucide="edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i data-lucide="users"></i>
+                <h3>Aucun employé enregistré</h3>
+                <p>Ajoutez des membres d'équipe pour commencer.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

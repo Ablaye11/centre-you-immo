@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de Bord{% endblock %}
+{% block page_title %}Tableau de Bord{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <!-- Stat 1: Revenues -->
+    <div class="stat-card blue animate-in">
+        <div class="stat-icon blue">
+            <i data-lucide="wallet"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Revenus du mois</div>
+            <div class="stat-value">{{ monthly_revenue }} FCFA</div>
+            <span class="stat-change up">Net: {{ monthly_net }} FCFA</span>
+        </div>
+    </div>
+
+    <!-- Stat 2: Occupancy -->
+    <div class="stat-card gold animate-in">
+        <div class="stat-icon gold">
+            <i data-lucide="building"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Taux d'occupation</div>
+            <div class="stat-value">{{ occupancy_rate }}%</div>
+            <div class="stat-label mt-1">Des boutiques louées</div>
+        </div>
+    </div>
+
+    <!-- Stat 3: Maintenance -->
+    <div class="stat-card red animate-in">
+        <div class="stat-icon red">
+            <i data-lucide="wrench"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Maintenance active</div>
+            <div class="stat-value">{{ total_maintenance }}</div>
+            <div class="stat-label mt-1">Interventions en cours</div>
+        </div>
+    </div>
+
+    <!-- Stat 4: Parking -->
+    <div class="stat-card green animate-in">
+        <div class="stat-icon green">
+            <i data-lucide="parking-square"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Parking Disponible</div>
+            <div class="stat-value">{{ parking_available }}</div>
+            <span class="stat-change up">Libre: {{ parking_rate }}%</span>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2 mb-3">
+    <!-- Financial Chart -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Aperçu Financier (Revenus vs Dépenses)</h3>
+        </div>
+        <div class="card-body">
+            <div class="chart-container" style="position: relative; height:250px; width:100%;">
+                <canvas id="financialChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert / Lease Expiring Widget -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Baux expirant bientôt</h3>
+        </div>
+        <div class="card-body">
+            {% if expiring_leases %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Locataire</th>
+                                <th>Boutique</th>
+                                <th>Fin du bail</th>
+                                <th>Jours restants</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lease in expiring_leases %}
+                            <tr>
+                                <td>{{ lease.tenant.full_name }}</td>
+                                <td>{{ lease.shop.shop_number }}</td>
+                                <td>{{ lease.end_date }}</td>
+                                <td><span class="badge badge-danger">{{ lease.days_remaining }} jours</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i data-lucide="check-circle" style="color: var(--success); opacity: 0.8;"></i>
+                    <h3>Tout est en ordre</h3>
+                    <p>Aucun bail n'expire dans les 30 prochains jours.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <!-- Recent Maintenance Requests -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Interventions de Maintenance Récentes</h3>
+            <a href="{% url 'maintenance_list' %}" class="btn btn-outline btn-sm">Voir tout</a>
+        </div>
+        <div class="card-body">
+            {% if recent_requests %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Zone</th>
+                                <th>Priorité</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in recent_requests %}
+                            <tr>
+                                <td>{{ req.title }}</td>
+                                <td>{{ req.get_zone_display }}</td>
+                                <td>
+                                    <span class="badge {% if req.priority == 'urgent' or req.priority == 'high' %}badge-danger{% elif req.priority == 'medium' %}badge-warning{% else %}badge-info{% endif %}">
+                                        {{ req.get_priority_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if req.status == 'completed' %}badge-success{% elif req.status == 'in_progress' %}badge-warning{% else %}badge-info{% endif %}">
+                                        {{ req.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune intervention signalée.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Payments/Invoices -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Dernières Factures</h3>
+            <a href="{% url 'finance_overview' %}" class="btn btn-outline btn-sm">Voir tout</a>
+        </div>
+        <div class="card-body">
+            {% if recent_invoices %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Facture</th>
+                                <th>Locataire</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inv in recent_invoices %}
+                            <tr>
+                                <td>{{ inv.invoice_number }}</td>
+                                <td>{{ inv.tenant.full_name }}</td>
+                                <td>{{ inv.amount }} FCFA</td>
+                                <td>
+                                    <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
+                                        {{ inv.get_status_display }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune facture enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Financial Chart - Revenue vs Expenses
+    const ctx = document.getElementById('financialChart');
+    if (ctx) {
+        const chartData = {{ monthly_chart_data|safe }};
+        const labels = chartData.map(d => d.month);
+        const revenues = chartData.map(d => d.revenue);
+        const expenses = chartData.map(d => d.expenses);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Revenus (FCFA)',
+                        data: revenues,
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barPercentage: 0.6,
+                    },
+                    {
+                        label: 'Dépenses (FCFA)',
+                        data: expenses,
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        barPercentage: 0.6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#94a3b8',
+                            font: { family: 'Inter', size: 12 },
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#f1f5f9',
+                        bodyColor: '#94a3b8',
+                        borderColor: 'rgba(148, 163, 184, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: { family: 'Inter', weight: '600' },
+                        bodyFont: { family: 'Inter' },
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toLocaleString('fr-FR') + ' FCFA';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(148, 163, 184, 0.08)' },
+                        ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(148, 163, 184, 0.08)' },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: { family: 'Inter', size: 11 },
+                            callback: function(value) {
+                                if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+                                if (value >= 1000) return (value / 1000).toFixed(0) + 'K';
+                                return value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

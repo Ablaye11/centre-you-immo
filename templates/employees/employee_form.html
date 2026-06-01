@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Fiche Employé{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'employee_list' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 800px; margin: 0 auto;">
+    <form method="post" class="flex-column gap-2">
+        {% csrf_token %}
+        
+        <div class="form-section-title">Informations Personnelles & Contrat</div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_first_name">Prénom</label>
+                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_last_name">Nom</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_email">Email</label>
+                <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_phone">Téléphone</label>
+                <input type="text" name="phone" id="id_phone" class="form-control" value="{{ form.phone.value|default_if_none:'' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_department">Département</label>
+                <select name="department" id="id_department" class="form-control">
+                    <option value="" selected>---------</option>
+                    {% for x, y in form.fields.department.choices %}
+                        {% if x %}
+                            <option value="{{ x }}" {% if form.department.value == x %}selected{% endif %}>{{ y }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_position">Poste occupé</label>
+                <input type="text" name="position" id="id_position" class="form-control" value="{{ form.position.value|default_if_none:'' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_contract_type">Type de contrat</label>
+                <select name="contract_type" id="id_contract_type" class="form-control">
+                    <option value="cdi" {% if form.contract_type.value == 'cdi' %}selected{% endif %}>CDI</option>
+                    <option value="cdd" {% if form.contract_type.value == 'cdd' %}selected{% endif %}>CDD</option>
+                    <option value="interim" {% if form.contract_type.value == 'interim' %}selected{% endif %}>Intérimaire</option>
+                    <option value="stage" {% if form.contract_type.value == 'stage' %}selected{% endif %}>Stagiaire</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_status">Statut de l'employé</label>
+                <select name="status" id="id_status" class="form-control">
+                    <option value="active" {% if form.status.value == 'active' %}selected{% endif %}>Actif</option>
+                    <option value="on_leave" {% if form.status.value == 'on_leave' %}selected{% endif %}>En congé</option>
+                    <option value="terminated" {% if form.status.value == 'terminated' %}selected{% endif %}>Licencié</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_salary">Salaire Mensuel (FCFA)</label>
+                <input type="number" name="salary" id="id_salary" class="form-control" value="{{ form.salary.value|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_hire_date">Date d'embauche</label>
+                <!-- Simple fallback formatting -->
+                <input type="date" name="hire_date" id="id_hire_date" class="form-control" value="{% if form.hire_date.value %}{{ form.hire_date.value|date:'Y-m-d' }}{% endif %}" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_address">Adresse</label>
+            <textarea name="address" id="id_address" class="form-control" rows="2">{{ form.address.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'employee_list' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

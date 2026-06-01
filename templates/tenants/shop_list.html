@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}Boutiques & Places{% endblock %}
+{% block page_title %}Gestion des Boutiques{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Vue d'ensemble des {{ total_shops }} emplacements du centre commercial.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'shop_create' %}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
+            <i data-lucide="plus"></i> Ajouter un Emplacement
+        </a>
+        <a href="{% url 'tenant_list' %}" class="btn btn-outline">
+            <i data-lucide="users"></i> Voir les Locataires
+        </a>
+        <a href="{% url 'tenant_create' %}" class="btn btn-primary">
+            <i data-lucide="user-plus"></i> Nouveau Locataire
+        </a>
+    </div>
+</div>
+
+<!-- Stats bar -->
+<div class="stats-grid mb-3 animate-in">
+    <div class="stat-card green">
+        <div class="stat-icon green"><i data-lucide="store"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Total Emplacements</div>
+            <div class="stat-value">{{ total_shops }}</div>
+        </div>
+    </div>
+    <div class="stat-card blue">
+        <div class="stat-icon blue"><i data-lucide="check-circle"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Occupees</div>
+            <div class="stat-value" style="color: var(--success);">{{ occupied_shops }}</div>
+            <span class="stat-change up">Taux: {{ occupancy_rate }}%</span>
+        </div>
+    </div>
+    <div class="stat-card gold">
+        <div class="stat-icon gold"><i data-lucide="door-open"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Disponibles</div>
+            <div class="stat-value" style="color: var(--warning);">{{ available_shops }}</div>
+            <span class="stat-change">Libres a louer</span>
+        </div>
+    </div>
+    <div class="stat-card red">
+        <div class="stat-icon red"><i data-lucide="wrench"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">En Maintenance</div>
+            <div class="stat-value" style="color: var(--danger);">{{ maintenance_shops }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Occupancy bar -->
+<div class="card animate-in mb-3">
+    <div class="card-body" style="padding: 16px 24px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <span style="font-size: 0.85rem; color: var(--text-muted); min-width: 120px;">Taux d'occupation</span>
+            <div style="flex: 1; background: rgba(148,163,184,0.15); border-radius: 999px; height: 12px; overflow: hidden;">
+                <div style="width: {{ occupancy_rate }}%; height: 100%; border-radius: 999px;
+                    background: linear-gradient(90deg, var(--success), #34d399);
+                    transition: width 1s ease;"></div>
+            </div>
+            <span style="font-size: 1rem; font-weight: 700; color: var(--success); min-width: 50px; text-align: right;">{{ occupancy_rate }}%</span>
+        </div>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="card animate-in mb-3">
+    <div class="card-body" style="padding: 12px 24px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Legende :</span>
+        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+            <span style="width: 14px; height: 14px; border-radius: 3px; background: rgba(34,197,94,0.25); border: 1.5px solid #22c55e; display:inline-block;"></span> Occupee
+        </span>
+        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+            <span style="width: 14px; height: 14px; border-radius: 3px; background: rgba(245,158,11,0.25); border: 1.5px solid #f59e0b; display:inline-block;"></span> Disponible
+        </span>
+        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+            <span style="width: 14px; height: 14px; border-radius: 3px; background: rgba(239,68,68,0.25); border: 1.5px solid #ef4444; display:inline-block;"></span> Maintenance
+        </span>
+        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+            <span style="width: 14px; height: 14px; border-radius: 3px; background: rgba(148,163,184,0.2); border: 1.5px solid #64748b; display:inline-block;"></span> Reserve
+        </span>
+    </div>
+</div>
+
+<!-- Shops by floor -->
+{% for floor, shops in floors.items %}
+<div class="card animate-in mb-3">
+    <div class="card-header" style="background: rgba(245,158,11,0.08); border-bottom: 1px solid rgba(245,158,11,0.2);">
+        <h3 class="card-title" style="display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="layers" style="color: var(--accent);"></i>
+            Niveau : {{ floor }}
+            <span style="font-size: 0.78rem; font-weight: 500; color: var(--text-muted); margin-left: 8px;">
+                ({{ shops|length }} emplacement{{ shops|length|pluralize }})
+            </span>
+        </h3>
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+            {% for shop in shops %}
+            <div class="shop-card
+                {% if shop.status == 'occupied' %}shop-occupied
+                {% elif shop.status == 'available' %}shop-available
+                {% elif shop.status == 'maintenance' %}shop-maintenance
+                {% else %}shop-reserved{% endif %}"
+                title="{{ shop.name }} — {{ shop.get_status_display }}">
+
+                <div class="shop-card-header">
+                    <span class="shop-number">{{ shop.shop_number }}</span>
+                    <span class="shop-status-dot
+                        {% if shop.status == 'occupied' %}dot-green
+                        {% elif shop.status == 'available' %}dot-yellow
+                        {% elif shop.status == 'maintenance' %}dot-red
+                        {% else %}dot-gray{% endif %}">
+                    </span>
+                </div>
+                <div class="shop-name">{{ shop.name }}</div>
+                <div class="shop-category">{{ shop.get_category_display }}</div>
+                {% if shop.surface %}
+                <div class="shop-surface">{{ shop.surface }} m²</div>
+                {% endif %}
+                <div class="shop-status-label" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        {% if shop.status == 'occupied' %}
+                            <i data-lucide="user-check" style="width:12px;height:12px;"></i>
+                            {% with lease=shop.leases.first %}
+                                {% if lease %}{{ lease.tenant.full_name }}{% else %}Occupe{% endif %}
+                            {% endwith %}
+                        {% elif shop.status == 'available' %}
+                            <i data-lucide="door-open" style="width:12px;height:12px;"></i> Disponible
+                        {% elif shop.status == 'maintenance' %}
+                            <i data-lucide="wrench" style="width:12px;height:12px;"></i> En maintenance
+                        {% else %}
+                            <i data-lucide="lock" style="width:12px;height:12px;"></i> Reserve
+                        {% endif %}
+                    </div>
+                    <div class="shop-actions">
+                        <a href="{% url 'shop_update' shop.pk %}" style="color: var(--text-muted);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></a>
+                        <a href="{% url 'shop_delete' shop.pk %}" style="color: var(--danger);"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="card animate-in">
+    <div class="card-body" style="text-align: center; padding: 48px;">
+        <i data-lucide="store" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 16px;"></i>
+        <p class="text-muted">Aucune boutique enregistree.</p>
+    </div>
+</div>
+{% endfor %}
+
+<style>
+.shop-card {
+    border-radius: var(--radius-md);
+    padding: 14px;
+    border: 1.5px solid;
+    cursor: default;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+}
+.shop-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.shop-occupied  { background: rgba(34,197,94,0.1);  border-color: rgba(34,197,94,0.4); }
+.shop-available { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.4); }
+.shop-maintenance { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.4); }
+.shop-reserved  { background: rgba(100,116,139,0.1); border-color: rgba(100,116,139,0.4); }
+
+.shop-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.shop-number { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.shop-status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-green  { background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+.dot-yellow { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.6); }
+.dot-red    { background: #ef4444; box-shadow: 0 0 6px rgba(239,68,68,0.6); }
+.dot-gray   { background: #64748b; }
+
+.shop-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-category { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
+.shop-surface { font-size: 0.72rem; color: var(--text-muted); }
+.shop-status-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
+{% endblock %}

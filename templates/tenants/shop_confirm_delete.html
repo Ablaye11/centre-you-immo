@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Supprimer Boutique{% endblock %}
+{% block page_title %}Supprimer une Boutique{% endblock %}
+
+{% block content %}
+<div class="card animate-in" style="max-width: 500px; margin: 0 auto;">
+    <div class="card-body" style="text-align: center; padding: 40px 24px;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); color: var(--danger); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+            <i data-lucide="alert-triangle" style="width: 32px; height: 32px;"></i>
+        </div>
+        
+        <h3 style="margin-bottom: 16px; font-size: 1.25rem;">Confirmer la suppression</h3>
+        <p style="color: var(--text-muted); margin-bottom: 32px; line-height: 1.6;">
+            Êtes-vous sûr de vouloir supprimer la boutique <strong>{{ object.name }} ({{ object.shop_number }})</strong> ?<br>
+            Cette action est irréversible et supprimera toutes les données liées.
+        </p>
+
+        <form method="post" style="display: flex; gap: 16px; justify-content: center;">
+            {% csrf_token %}
+            <a href="{% url 'shop_list' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-danger">
+                <i data-lucide="trash-2"></i> Oui, supprimer
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

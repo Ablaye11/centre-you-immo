@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Locataires & Boutiques{% endblock %}
+{% block page_title %}Locataires & Boutiques{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Gérez les boutiques du centre commercial et les contrats de bail des locataires.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'tenant_create' %}" class="btn btn-primary">
+            <i data-lucide="user-plus"></i> Nouveau Locataire
+        </a>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filter-bar animate-in">
+    <form method="get" class="flex gap-2" style="width: 100%;">
+        <div class="search-input">
+            <i data-lucide="search" class="icon"></i>
+            <input type="text" name="q" placeholder="Rechercher par nom, prénom ou entreprise..." value="{{ request.GET.q }}">
+        </div>
+        <button type="submit" class="btn btn-outline">Filtrer</button>
+    </form>
+</div>
+
+<div class="grid-3 mb-3">
+    <!-- Tenants List -->
+    <div class="card animate-in" style="grid-column: span 2;">
+        <div class="card-header">
+            <h3 class="card-title">Liste des Locataires</h3>
+        </div>
+        <div class="card-body">
+            {% if tenants %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Téléphone</th>
+                                <th>Entreprise</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tenant in tenants %}
+                            <tr>
+                                <td>{{ tenant.full_name }}</td>
+                                <td>{{ tenant.phone }}</td>
+                                <td>{{ tenant.company_name|default:"-" }}</td>
+                                <td>
+                                    <div class="flex gap-1">
+                                        <a href="{% url 'tenant_detail' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Voir la fiche">
+                                            <i data-lucide="eye"></i>
+                                        </a>
+                                        <a href="{% url 'tenant_update' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier">
+                                            <i data-lucide="edit"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i data-lucide="users"></i>
+                    <h3>Aucun locataire trouvé</h3>
+                    <p>Commencez à ajouter des locataires pour gérer leurs baux.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Shops Status sidebar list -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">État des Boutiques</h3>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                {% for shop in shops %}
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color);">
+                    <div>
+                        <div style="font-weight: 600; font-size: 0.9rem;">{{ shop.shop_number }} - {{ shop.name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ shop.get_floor_display }} • {{ shop.surface }}m²</div>
+                    </div>
+                    <span class="badge {% if shop.status == 'occupied' %}badge-success{% elif shop.status == 'available' %}badge-info{% else %}badge-warning{% endif %}">
+                        {{ shop.get_status_display }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

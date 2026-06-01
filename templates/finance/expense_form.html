@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Enregistrer une Dépense{% endblock %}
+{% block page_title %}Enregistrer une Dépense{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'finance_overview' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 800px; margin: 0 auto;">
+    <form method="post" class="flex-column gap-2">
+        {% csrf_token %}
+        
+        <div class="form-section-title">Informations de la Dépense</div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_title">Titre / Objet</label>
+                <input type="text" name="title" id="id_title" class="form-control" placeholder="ex: Réparation électricité couloir" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_category">Catégorie</label>
+                <select name="category" id="id_category" class="form-control">
+                    <option value="maintenance">Maintenance</option>
+                    <option value="salary">Salaires</option>
+                    <option value="energy">Énergie & Eau</option>
+                    <option value="security">Sécurité</option>
+                    <option value="cleaning">Nettoyage</option>
+                    <option value="insurance">Assurance</option>
+                    <option value="taxes">Taxes & Impôts</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="equipment">Équipement</option>
+                    <option value="other" selected>Autre</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_amount">Montant (FCFA)</label>
+                <input type="number" name="amount" id="id_amount" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_date">Date de la dépense</label>
+                <input type="date" name="date" id="id_date" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_supplier">Fournisseur / Prestataire (Optionnel)</label>
+            <input type="text" name="supplier" id="id_supplier" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_description">Description / Détails</label>
+            <textarea name="description" id="id_description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'finance_overview' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary">Enregistrer la dépense</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

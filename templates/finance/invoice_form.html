@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'finance_overview' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 800px; margin: 0 auto;">
+    <form method="post" class="flex-column gap-2">
+        {% csrf_token %}
+        
+        <div class="form-section-title">Paramètres de la facture</div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_invoice_number">Numéro de Facture</label>
+                <input type="text" name="invoice_number" id="id_invoice_number" class="form-control" placeholder="FAC-XXXX" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_invoice_type">Type de Facture</label>
+                <select name="invoice_type" id="id_invoice_type" class="form-control">
+                    <option value="rent" selected>Loyer</option>
+                    <option value="charges">Charges</option>
+                    <option value="parking">Parking</option>
+                    <option value="penalty">Pénalité</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_tenant">Locataire</label>
+                <select name="tenant" id="id_tenant" class="form-control" required>
+                    <option value="" disabled selected>Choisir un locataire</option>
+                    {% for x, y in form.fields.tenant.choices %}
+                        {% if x %}
+                            <option value="{{ x }}">{{ y }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_shop">Boutique</label>
+                <select name="shop" id="id_shop" class="form-control" required>
+                    <option value="" disabled selected>Choisir une boutique</option>
+                    {% for x, y in form.fields.shop.choices %}
+                        {% if x %}
+                            <option value="{{ x }}">{{ y }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_amount">Montant (FCFA)</label>
+                <input type="number" name="amount" id="id_amount" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_status">Statut de Paiement</label>
+                <select name="status" id="id_status" class="form-control">
+                    <option value="pending" selected>En attente</option>
+                    <option value="paid">Payée</option>
+                    <option value="overdue">En retard</option>
+                    <option value="cancelled">Annulée</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_issue_date">Date d'émission</label>
+                <input type="date" name="issue_date" id="id_issue_date" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_due_date">Date d'échéance</label>
+                <input type="date" name="due_date" id="id_due_date" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_description">Description / Libellé</label>
+            <textarea name="description" id="id_description" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'finance_overview' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary">Créer la facture</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

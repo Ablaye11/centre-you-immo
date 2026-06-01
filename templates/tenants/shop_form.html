@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card animate-in" style="max-width: 600px; margin: 0 auto;">
+    <div class="card-header">
+        <h3 class="card-title">Informations de la boutique</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" class="form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Numero de boutique *</label>
+                    {{ form.shop_number }}
+                    {{ form.shop_number.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nom de la boutique *</label>
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Categorie</label>
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Niveau (Etage) *</label>
+                    {{ form.floor }}
+                    {{ form.floor.errors }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Surface (m²)</label>
+                    {{ form.surface }}
+                    {{ form.surface.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    {{ form.status }}
+                    {{ form.status.errors }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'shop_list' %}" class="btn btn-outline">Annuler</a>
+                <button type="submit" class="btn btn-primary">
+                    <i data-lucide="save"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

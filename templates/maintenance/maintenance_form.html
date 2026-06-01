@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'maintenance_list' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 800px; margin: 0 auto;">
+    <form method="post" class="flex-column gap-2">
+        {% csrf_token %}
+        
+        <div class="form-section-title">Description du Problème & Diagnostic</div>
+        
+        <div class="form-group">
+            <label class="form-label" for="id_title">Titre de l'incident / Panne</label>
+            <input type="text" name="title" id="id_title" class="form-control" placeholder="ex: Ascenseur A en panne, porte bloquée" value="{{ form.title.value|default_if_none:'' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_description">Détails techniques / Observations</label>
+            <textarea name="description" id="id_description" class="form-control" rows="3" required>{{ form.description.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_zone">Zone / Emplacement</label>
+                <select name="zone" id="id_zone" class="form-control">
+                    {% for val, name in form.fields.zone.choices %}
+                        <option value="{{ val }}" {% if form.zone.value == val %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_priority">Niveau de Priorité</label>
+                <select name="priority" id="id_priority" class="form-control">
+                    <option value="low" {% if form.priority.value == 'low' %}selected{% endif %}>Basse</option>
+                    <option value="medium" {% if form.priority.value == 'medium' or not form.priority.value %}selected{% endif %}>Moyenne</option>
+                    <option value="high" {% if form.priority.value == 'high' %}selected{% endif %}>Haute</option>
+                    <option value="urgent" {% if form.priority.value == 'urgent' %}selected{% endif %}>Urgente</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_status">Statut de l'intervention</label>
+                <select name="status" id="id_status" class="form-control">
+                    <option value="new" {% if form.status.value == 'new' %}selected{% endif %}>Nouvelle</option>
+                    <option value="in_progress" {% if form.status.value == 'in_progress' %}selected{% endif %}>En cours</option>
+                    <option value="completed" {% if form.status.value == 'completed' %}selected{% endif %}>Terminée</option>
+                    <option value="cancelled" {% if form.status.value == 'cancelled' %}selected{% endif %}>Annulée</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_assigned_to">Technicien / Entreprise prestataire en charge</label>
+                <input type="text" name="assigned_to" id="id_assigned_to" class="form-control" placeholder="ex: Service Technique YouImmo, OTIS" value="{{ form.assigned_to.value|default_if_none:'' }}">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_estimated_cost">Coût estimé (FCFA)</label>
+                <input type="number" name="estimated_cost" id="id_estimated_cost" class="form-control" value="{{ form.estimated_cost.value|default_if_none:'' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_actual_cost">Coût réel final (FCFA)</label>
+                <input type="number" name="actual_cost" id="id_actual_cost" class="form-control" value="{{ form.actual_cost.value|default_if_none:'' }}">
+            </div>
+        </div>
+
+        {% if form.notes %}
+        <div class="form-group">
+            <label class="form-label" for="id_notes">Notes techniques / Suivi</label>
+            <textarea name="notes" id="id_notes" class="form-control" rows="2">{{ form.notes.value|default_if_none:'' }}</textarea>
+        </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <a href="{% url 'maintenance_list' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary">Enregistrer l'incident</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

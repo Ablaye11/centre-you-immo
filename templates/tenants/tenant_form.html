@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'tenant_list' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 800px; margin: 0 auto;">
+    <form method="post" class="flex-column gap-2">
+        {% csrf_token %}
+        
+        <div class="form-section-title">Informations Générales</div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_first_name">Prénom</label>
+                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_last_name">Nom</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_email">Adresse Email</label>
+                <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_phone">Téléphone</label>
+                <input type="text" name="phone" id="id_phone" class="form-control" value="{{ form.phone.value|default_if_none:'' }}" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_company_name">Nom de l'entreprise (Optionnel)</label>
+                <input type="text" name="company_name" id="id_company_name" class="form-control" value="{{ form.company_name.value|default_if_none:'' }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_id_number">Numéro Pièce d'Identité (CNI / Passeport)</label>
+                <input type="text" name="id_number" id="id_id_number" class="form-control" value="{{ form.id_number.value|default_if_none:'' }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_address">Adresse complète</label>
+            <textarea name="address" id="id_address" class="form-control" rows="3">{{ form.address.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="form-actions">
+            <a href="{% url 'tenant_list' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

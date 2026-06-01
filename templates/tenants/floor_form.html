@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'floor_list' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+
+<div class="card animate-in" style="max-width: 600px; margin: 0 auto; animation-delay: 0.1s;">
+    <div class="card-body">
+        <form method="post" class="form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Nom de l'étage *</label>
+                    {{ form.name }}
+                    {{ form.name.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Niveau (Pour tri) *</label>
+                    {{ form.level }}
+                    {{ form.level.errors }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'floor_list' %}" class="btn btn-outline">Annuler</a>
+                <button type="submit" class="btn btn-primary">
+                    <i data-lucide="save"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

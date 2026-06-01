@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}YOU IMMO{% endblock %} | {{ app_name }}</title>
+    <!-- Load custom styles -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <div class="app-layout">
+        <!-- Sidebar overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <img src="{% static 'images/logo.png' %}?v={% now 'U' %}" alt="YOU IMMO" style="width: 100%; max-width: 110px; height: auto; object-fit: contain; border-radius: 8px;">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <a href="{% url 'dashboard' %}" class="nav-item {% if active_menu == 'dashboard' %}active{% endif %}">
+                        <i data-lucide="layout-dashboard" class="nav-icon"></i>
+                        <span>Tableau de bord</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Opérations</div>
+                    <a href="{% url 'shop_list' %}" class="nav-item {% if active_menu == 'shops' %}active{% endif %}">
+                        <i data-lucide="store" class="nav-icon"></i>
+                        <span>Plan des Boutiques</span>
+                    </a>
+                    <a href="{% url 'floor_list' %}" class="nav-item {% if active_menu == 'floors' %}active{% endif %}">
+                        <i data-lucide="layers" class="nav-icon"></i>
+                        <span>Gestion des Étages</span>
+                    </a>
+                    <a href="{% url 'tenant_list' %}" class="nav-item {% if active_menu == 'tenants' %}active{% endif %}">
+                        <i data-lucide="users" class="nav-icon"></i>
+                        <span>Locataires</span>
+                    </a>
+                    <a href="{% url 'finance_overview' %}" class="nav-item {% if active_menu == 'finance' %}active{% endif %}">
+                        <i data-lucide="wallet" class="nav-icon"></i>
+                        <span>Finances</span>
+                        {% if overdue_invoices > 0 %}
+                        <span class="nav-badge">{{ overdue_invoices }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'employee_list' %}" class="nav-item {% if active_menu == 'employees' %}active{% endif %}">
+                        <i data-lucide="contact" class="nav-icon"></i>
+                        <span>Employés</span>
+                    </a>
+                    <a href="{% url 'maintenance_list' %}" class="nav-item {% if active_menu == 'maintenance' %}active{% endif %}">
+                        <i data-lucide="wrench" class="nav-icon"></i>
+                        <span>Maintenance</span>
+                        {% if pending_maintenance > 0 %}
+                        <span class="nav-badge">{{ pending_maintenance }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'parking_overview' %}" class="nav-item {% if active_menu == 'parking' %}active{% endif %}">
+                        <i data-lucide="parking-square" class="nav-icon"></i>
+                        <span>Parking</span>
+                    </a>
+                </div>
+
+                <div class="nav-section" style="margin-top: auto;">
+                    <div class="nav-section-title">Système</div>
+                    <form action="{% url 'logout' %}" method="post" id="logoutForm" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;" class="nav-item" style="color: var(--danger);">
+                        <i data-lucide="log-out" class="nav-icon"></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="mobile-toggle" id="mobileToggle">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <h1>{% block page_title %}YOU IMMO{% endblock %}</h1>
+                </div>
+                
+                <div class="header-right">
+                    <div class="user-menu">
+                        <div class="user-avatar">
+                            {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
+                            <span class="user-role">{{ user.profile.get_role_display|default:"Staff" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <i data-lucide="info"></i>
+                            <div>{{ message }}</div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+    {% else %}
+        {% block login_content %}{% endblock %}
+    {% endif %}
+
+    <!-- Global Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Responsive Mobile Sidebar Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (mobileToggle && sidebar && sidebarOverlay) {
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('active');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            });
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

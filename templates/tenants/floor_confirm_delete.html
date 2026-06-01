@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Supprimer l'étage{% endblock %}
+{% block page_title %}Supprimer l'étage{% endblock %}
+
+{% block content %}
+<div class="card animate-in" style="max-width: 500px; margin: 40px auto; text-align: center;">
+    <div class="card-body" style="padding: var(--spacing-2xl);">
+        <div style="width: 64px; height: 64px; background: var(--danger-bg); color: var(--danger); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <i data-lucide="alert-triangle" style="width: 32px; height: 32px;"></i>
+        </div>
+        
+        <h3 style="font-size: 1.2rem; margin-bottom: 12px;">Êtes-vous sûr ?</h3>
+        <p class="text-muted" style="margin-bottom: 24px;">
+            Voulez-vous vraiment supprimer l'étage <strong>"{{ object.name }}"</strong> ? 
+            <br><br>
+            <span class="text-warning font-bold">
+                Attention : Toutes les boutiques actuellement rattachées à cet étage perdront leur étage (il deviendra non assigné).
+            </span>
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: flex; gap: 16px; justify-content: center;">
+                <a href="{% url 'floor_list' %}" class="btn btn-outline">Annuler</a>
+                <button type="submit" class="btn btn-danger">
+                    <i data-lucide="trash-2"></i> Confirmer la suppression
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

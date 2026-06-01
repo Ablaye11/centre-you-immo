@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Maintenance{% endblock %}
+{% block page_title %}Maintenance & Interventions{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Suivez les demandes de réparation, planifiez des interventions techniques et gérez les coûts de maintenance.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'maintenance_create' %}" class="btn btn-primary">
+            <i data-lucide="plus-circle"></i> Déclarer un Incident
+        </a>
+    </div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header">
+        <h3 class="card-title">Interventions Signalées</h3>
+    </div>
+    <div class="card-body">
+        {% if requests %}
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Incident</th>
+                            <th>Zone</th>
+                            <th>Priorité</th>
+                            <th>Technicien</th>
+                            <th>Coût estimé</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in requests %}
+                        <tr>
+                            <td class="font-bold">{{ req.title }}</td>
+                            <td>{{ req.get_zone_display }}</td>
+                            <td>
+                                <span class="badge {% if req.priority == 'urgent' or req.priority == 'high' %}badge-danger{% elif req.priority == 'medium' %}badge-warning{% else %}badge-info{% endif %}">
+                                    {{ req.get_priority_display }}
+                                </span>
+                            </td>
+                            <td>{{ req.assigned_to|default:"Non assigné" }}</td>
+                            <td>{{ req.estimated_cost|default:"-" }} {% if req.estimated_cost %}FCFA{% endif %}</td>
+                            <td>
+                                <span class="badge {% if req.status == 'completed' %}badge-success{% elif req.status == 'in_progress' %}badge-warning{% elif req.status == 'cancelled' %}badge-secondary{% else %}badge-info{% endif %}">
+                                    {{ req.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'maintenance_update' req.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier/Assigner">
+                                    <i data-lucide="edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i data-lucide="wrench"></i>
+                <h3>Aucune intervention à signaler</h3>
+                <p>Les installations électriques, plomberies et ascenseurs fonctionnent correctement.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

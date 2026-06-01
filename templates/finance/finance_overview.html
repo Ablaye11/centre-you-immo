@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}Finances{% endblock %}
+{% block page_title %}Gestion Financière{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Suivez les loyers encaissés, émettez des factures et gérez les charges opérationnelles du centre commercial.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'invoice_create' %}" class="btn btn-outline">
+            <i data-lucide="plus-circle"></i> Émettre une Facture
+        </a>
+        <a href="{% url 'expense_create' %}" class="btn btn-danger">
+            <i data-lucide="minus-circle"></i> Enregistrer Dépense
+        </a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <!-- Stat 1: Total Encaissé -->
+    <div class="stat-card blue animate-in">
+        <div class="stat-icon blue">
+            <i data-lucide="badge-check"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Total Encaissé</div>
+            <div class="stat-value">{{ total_collected }} FCFA</div>
+            <span class="stat-change up">Sur facturé: {{ total_invoiced }} FCFA</span>
+        </div>
+    </div>
+
+    <!-- Stat 2: Total Dépenses -->
+    <div class="stat-card red animate-in">
+        <div class="stat-icon red">
+            <i data-lucide="trending-down"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Total Dépenses</div>
+            <div class="stat-value">{{ total_expenses }} FCFA</div>
+            <div class="stat-label mt-1">Charges du centre</div>
+        </div>
+    </div>
+
+    <!-- Stat 3: Solde Net -->
+    <div class="stat-card green animate-in">
+        <div class="stat-icon green">
+            <i data-lucide="wallet"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Bénéfice Net</div>
+            <div class="stat-value">{{ net_balance }} FCFA</div>
+            <div class="stat-label mt-1">Flux de trésorerie net</div>
+        </div>
+    </div>
+
+    <!-- Stat 4: Impayés / Retards -->
+    <div class="stat-card gold animate-in">
+        <div class="stat-icon gold">
+            <i data-lucide="alert-triangle"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">En attente / Retards</div>
+            <div class="stat-value" style="color: var(--danger);">{{ total_overdue }} FCFA</div>
+            <span class="stat-change down">À collecter: {{ total_pending }} FCFA</span>
+        </div>
+    </div>
+</div>
+
+<div class="grid-2 mb-3">
+    <!-- Invoices List -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Dernières Factures Émises</h3>
+        </div>
+        <div class="card-body">
+            {% if invoices %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Facture</th>
+                                <th>Locataire</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inv in invoices %}
+                            <tr>
+                                <td>{{ inv.invoice_number }}</td>
+                                <td>{{ inv.tenant.full_name }}</td>
+                                <td>{{ inv.amount }} FCFA</td>
+                                <td>
+                                    <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
+                                        {{ inv.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'invoice_pdf' inv.pk %}" class="btn btn-outline btn-sm btn-icon" title="Télécharger PDF">
+                                        <i data-lucide="file-down"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune facture enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Expenses List -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Dépenses Récentes</h3>
+        </div>
+        <div class="card-body">
+            {% if expenses %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Catégorie</th>
+                                <th>Montant</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exp in expenses %}
+                            <tr>
+                                <td>{{ exp.title }}</td>
+                                <td>{{ exp.get_category_display }}</td>
+                                <td style="color: var(--danger);">{{ exp.amount }} FCFA</td>
+                                <td>{{ exp.date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune dépense enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

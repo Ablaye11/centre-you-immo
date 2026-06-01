@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion des Étages{% endblock %}
+{% block page_title %}Gestion des Étages{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <h2>Liste des Étages</h2>
+        <p>Gérez les niveaux et étages du centre commercial</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'floor_create' %}" class="btn btn-primary">
+            <i data-lucide="plus"></i> Ajouter un Étage
+        </a>
+        <a href="{% url 'shop_list' %}" class="btn btn-outline">
+            <i data-lucide="layout-grid"></i> Retour aux Boutiques
+        </a>
+    </div>
+</div>
+
+<div class="card animate-in" style="animation-delay: 0.1s;">
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Niveau (Tri)</th>
+                    <th>Nom de l'étage</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for floor in floors %}
+                <tr>
+                    <td><span class="badge badge-secondary">{{ floor.level }}</span></td>
+                    <td class="font-bold">{{ floor.name }}</td>
+                    <td>{{ floor.description|default:"-"|truncatechars:50 }}</td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="{% url 'floor_update' floor.pk %}" class="btn btn-icon btn-outline" title="Modifier">
+                                <i data-lucide="edit"></i>
+                            </a>
+                            <a href="{% url 'floor_delete' floor.pk %}" class="btn btn-icon btn-danger" title="Supprimer">
+                                <i data-lucide="trash-2"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <i data-lucide="layers" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <h3>Aucun étage configuré</h3>
+                            <p>Vous n'avez pas encore ajouté d'étages à votre centre commercial.</p>
+                            <a href="{% url 'floor_create' %}" class="btn btn-primary mt-2">
+                                Ajouter le premier étage
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
