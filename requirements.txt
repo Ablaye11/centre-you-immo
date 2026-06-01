@@ -16,7 +16,7 @@ click==8.3.2
 cloudinary==1.44.2
 colorama==0.4.6
 crispy-bootstrap5==2026.3
-cryptography==48.0.0
+cryptography
 cssselect2==0.9.0
 defusedxml==0.7.1
 deprecation==2.1.0
