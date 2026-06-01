@@ -2,7 +2,7 @@ import datetime
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from core.models import UserProfile
-from tenants.models import Shop, Tenant, Lease
+from tenants.models import Shop, Tenant, Lease, Floor
 from finance.models import Invoice, Expense
 from employees.models import Employee, Department
 from maintenance.models import MaintenanceRequest
@@ -18,6 +18,7 @@ class Command(BaseCommand):
         User.objects.all().delete()
         Department.objects.all().delete()
         Shop.objects.all().delete()
+        Floor.objects.all().delete()
         Tenant.objects.all().delete()
         ParkingSpace.objects.all().delete()
         MaintenanceRequest.objects.all().delete()
@@ -51,13 +52,20 @@ class Command(BaseCommand):
         Employee.objects.create(first_name='Ibrahima', last_name='Diagne', email='ibrahima@youimmo.com', phone='+221 78 456 12 34', department=dept_maint, position='Électricien Principal', hire_date=datetime.date(2023, 11, 1), contract_type='cdi', salary=350000, status='active')
         Employee.objects.create(first_name='Awa', last_name='Faye', email='awa@youimmo.com', phone='+221 77 345 67 89', department=dept_admin, position='Hôtesse d\'accueil', hire_date=datetime.date(2025, 1, 10), contract_type='stage', salary=100000, status='active')
 
+        self.stdout.write('Creating floors...')
+        # Floors
+        floor_rdc = Floor.objects.create(name='Rez-de-chaussée', level=0, description='Niveau entrée principale')
+        floor_1er = Floor.objects.create(name='1er Étage', level=1, description='Premier étage')
+        floor_2eme = Floor.objects.create(name='2ème Étage', level=2, description='Deuxième étage')
+        floor_3eme = Floor.objects.create(name='3ème Étage', level=3, description='Troisième étage')
+
         self.stdout.write('Creating shops...')
         # Shops
-        shop1 = Shop.objects.create(name='Samsung Brand Store', shop_number='A01', category='electronics', floor='rdc', surface=120.50, status='occupied', description='Boutique officielle Samsung')
-        shop2 = Shop.objects.create(name='Café Touba & Gourmandises', shop_number='B04', category='food', floor='rdc', surface=45.00, status='occupied', description='Espace café et restauration rapide')
-        shop3 = Shop.objects.create(name='City Mode & Couture', shop_number='C02', category='clothing', floor='1er', surface=85.00, status='occupied')
-        shop4 = Shop.objects.create(name='Espace Vacant 1', shop_number='D12', category='other', floor='2eme', surface=60.00, status='available')
-        shop5 = Shop.objects.create(name='Espace Vacant 2', shop_number='E03', category='other', floor='3eme', surface=200.00, status='available')
+        shop1 = Shop.objects.create(name='Samsung Brand Store', shop_number='A01', category='electronics', floor=floor_rdc, surface=120.50, status='occupied', description='Boutique officielle Samsung')
+        shop2 = Shop.objects.create(name='Café Touba & Gourmandises', shop_number='B04', category='food', floor=floor_rdc, surface=45.00, status='occupied', description='Espace café et restauration rapide')
+        shop3 = Shop.objects.create(name='City Mode & Couture', shop_number='C02', category='clothing', floor=floor_1er, surface=85.00, status='occupied')
+        shop4 = Shop.objects.create(name='Espace Vacant 1', shop_number='D12', category='other', floor=floor_2eme, surface=60.00, status='available')
+        shop5 = Shop.objects.create(name='Espace Vacant 2', shop_number='E03', category='other', floor=floor_3eme, surface=200.00, status='available')
 
         self.stdout.write('Creating tenants...')
         # Tenants
