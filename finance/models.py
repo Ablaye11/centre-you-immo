@@ -55,6 +55,7 @@ class Expense(models.Model):
         ('other', 'Autre'),
     ]
 
+    mall = models.ForeignKey('tenants.Mall', on_delete=models.CASCADE, related_name='expenses', verbose_name='Centre Commercial', null=True, blank=True)
     title = models.CharField(max_length=200, verbose_name='Titre')
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, verbose_name='Catégorie')
     amount = models.DecimalField(max_digits=12, decimal_places=0, verbose_name='Montant (FCFA)')

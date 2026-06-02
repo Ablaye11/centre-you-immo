@@ -18,6 +18,7 @@ class ParkingSpace(models.Model):
         ('maintenance', 'En maintenance'),
     ]
 
+    mall = models.ForeignKey('tenants.Mall', on_delete=models.CASCADE, related_name='parking_spaces', verbose_name='Centre Commercial', null=True, blank=True)
     space_number = models.CharField(max_length=10, unique=True, verbose_name='N° Place')
     level = models.CharField(max_length=20, verbose_name='Niveau')
     space_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='standard', verbose_name='Type')

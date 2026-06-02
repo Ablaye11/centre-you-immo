@@ -30,6 +30,7 @@ class Employee(models.Model):
         ('stage', 'Stagiaire'),
     ]
 
+    mall = models.ForeignKey('tenants.Mall', on_delete=models.SET_NULL, null=True, blank=True, related_name='employees', verbose_name='Centre Commercial')
     first_name = models.CharField(max_length=100, verbose_name='Prénom')
     last_name = models.CharField(max_length=100, verbose_name='Nom')
     email = models.EmailField(blank=True, verbose_name='Email')

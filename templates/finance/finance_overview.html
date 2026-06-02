@@ -8,7 +8,22 @@
     <div>
         <p>Suivez les loyers encaissés, émettez des factures et gérez les charges opérationnelles du centre commercial.</p>
     </div>
-    <div class="page-actions">
+    <div class="page-actions" style="display: flex; gap: var(--spacing-sm); align-items: center; flex-wrap: wrap;">
+        <form method="post" action="{% url 'generate_monthly_invoices' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                <i data-lucide="refresh-cw"></i> Générer les loyers
+            </button>
+        </form>
+        <form method="post" action="{% url 'generate_monthly_salaries' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">
+                <i data-lucide="users"></i> Payer les salaires
+            </button>
+        </form>
+        <a href="{% url 'distribute_charges' %}" class="btn btn-accent">
+            <i data-lucide="calculator"></i> Répartir les Charges
+        </a>
         <a href="{% url 'invoice_create' %}" class="btn btn-outline">
             <i data-lucide="plus-circle"></i> Émettre une Facture
         </a>
@@ -111,8 +126,19 @@
                                 </td>
                                 <td>
                                     <div class="flex gap-1">
+                                        {% if inv.status != 'paid' %}
+                                        <button type="button" class="btn btn-outline btn-sm btn-icon" onclick="openPayModal('{{ inv.pk }}', '{{ inv.invoice_number }}', '{{ inv.amount }}')" title="Payer" style="color: var(--success); border-color: rgba(16, 185, 129, 0.2);">
+                                            <i data-lucide="check"></i>
+                                        </button>
+                                        <a href="https://api.whatsapp.com/send?phone={{ inv.tenant.whatsapp_phone }}&text=Bonjour%20{{ inv.tenant.full_name|urlencode }},%20voici%20un%20rappel%20concernant%20votre%20facture%20N%C2%B0%20{{ inv.invoice_number|urlencode }}%20d'un%20montant%20de%20{{ inv.amount|urlencode }}%20FCFA%20pour%20la%20boutique%20{{ inv.shop.shop_number|urlencode }}.%20Merci%20de%20proc%C3%A9der%20au%20r%C3%A8glement." target="_blank" class="btn btn-outline btn-sm btn-icon" title="Relancer via WhatsApp" style="color: #25d366; border-color: rgba(37, 211, 102, 0.25);">
+                                            <i data-lucide="message-square"></i>
+                                        </a>
+                                        {% endif %}
                                         <a href="{% url 'invoice_pdf' inv.pk %}" class="btn btn-outline btn-sm btn-icon" title="Télécharger PDF">
                                             <i data-lucide="file-down"></i>
+                                        </a>
+                                        <a href="{% url 'invoice_pdf' inv.pk %}?inline=true" target="_blank" class="btn btn-outline btn-sm btn-icon" title="Imprimer la facture" style="color: var(--primary-400); border-color: rgba(59, 130, 246, 0.25);">
+                                            <i data-lucide="printer"></i>
                                         </a>
                                         <a href="{% url 'invoice_delete' inv.pk %}" class="btn btn-outline btn-sm btn-icon" title="Supprimer" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
                                             <i data-lucide="trash-2"></i>
@@ -169,6 +195,41 @@
                 <p class="text-muted">Aucune dépense enregistrée.</p>
             {% endif %}
         </div>
+    </div>
+</div>
+
+<!-- Quick Pay Modal -->
+<div class="modal-overlay" id="payModal" onclick="closePayModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-title" id="payModalTitle">Payer la facture</div>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Montant à payer:</span>
+            <div id="payModalAmount" style="font-size: 1.4rem; font-weight: 700; color: var(--success); margin-top: 4px;">0 FCFA</div>
+        </div>
+        <form method="post" data-url-template="{% url 'mark_invoice_paid' 0 %}" class="flex-column gap-2">
+            {% csrf_token %}
+            <input type="hidden" name="invoice_id" id="payModalInvoiceId">
+            
+            <div class="form-group">
+                <label class="form-label" for="id_payment_method">Mode de Paiement</label>
+                <select name="payment_method" id="id_payment_method" class="form-control">
+                    <option value="cash">Espèces</option>
+                    <option value="bank_transfer">Virement bancaire</option>
+                    <option value="check">Chèque</option>
+                    <option value="mobile_money">Mobile Money</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="id_notes">Notes / Référence (Optionnel)</label>
+                <textarea name="notes" id="id_notes" class="form-control" rows="2" placeholder="Ex: Référence virement, N° de chèque..."></textarea>
+            </div>
+            
+            <div class="form-actions" style="margin-top: 20px;">
+                <button type="button" class="btn btn-outline" onclick="closePayModal()">Annuler</button>
+                <button type="submit" class="btn btn-primary">Confirmer le paiement</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

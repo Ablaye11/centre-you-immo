@@ -1669,3 +1669,206 @@ textarea.form-control {
     border-radius: var(--radius-md);
 }
 
+
+/* ---- Mall Switcher (Header Dropdown) ---- */
+.mall-switcher { position: relative; }
+
+.mall-switcher-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    max-width: 220px;
+}
+.mall-switcher-btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mall-switcher-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.mall-switcher-btn:hover,
+.mall-switcher-btn.open {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: var(--primary-500);
+    color: var(--primary-300);
+}
+
+.mall-switcher-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 240px;
+    background: var(--bg-modal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 8px;
+    box-shadow: var(--shadow-lg);
+    z-index: 2000;
+    display: none;
+    backdrop-filter: var(--glass-blur);
+    animation: dropIn 0.15s ease;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.mall-switcher-dropdown.open { display: block; }
+
+.mall-switcher-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    text-align: left;
+}
+.mall-switcher-item:hover { background: rgba(59, 130, 246, 0.1); color: var(--text-primary); }
+.mall-switcher-item.active { background: rgba(59, 130, 246, 0.15); color: var(--primary-400); font-weight: 600; }
+
+.mall-switcher-divider { height: 1px; background: var(--border-color); margin: 6px 0; }
+
+
+/* ---- Quick Pay Modal ---- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.modal-box {
+    background: var(--bg-modal);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    max-width: 440px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.95);
+    transition: transform var(--transition-fast);
+}
+.modal-overlay.open .modal-box { transform: scale(1); }
+
+.modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
+}
+
+.modal-icon-badge {
+    transition: transform var(--transition-normal);
+}
+.modal-overlay.open .modal-icon-badge {
+    animation: pulseBadge 1.2s ease-in-out infinite alternate;
+}
+@keyframes pulseBadge {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.08); }
+}
+
+
+/* ---- Lease Section (Tenant Form) ---- */
+.lease-section {
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    background: rgba(59, 130, 246, 0.04);
+    margin-top: var(--spacing-lg);
+}
+.lease-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: var(--spacing-lg);
+}
+.lease-section-header h4 { font-size: 0.95rem; font-weight: 700; color: var(--primary-300); }
+.lease-badge-optional {
+    font-size: 0.7rem;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--primary-400);
+    font-weight: 600;
+}
+
+
+/* ---- Mall Cards Grid ---- */
+.mall-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.mall-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
+}
+.mall-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-500), var(--accent-500));
+}
+.mall-card:hover { border-color: var(--primary-500); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+.mall-card-name { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+.mall-card-meta { font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: flex-start; gap: 6px; }
+.mall-card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+    align-items: center;
+}
+.mall-active-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--success);
+    font-weight: 600;
+}

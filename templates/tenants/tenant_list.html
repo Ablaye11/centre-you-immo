@@ -51,10 +51,17 @@
                                 <td>{{ tenant.phone }}</td>
                                 <td>{{ tenant.company_name|default:"-" }}</td>
                                 <td>
-                                    <div class="flex gap-1">
-                                        <a href="{% url 'tenant_detail' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Voir la fiche">
-                                            <i data-lucide="eye"></i>
-                                        </a>
+                                     <div class="flex gap-1">
+                                         <a href="{% url 'tenant_detail' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Voir la fiche">
+                                             <i data-lucide="eye"></i>
+                                         </a>
+                                         {% for lease in tenant.leases.all %}
+                                             {% if lease.status == 'active' %}
+                                             <a href="{% url 'lease_print' lease.pk %}" class="btn btn-outline btn-sm btn-icon" title="Imprimer le contrat de bail (Boutique {{ lease.shop.shop_number }})" style="color: var(--accent-500); border-color: rgba(245, 158, 11, 0.25);">
+                                                 <i data-lucide="printer"></i>
+                                             </a>
+                                             {% endif %}
+                                         {% endfor %}
                                         <a href="{% url 'tenant_update' tenant.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier">
                                             <i data-lucide="edit"></i>
                                         </a>

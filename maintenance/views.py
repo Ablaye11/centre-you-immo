@@ -12,7 +12,11 @@ class MaintenanceListView(LoginRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return MaintenanceRequest.objects.select_related('reported_by').all()
+        qs = MaintenanceRequest.objects.select_related('reported_by', 'assigned_employee').all()
+        active_mall = self.request.active_mall
+        if active_mall:
+            qs = qs.filter(mall=active_mall)
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,7 +27,7 @@ class MaintenanceListView(LoginRequiredMixin, ListView):
 class MaintenanceCreateView(LoginRequiredMixin, CreateView):
     model = MaintenanceRequest
     template_name = 'maintenance/maintenance_form.html'
-    fields = ['title', 'description', 'zone', 'priority', 'status', 'assigned_to', 'estimated_cost', 'actual_cost']
+    fields = ['title', 'description', 'zone', 'priority', 'status', 'assigned_to', 'assigned_employee', 'photo', 'estimated_cost', 'actual_cost']
     success_url = reverse_lazy('maintenance_list')
 
     def get_context_data(self, **kwargs):
@@ -32,8 +36,18 @@ class MaintenanceCreateView(LoginRequiredMixin, CreateView):
         context['title'] = "Signaler une anomalie"
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        active_mall = self.request.active_mall
+        if active_mall:
+            from employees.models import Employee
+            form.fields['assigned_employee'].queryset = Employee.objects.filter(mall=active_mall, status='active')
+        return form
+
     def form_valid(self, form):
         form.instance.reported_by = self.request.user
+        if self.request.active_mall:
+            form.instance.mall = self.request.active_mall
         messages.success(self.request, "La demande d'intervention a été créée avec succès.")
         return super().form_valid(form)
 
@@ -41,7 +55,7 @@ class MaintenanceCreateView(LoginRequiredMixin, CreateView):
 class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
     model = MaintenanceRequest
     template_name = 'maintenance/maintenance_form.html'
-    fields = ['title', 'description', 'zone', 'priority', 'status', 'assigned_to', 'estimated_cost', 'actual_cost', 'notes']
+    fields = ['title', 'description', 'zone', 'priority', 'status', 'assigned_to', 'assigned_employee', 'photo', 'estimated_cost', 'actual_cost', 'notes']
     success_url = reverse_lazy('maintenance_list')
 
     def get_context_data(self, **kwargs):
@@ -50,7 +64,34 @@ class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
         context['title'] = "Mettre à jour l'intervention"
         return context
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        active_mall = self.request.active_mall
+        if active_mall:
+            from employees.models import Employee
+            form.fields['assigned_employee'].queryset = Employee.objects.filter(mall=active_mall, status='active')
+        return form
+
     def form_valid(self, form):
+        # Check if assignment changed
+        request_obj = self.get_object()
+        assigned_employee = form.cleaned_data.get('assigned_employee')
+        
+        if assigned_employee and request_obj.assigned_employee != assigned_employee:
+            from django.contrib.auth.models import User
+            from django.db.models import Q
+            from core.models import Notification
+            
+            admins = User.objects.filter(Q(is_superuser=True) | Q(profile__role__in=['admin', 'manager', 'maintenance'])).distinct()
+            for admin in admins:
+                if admin != self.request.user:
+                    Notification.objects.create(
+                        user=admin,
+                        title="Intervention assignée",
+                        message=f"L'intervention '{form.instance.title}' a été assignée à {assigned_employee.full_name}.",
+                        notif_type='info'
+                    )
+
         messages.success(self.request, "La demande de maintenance a été mise à jour.")
         return super().form_valid(form)
 

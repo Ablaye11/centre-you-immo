@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Signaler une Panne - YOU IMMO{% endblock %}
+{% block page_title %}Signaler une Panne / Anomalie{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'tenant_dashboard' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>Signaler un problème de maintenance</h2>
+        <p>Décrivez précisément le dysfonctionnement technique afin que nos équipes interviennent.</p>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 600px; margin: 0 auto; margin-top: var(--spacing-lg);">
+    <form method="post" enctype="multipart/form-data" class="flex-column gap-md">
+        {% csrf_token %}
+        
+        <div class="form-section-title">Détails de la demande</div>
+        
+        <div class="form-group" style="margin-bottom: var(--spacing-md);">
+            <label class="form-label" for="id_title">Sujet / Titre de la panne</label>
+            {{ form.title }}
+            {{ form.title.errors }}
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Ex: Court-circuit prise électrique, Fuite robinet toilette, Climatiseur en panne.</p>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+            <div class="form-group">
+                <label class="form-label" for="id_zone">Zone concernée</label>
+                {{ form.zone }}
+                {{ form.zone.errors }}
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_priority">Niveau de priorité</label>
+                {{ form.priority }}
+                {{ form.priority.errors }}
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: var(--spacing-md);">
+            <label class="form-label" for="id_photo">Photo de l'anomalie / Preuve (Optionnel)</label>
+            {{ form.photo }}
+            {{ form.photo.errors }}
+        </div>
+
+        <div class="form-group" style="margin-bottom: var(--spacing-lg);">
+            <label class="form-label" for="id_description">Description détaillée</label>
+            {{ form.description }}
+            {{ form.description.errors }}
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Donnez un maximum de précisions pour accélérer l'intervention.</p>
+        </div>
+
+        <div class="form-actions" style="display: flex; gap: var(--spacing-sm); justify-content: flex-end; margin-top: var(--spacing-lg);">
+            <a href="{% url 'tenant_dashboard' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-accent">
+                <i data-lucide="send"></i> Envoyer le signalement
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

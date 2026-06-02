@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}Répartition des Charges - YOU IMMO{% endblock %}
+{% block page_title %}Répartition des Charges Communes{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'finance_overview' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>Répartir les charges communes au prorata</h2>
+        <p>Centre commercial : {{ active_mall.name }}</p>
+    </div>
+</div>
+
+<div class="animate-in" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); align-items: start; margin-top: var(--spacing-lg);">
+    <!-- Colonne de Gauche : Formulaire -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Paramètres de Répartition</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" id="distributionForm" class="flex-column gap-md">
+                {% csrf_token %}
+                
+                <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                    <label class="form-label" for="id_category">Catégorie de charges</label>
+                    <select name="category" id="id_category" class="form-control" style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary);">
+                        {% for code, label in categories %}
+                        <option value="{{ code }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: var(--spacing-md);">
+                    <label class="form-label" for="id_total_amount">Montant global de la facture (FCFA)</label>
+                    <input type="number" name="total_amount" id="id_total_amount" class="form-control" placeholder="ex: 500000" required style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary);">
+                </div>
+
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                    <div class="form-group">
+                        <label class="form-label" for="id_issue_date">Date d'émission</label>
+                        <input type="date" name="issue_date" id="id_issue_date" class="form-control" value="{% now 'Y-m-d' %}" required style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary);">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="id_due_date">Date d'échéance</label>
+                        <input type="date" name="due_date" id="id_due_date" class="form-control" required style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary);">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: var(--spacing-lg);">
+                    <label class="form-label" for="id_description">Description / Libellé (Optionnel)</label>
+                    <textarea name="description" id="id_description" class="form-control" rows="3" placeholder="Laissez vide pour générer un libellé automatique..." style="width: 100%; padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-input); color: var(--text-primary); font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: var(--spacing-sm); justify-content: flex-end; margin-top: var(--spacing-lg);">
+                    <a href="{% url 'finance_overview' %}" class="btn btn-outline">Annuler</a>
+                    <button type="submit" class="btn btn-accent">
+                        <i data-lucide="check-circle-2"></i> Valider et Facturer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Colonne de Droite : Prévisualisation -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Prévisualisation de la Répartition</h3>
+            <span style="font-size: 0.8rem; color: var(--text-secondary); background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.2);">
+                Total Surface : <strong>{{ total_surface }} m²</strong>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="table-wrapper" style="max-height: 400px; overflow-y: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Boutique</th>
+                            <th>Locataire</th>
+                            <th>Surface</th>
+                            <th>Part</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lease in active_leases %}
+                        <tr class="lease-row" data-surface="{{ lease.shop.surface }}">
+                            <td>{{ lease.shop.shop_number }}</td>
+                            <td>{{ lease.tenant.full_name }}</td>
+                            <td>{{ lease.shop.surface }} m²</td>
+                            <td class="percentage-cell">-</td>
+                            <td class="amount-cell" style="font-weight: 600; color: var(--text-primary);">-</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: var(--spacing-lg);">Aucun locataire actif pour ce centre.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: var(--spacing-md); padding-top: var(--spacing-md); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.9rem; color: var(--text-secondary);">Total Réparti :</span>
+                <span id="previewTotalAmount" style="font-size: 1.1rem; font-weight: 700; color: var(--success);">0 FCFA</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const amountInput = document.getElementById('id_total_amount');
+        const previewTotalSpan = document.getElementById('previewTotalAmount');
+        const rows = document.querySelectorAll('.lease-row');
+        const totalSurface = parseFloat("{{ total_surface|default:0 }}");
+
+        // Set default due date to 28th of current month
+        const dueDateInput = document.getElementById('id_due_date');
+        if (dueDateInput) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            // If today is past the 20th, set due date to 28th of next month
+            let dueMonth = today.getMonth() + 1;
+            let dueYear = year;
+            if (today.getDate() > 20) {
+                dueMonth += 1;
+                if (dueMonth > 12) {
+                    dueMonth = 1;
+                    dueYear += 1;
+                }
+            }
+            const formattedMonth = String(dueMonth).padStart(2, '0');
+            dueDateInput.value = `${dueYear}-${formattedMonth}-28`;
+        }
+
+        function updatePreview() {
+            const totalAmount = parseFloat(amountInput.value) || 0;
+            if (totalAmount <= 0 || totalSurface <= 0) {
+                rows.forEach(row => {
+                    row.querySelector('.percentage-cell').textContent = '-';
+                    row.querySelector('.amount-cell').textContent = '-';
+                });
+                previewTotalSpan.textContent = '0 FCFA';
+                return;
+            }
+
+            let sumAllocated = 0;
+            rows.forEach(row => {
+                const surface = parseFloat(row.getAttribute('data-surface')) || 0;
+                const percentage = (surface / totalSurface) * 100;
+                const share = Math.round(surface * (totalAmount / totalSurface));
+                sumAllocated += share;
+
+                row.querySelector('.percentage-cell').textContent = percentage.toFixed(1) + ' %';
+                row.querySelector('.amount-cell').textContent = share.toLocaleString('fr-FR') + ' FCFA';
+            });
+
+            previewTotalSpan.textContent = sumAllocated.toLocaleString('fr-FR') + ' FCFA';
+        }
+
+        if (amountInput) {
+            amountInput.addEventListener('input', updatePreview);
+        }
+    });
+</script>
+{% endblock %}

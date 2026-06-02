@@ -124,7 +124,14 @@ class InvoicePDFView(LoginRequiredMixin, View):
         p.showPage()
         p.save()
 
-        # FileResponse sets the Content-Disposition header so that browsers
-        # know to download it as a PDF file attachment.
+        # Check if the user wants to view inline (for printing or viewing in browser)
+        # instead of downloading as an attachment.
+        inline = request.GET.get('inline', 'false') == 'true'
+        as_attachment = not inline
+
         buffer.seek(0)
-        return FileResponse(buffer, as_attachment=True, filename=f"facture-{invoice.invoice_number}.pdf")
+        return FileResponse(
+            buffer,
+            as_attachment=as_attachment,
+            filename=f"facture-{invoice.invoice_number}.pdf"
+        )

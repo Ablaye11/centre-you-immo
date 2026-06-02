@@ -32,12 +32,15 @@ class MaintenanceRequest(models.Model):
         ('plumbing', 'Plomberie'),
     ]
 
+    mall = models.ForeignKey('tenants.Mall', on_delete=models.CASCADE, related_name='maintenance_requests', verbose_name='Centre Commercial', null=True, blank=True)
     title = models.CharField(max_length=200, verbose_name='Titre')
     description = models.TextField(verbose_name='Description')
     zone = models.CharField(max_length=50, choices=ZONE_CHOICES, verbose_name='Zone')
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='medium', verbose_name='Priorité')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', verbose_name='Statut')
-    assigned_to = models.CharField(max_length=200, blank=True, verbose_name='Assigné à')
+    assigned_to = models.CharField(max_length=200, blank=True, verbose_name='Assigné à (Texte)')
+    assigned_employee = models.ForeignKey('employees.Employee', on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_maintenance', verbose_name='Employé assigné')
+    photo = models.FileField(upload_to='maintenance/photos/', null=True, blank=True, verbose_name='Photo de l\'incident')
     estimated_cost = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name='Coût estimé (FCFA)')
     actual_cost = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name='Coût réel (FCFA)')
     reported_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Signalé par')

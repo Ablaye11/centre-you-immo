@@ -1,9 +1,27 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
+
+
+class Mall(models.Model):
+    """Represents a shopping center."""
+    name = models.CharField(max_length=200, verbose_name='Nom du centre commercial')
+    address = models.TextField(blank=True, verbose_name='Adresse')
+    description = models.TextField(blank=True, verbose_name='Description')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'Centre Commercial'
+        verbose_name_plural = 'Centres Commerciaux'
+
+    def __str__(self):
+        return self.name
 
 
 class Floor(models.Model):
     """Represents a floor/level in the shopping center."""
+    mall = models.ForeignKey(Mall, on_delete=models.CASCADE, related_name='floors', verbose_name='Centre Commercial', null=True, blank=True)
     name = models.CharField(max_length=50, verbose_name='Nom (ex: Rez-de-chaussée, 1er étage)')
     level = models.IntegerField(default=0, verbose_name='Niveau (pour le tri, ex: 0, 1, 2, -1)')
     description = models.TextField(blank=True, verbose_name='Description')
@@ -49,6 +67,7 @@ class Shop(models.Model):
         ('maintenance', 'En maintenance'),
     ]
 
+    mall = models.ForeignKey(Mall, on_delete=models.CASCADE, related_name='shops', verbose_name='Centre Commercial', null=True, blank=True)
     name = models.CharField(max_length=200, verbose_name='Nom de la boutique')
     shop_number = models.CharField(max_length=20, unique=True, verbose_name='Numéro')
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, verbose_name='Catégorie')
@@ -78,6 +97,9 @@ class Tenant(models.Model):
     id_number = models.CharField(max_length=50, blank=True, verbose_name='N° Pièce d\'identité')
     address = models.TextField(blank=True, verbose_name='Adresse personnelle')
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='tenant', verbose_name='Utilisateur de connexion')
+    cni_or_passport = models.FileField(upload_to='tenants/documents/', null=True, blank=True, verbose_name='CNI ou Passeport')
+    ninea_or_rc = models.FileField(upload_to='tenants/documents/', null=True, blank=True, verbose_name='NINEA ou Reg. Commerce')
 
     class Meta:
         ordering = ['last_name', 'first_name']
@@ -90,6 +112,21 @@ class Tenant(models.Model):
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
+
+    @property
+    def whatsapp_phone(self):
+        """Clean phone number for WhatsApp API link."""
+        if not self.phone:
+            return ""
+        # Remove all spaces, dashes, parentheses and plus sign
+        clean = "".join(c for c in self.phone if c.isdigit())
+        
+        # If it's a standard Senegalese mobile number of 9 digits starting with 7
+        # we prefix it with country code 221
+        if len(clean) == 9 and clean.startswith('7'):
+            clean = "221" + clean
+            
+        return clean
 
 
 class Lease(models.Model):

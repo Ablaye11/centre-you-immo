@@ -37,14 +37,31 @@
                     <tbody>
                         {% for req in requests %}
                         <tr>
-                            <td class="font-bold">{{ req.title }}</td>
+                            <td class="font-bold">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    {{ req.title }}
+                                    {% if req.photo %}
+                                    <a href="{{ req.photo.url }}" target="_blank" title="Voir la photo de l'incident" style="color: var(--accent-500); display: inline-flex; align-items: center;">
+                                        <i data-lucide="image" style="width: 14px; height: 14px;"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
                             <td>{{ req.get_zone_display }}</td>
                             <td>
                                 <span class="badge {% if req.priority == 'urgent' or req.priority == 'high' %}badge-danger{% elif req.priority == 'medium' %}badge-warning{% else %}badge-info{% endif %}">
                                     {{ req.get_priority_display }}
                                 </span>
                             </td>
-                            <td>{{ req.assigned_to|default:"Non assigné" }}</td>
+                            <td>
+                                {% if req.assigned_employee %}
+                                    <i data-lucide="user" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:2px;color:var(--accent-500);"></i>{{ req.assigned_employee.full_name }}
+                                {% elif req.assigned_to %}
+                                    {{ req.assigned_to }}
+                                {% else %}
+                                    <span class="text-muted">Non assigné</span>
+                                {% endif %}
+                            </td>
                             <td>{{ req.estimated_cost|default:"-" }} {% if req.estimated_cost %}FCFA{% endif %}</td>
                             <td>
                                 <span class="badge {% if req.status == 'completed' %}badge-success{% elif req.status == 'in_progress' %}badge-warning{% elif req.status == 'cancelled' %}badge-secondary{% else %}badge-info{% endif %}">

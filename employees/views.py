@@ -2,6 +2,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
 from .models import Employee
 
 
@@ -18,9 +19,16 @@ class EmployeeListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        active_mall = self.request.active_mall
+        if active_mall:
+            queryset = queryset.filter(mall=active_mall)
         query = self.request.GET.get('q')
         if query:
-            queryset = queryset.filter(first_name__icontains=query) | queryset.filter(last_name__icontains=query) | queryset.filter(position__icontains=query)
+            queryset = queryset.filter(
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query) |
+                Q(position__icontains=query)
+            )
         return queryset
 
 
@@ -37,6 +45,8 @@ class EmployeeCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        if self.request.active_mall:
+            form.instance.mall = self.request.active_mall
         messages.success(self.request, "L'employé a été enregistré avec succès.")
         return super().form_valid(form)
 

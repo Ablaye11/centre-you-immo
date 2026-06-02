@@ -26,6 +26,35 @@
             </div>
             
             <nav class="sidebar-nav">
+                {% if user.tenant %}
+                <!-- Menu Locataire -->
+                <div class="nav-section">
+                    <div class="nav-section-title">Principal</div>
+                    <a href="{% url 'tenant_dashboard' %}" class="nav-item {% if active_menu == 'tenant_dashboard' %}active{% endif %}">
+                        <i data-lucide="layout-dashboard" class="nav-icon"></i>
+                        <span>Mon Tableau de bord</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Demandes</div>
+                    <a href="{% url 'tenant_maintenance_create' %}" class="nav-item {% if active_menu == 'tenant_maintenance' %}active{% endif %}">
+                        <i data-lucide="wrench" class="nav-icon"></i>
+                        <span>Signaler une Panne</span>
+                    </a>
+                </div>
+
+                <div class="nav-section" style="margin-top: auto;">
+                    <form action="{% url 'logout' %}" method="post" id="logoutForm" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;" class="nav-item" style="color: var(--danger);">
+                        <i data-lucide="log-out" class="nav-icon"></i>
+                        <span>Déconnexion</span>
+                    </a>
+                </div>
+                {% else %}
+                <!-- Menu Administrateur -->
                 <div class="nav-section">
                     <div class="nav-section-title">Principal</div>
                     <a href="{% url 'dashboard' %}" class="nav-item {% if active_menu == 'dashboard' %}active{% endif %}">
@@ -36,6 +65,7 @@
 
                 <div class="nav-section">
                     <div class="nav-section-title">Opérations</div>
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' %}
                     <a href="{% url 'shop_list' %}" class="nav-item {% if active_menu == 'shops' %}active{% endif %}">
                         <i data-lucide="store" class="nav-icon"></i>
                         <span>Plan des Boutiques</span>
@@ -44,6 +74,9 @@
                         <i data-lucide="layers" class="nav-icon"></i>
                         <span>Gestion des Étages</span>
                     </a>
+                    {% endif %}
+                    
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
                     <a href="{% url 'tenant_list' %}" class="nav-item {% if active_menu == 'tenants' %}active{% endif %}">
                         <i data-lucide="users" class="nav-icon"></i>
                         <span>Locataires</span>
@@ -55,10 +88,16 @@
                         <span class="nav-badge">{{ overdue_invoices }}</span>
                         {% endif %}
                     </a>
+                    {% endif %}
+                    
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' %}
                     <a href="{% url 'employee_list' %}" class="nav-item {% if active_menu == 'employees' %}active{% endif %}">
                         <i data-lucide="contact" class="nav-icon"></i>
                         <span>Employés</span>
                     </a>
+                    {% endif %}
+                    
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'maintenance' %}
                     <a href="{% url 'maintenance_list' %}" class="nav-item {% if active_menu == 'maintenance' %}active{% endif %}">
                         <i data-lucide="wrench" class="nav-icon"></i>
                         <span>Maintenance</span>
@@ -66,10 +105,23 @@
                         <span class="nav-badge">{{ pending_maintenance }}</span>
                         {% endif %}
                     </a>
-                    <a href="{% url 'parking_overview' %}" class="nav-item {% if active_menu == 'parking' %}active{% endif %}">
-                        <i data-lucide="parking-square" class="nav-icon"></i>
-                        <span>Parking</span>
+                    {% endif %}
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Gestion</div>
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' %}
+                    <a href="{% url 'mall_list' %}" class="nav-item {% if active_menu == 'malls' %}active{% endif %}">
+                        <i data-lucide="building-2" class="nav-icon"></i>
+                        <span>Centres Commerciaux</span>
                     </a>
+                    {% endif %}
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
+                    <a href="{% url 'report_overview' %}" class="nav-item {% if active_menu == 'reports' %}active{% endif %}">
+                        <i data-lucide="bar-chart-3" class="nav-icon"></i>
+                        <span>Rapports & Inventaires</span>
+                    </a>
+                    {% endif %}
                 </div>
 
                 <div class="nav-section" style="margin-top: auto;">
@@ -83,15 +135,23 @@
                     <form action="{% url 'reset_database' %}" method="post" id="resetDbForm" style="display: none;">
                         {% csrf_token %}
                     </form>
-                    <a href="#" onclick="if(confirm('ATTENTION : Voulez-vous vraiment SUPPRIMER toutes les données de la base ? (Boutiques, Locataires, Employés, Incidents, Factures...)')) { document.getElementById('resetDbForm').submit(); } return false;" class="nav-item" style="color: var(--danger);">
+                    <a href="#" onclick="openConfirmModal('reset'); return false;" class="nav-item" style="color: var(--danger);">
                         <i data-lucide="trash-2" class="nav-icon"></i>
                         <span>Remettre à zéro</span>
                     </a>
-                    
+
+                    <form action="{% url 'restore_backup' %}" method="post" id="restoreBackupForm" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    <a href="#" onclick="openConfirmModal('restore_backup'); return false;" class="nav-item" style="color: var(--success);">
+                        <i data-lucide="rotate-ccw" class="nav-icon"></i>
+                        <span>Restaurer mes données</span>
+                    </a>
+
                     <form action="{% url 'restore_database' %}" method="post" id="restoreDbForm" style="display: none;">
                         {% csrf_token %}
                     </form>
-                    <a href="#" onclick="if(confirm('Voulez-vous charger les données de démonstration par défaut ? Cela va remplacer toutes les données actuelles.')) { document.getElementById('restoreDbForm').submit(); } return false;" class="nav-item" style="color: var(--accent-500);">
+                    <a href="#" onclick="openConfirmModal('restore_demo'); return false;" class="nav-item" style="color: var(--accent-500);">
                         <i data-lucide="database" class="nav-icon"></i>
                         <span>Restaurer la démo</span>
                     </a>
@@ -104,6 +164,7 @@
                         <span>Déconnexion</span>
                     </a>
                 </div>
+                {% endif %}
             </nav>
         </aside>
 
@@ -119,13 +180,93 @@
                 </div>
                 
                 <div class="header-right">
+                    {% if not user.tenant and request.all_malls|length > 0 %}
+                    <div class="mall-switcher" id="mallSwitcherWrapper">
+                        <button class="mall-switcher-btn" id="mallSwitcherBtn" type="button">
+                            <i data-lucide="building-2"></i>
+                            <span>{{ request.active_mall.name|default:"Sélectionner un centre" }}</span>
+                            <i data-lucide="chevron-down" style="width:14px;height:14px;"></i>
+                        </button>
+                        <div class="mall-switcher-dropdown" id="mallSwitcherDropdown">
+                            {% for mall in request.all_malls %}
+                            <form method="post" action="{% url 'switch_mall' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="mall_id" value="{{ mall.id }}">
+                                <button type="submit" class="mall-switcher-item {% if mall == request.active_mall %}active{% endif %}">
+                                    <i data-lucide="building-2" style="width:14px;height:14px;"></i>
+                                    {{ mall.name }}
+                                    {% if mall == request.active_mall %}<i data-lucide="check" style="width:12px;height:12px;margin-left:auto;"></i>{% endif %}
+                                </button>
+                            </form>
+                            {% endfor %}
+                            <div class="mall-switcher-divider"></div>
+                            <a href="{% url 'mall_create' %}" class="mall-switcher-item">
+                                <i data-lucide="plus" style="width:14px;height:14px;"></i>
+                                Ajouter un centre
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Notifications Dropdown -->
+                    <div class="notification-dropdown-wrapper" id="notificationWrapper" style="position: relative; margin-right: 15px;">
+                        <button class="notification-trigger-btn" id="notificationBtn" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-md); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
+                            <i data-lucide="bell" style="width: 18px; height: 18px;"></i>
+                            {% if unread_notifications_count > 0 %}
+                            <span style="position: absolute; top: -4px; right: -4px; background: var(--danger); color: white; font-size: 0.68rem; font-weight: 700; border-radius: 50%; min-width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.95); animation: pulse 2s infinite;">{{ unread_notifications_count }}</span>
+                            {% endif %}
+                        </button>
+                        
+                        <div class="notification-dropdown-menu" id="notificationDropdown" style="display: none; position: absolute; top: 48px; right: 0; width: 320px; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); z-index: 1000; padding: var(--spacing-sm) 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 16px 12px; border-bottom: 1px solid var(--border-color);">
+                                <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Notifications</span>
+                                {% if unread_notifications_count > 0 %}
+                                <form method="post" action="{% url 'mark_all_notifications_read' %}" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background: none; border: none; color: var(--accent-500); font-size: 0.75rem; font-weight: 600; cursor: pointer; padding: 0;">Tout marquer comme lu</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                            
+                            <div style="max-height: 280px; overflow-y: auto;">
+                                {% for notif in unread_notifications %}
+                                <a href="{% url 'mark_notification_read' notif.pk %}" style="display: block; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                                        <div style="margin-top: 2px;">
+                                            {% if notif.notif_type == 'danger' %}
+                                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--danger);"></span>
+                                            {% elif notif.notif_type == 'warning' %}
+                                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--warning);"></span>
+                                            {% elif notif.notif_type == 'success' %}
+                                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></span>
+                                            {% else %}
+                                            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--primary-400);"></span>
+                                            {% endif %}
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <div style="font-weight: 600; font-size: 0.82rem; color: var(--text-primary); margin-bottom: 2px;">{{ notif.title }}</div>
+                                            <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.3;">{{ notif.message }}</div>
+                                            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">{{ notif.created_at|timesince }}</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% empty %}
+                                <div style="padding: 24px 16px; text-align: center; color: var(--text-muted);">
+                                    <i data-lucide="bell-off" style="width: 24px; height: 24px; margin: 0 auto 8px; opacity: 0.5; display: block;"></i>
+                                    <p style="font-size: 0.8rem;">Aucune nouvelle notification.</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="user-menu">
                         <div class="user-avatar">
                             {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
                         </div>
                         <div class="user-info">
                             <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
-                            <span class="user-role">{{ user.profile.get_role_display|default:"Staff" }}</span>
+                            <span class="user-role">{% if user.tenant %}Locataire{% else %}{{ user.profile.get_role_display|default:"Staff" }}{% endif %}</span>
                         </div>
                     </div>
                 </div>
@@ -146,6 +287,77 @@
             </main>
         </div>
     </div>
+
+    {% if user.is_staff or user.is_superuser %}
+    <!-- Modals de Confirmation Système -->
+    <!-- Modal : Remettre à zéro -->
+    <div class="modal-overlay" id="confirmResetModal" onclick="closeConfirmModal('reset')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title" style="color: var(--danger);">
+                <div class="modal-icon-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="trash-2" style="width: 20px; height: 20px;"></i>
+                </div>
+                <span>Remettre à zéro la base ?</span>
+            </div>
+            <div class="modal-body-content" style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">⚠️ ATTENTION : Vos données actuelles seront effacées.</p>
+                <p style="margin-bottom: 12px;">Ne vous inquiétez pas : une sauvegarde automatique sera créée juste avant l'effacement.</p>
+                <p>Vous pourrez restaurer ces données à tout moment via le bouton vert <strong>"Restaurer mes données"</strong>.</p>
+            </div>
+            <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="button" class="btn btn-outline" onclick="closeConfirmModal('reset')">Annuler</button>
+                <button type="button" class="btn btn-danger" onclick="submitSystemForm('reset')">Confirmer la remise à zéro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal : Restaurer mes données -->
+    <div class="modal-overlay" id="confirmRestoreBackupModal" onclick="closeConfirmModal('restore_backup')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title" style="color: var(--success);">
+                <div class="modal-icon-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="rotate-ccw" style="width: 20px; height: 20px;"></i>
+                </div>
+                <span>Restaurer vos données ?</span>
+            </div>
+            <div class="modal-body-content" style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">✅ Confirmer la restauration de la sauvegarde ?</p>
+                <p style="margin-bottom: 12px;">Cela rechargera le fichier de sauvegarde créé automatiquement lors de la dernière remise à zéro.</p>
+                <p style="color: var(--danger); font-size: 0.85rem; font-weight: 500; background: rgba(239, 68, 68, 0.05); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--danger);">
+                    ⚠️ Attention : Toutes vos modifications effectuées après cette sauvegarde seront perdues.
+                </p>
+            </div>
+            <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="button" class="btn btn-outline" onclick="closeConfirmModal('restore_backup')">Annuler</button>
+                <button type="button" class="btn btn-success" onclick="submitSystemForm('restore_backup')">Restaurer les données</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal : Restaurer la démo -->
+    <div class="modal-overlay" id="confirmRestoreDemoModal" onclick="closeConfirmModal('restore_demo')">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-title" style="color: var(--accent-500);">
+                <div class="modal-icon-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--accent-500); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="database" style="width: 20px; height: 20px;"></i>
+                </div>
+                <span>Restaurer la démo ?</span>
+            </div>
+            <div class="modal-body-content" style="margin-bottom: 24px; color: var(--text-secondary); line-height: 1.6;">
+                <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">⚡ Charger les données de démonstration ?</p>
+                <p style="margin-bottom: 12px;">Cette action remplacera toutes les données actuelles de l'application par le jeu de données fictives par défaut.</p>
+                <p style="color: var(--danger); font-size: 0.85rem; font-weight: 500; background: rgba(239, 68, 68, 0.05); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--danger);">
+                    ⚠️ Attention : Vos données actuelles seront définitivement perdues.
+                </p>
+            </div>
+            <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button type="button" class="btn btn-outline" onclick="closeConfirmModal('restore_demo')">Annuler</button>
+                <button type="button" class="btn btn-accent" onclick="submitSystemForm('restore_demo')">Charger la démo</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     {% else %}
         {% block login_content %}{% endblock %}
     {% endif %}
@@ -170,6 +382,102 @@
                 sidebar.classList.remove('open');
                 sidebarOverlay.classList.remove('active');
             });
+        }
+
+        // Mall Switcher & Notification Dropdowns
+        const mallBtn = document.getElementById('mallSwitcherBtn');
+        const mallDropdown = document.getElementById('mallSwitcherDropdown');
+        const notifBtn = document.getElementById('notificationBtn');
+        const notifDropdown = document.getElementById('notificationDropdown');
+
+        if (mallBtn && mallDropdown) {
+            mallBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = mallDropdown.classList.contains('open');
+                mallDropdown.classList.toggle('open', !isOpen);
+                mallBtn.classList.toggle('open', !isOpen);
+                if (notifDropdown) notifDropdown.style.display = 'none';
+            });
+            document.addEventListener('click', () => {
+                mallDropdown.classList.remove('open');
+                mallBtn.classList.remove('open');
+            });
+            mallDropdown.addEventListener('click', e => e.stopPropagation());
+        }
+
+        if (notifBtn && notifDropdown) {
+            notifBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = notifDropdown.style.display === 'block';
+                notifDropdown.style.display = isOpen ? 'none' : 'block';
+                if (mallDropdown) {
+                    mallDropdown.classList.remove('open');
+                    mallBtn.classList.remove('open');
+                }
+            });
+            document.addEventListener('click', () => {
+                notifDropdown.style.display = 'none';
+            });
+            notifDropdown.addEventListener('click', e => e.stopPropagation());
+        }
+
+        // Quick Pay Modal helpers
+        function openPayModal(invoiceId, invoiceNum, amount) {
+            const overlay = document.getElementById('payModal');
+            if (!overlay) return;
+            document.getElementById('payModalInvoiceId').value = invoiceId;
+            document.getElementById('payModalTitle').textContent = 'Payer — ' + invoiceNum;
+            document.getElementById('payModalAmount').textContent = Number(amount).toLocaleString('fr-FR') + ' FCFA';
+            
+            const form = overlay.querySelector('form');
+            if (form) {
+                const template = form.getAttribute('data-url-template');
+                if (template) {
+                    form.action = template.replace('0', invoiceId);
+                }
+            }
+            overlay.classList.add('open');
+        }
+        function closePayModal() {
+            const overlay = document.getElementById('payModal');
+            if (overlay) overlay.classList.remove('open');
+        }
+
+        // System Action Confirmation Modals
+        function openConfirmModal(type) {
+            let modalId = '';
+            if (type === 'reset') modalId = 'confirmResetModal';
+            else if (type === 'restore_backup') modalId = 'confirmRestoreBackupModal';
+            else if (type === 'restore_demo') modalId = 'confirmRestoreDemoModal';
+            
+            const overlay = document.getElementById(modalId);
+            if (overlay) {
+                overlay.classList.add('open');
+                lucide.createIcons();
+            }
+        }
+
+        function closeConfirmModal(type) {
+            let modalId = '';
+            if (type === 'reset') modalId = 'confirmResetModal';
+            else if (type === 'restore_backup') modalId = 'confirmRestoreBackupModal';
+            else if (type === 'restore_demo') modalId = 'confirmRestoreDemoModal';
+            
+            const overlay = document.getElementById(modalId);
+            if (overlay) overlay.classList.remove('open');
+        }
+
+        // Submit form
+        function submitSystemForm(type) {
+            let formId = '';
+            if (type === 'reset') formId = 'resetDbForm';
+            else if (type === 'restore_backup') formId = 'restoreBackupForm';
+            else if (type === 'restore_demo') formId = 'restoreDbForm';
+            
+            const form = document.getElementById(formId);
+            if (form) {
+                form.submit();
+            }
         }
     </script>
     {% block extra_js %}{% endblock %}

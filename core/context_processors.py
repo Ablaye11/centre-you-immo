@@ -15,11 +15,30 @@ def global_context(request):
     }
 
     if request.user.is_authenticated:
-        context['pending_maintenance'] = MaintenanceRequest.objects.filter(
-            status__in=['new', 'in_progress']
-        ).count()
-        context['overdue_invoices'] = Invoice.objects.filter(
-            status='overdue'
-        ).count()
+        active_mall = getattr(request, 'active_mall', None)
+        context['active_mall'] = active_mall
+        context['all_malls'] = getattr(request, 'all_malls', [])
+
+        from core.models import Notification
+        context['unread_notifications'] = Notification.objects.filter(user=request.user, is_read=False)[:10]
+        context['unread_notifications_count'] = Notification.objects.filter(user=request.user, is_read=False).count()
+
+        if active_mall:
+            context['pending_maintenance'] = MaintenanceRequest.objects.filter(
+                mall=active_mall,
+                status__in=['new', 'in_progress']
+            ).count()
+            context['overdue_invoices'] = Invoice.objects.filter(
+                shop__mall=active_mall,
+                status='overdue'
+            ).count()
+        else:
+            context['pending_maintenance'] = 0
+            context['overdue_invoices'] = 0
+    else:
+        context['active_mall'] = None
+        context['all_malls'] = []
+        context['pending_maintenance'] = 0
+        context['overdue_invoices'] = 0
 
     return context

@@ -42,6 +42,32 @@
                 <span class="info-label">Adresse</span>
                 <span class="info-value">{{ tenant.address|default:"Non renseignée" }}</span>
             </div>
+            <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
+            <div style="font-weight: 600; font-size: 0.9rem; color: var(--accent-500); margin-bottom: 10px;">Documents justificatifs</div>
+            <div class="info-row">
+                <span class="info-label">Pièce d'Identité</span>
+                <span class="info-value">
+                    {% if tenant.cni_or_passport %}
+                        <a href="{{ tenant.cni_or_passport.url }}" target="_blank" class="btn btn-sm btn-outline" style="color: var(--accent-500); display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px;">
+                            <i data-lucide="download" style="width: 12px; height: 12px;"></i> Visualiser / Télécharger
+                        </a>
+                    {% else %}
+                        <span class="text-muted" style="font-style: italic; font-size: 0.82rem;">Non fournie</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">NINEA / Reg. Commerce</span>
+                <span class="info-value">
+                    {% if tenant.ninea_or_rc %}
+                        <a href="{{ tenant.ninea_or_rc.url }}" target="_blank" class="btn btn-sm btn-outline" style="color: var(--accent-500); display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px;">
+                            <i data-lucide="download" style="width: 12px; height: 12px;"></i> Visualiser / Télécharger
+                        </a>
+                    {% else %}
+                        <span class="text-muted" style="font-style: italic; font-size: 0.82rem;">Non fourni</span>
+                    {% endif %}
+                </span>
+            </div>
         </div>
     </div>
 
@@ -56,7 +82,12 @@
                 <div style="padding: 16px; border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); margin-bottom: 12px;">
                     <div class="flex-between mb-2">
                         <span style="font-weight: 700; font-size: 1rem; color: var(--accent-500);">Boutique {{ lease.shop.shop_number }}</span>
-                        <span class="badge {% if lease.status == 'active' %}badge-success{% else %}badge-secondary{% endif %}">{{ lease.get_status_display }}</span>
+                        <div class="flex gap-1" style="align-items: center;">
+                            <span class="badge {% if lease.status == 'active' %}badge-success{% else %}badge-secondary{% endif %}">{{ lease.get_status_display }}</span>
+                            <a href="{% url 'lease_print' lease.pk %}" class="btn btn-outline btn-sm btn-icon" title="Imprimer le contrat de bail" style="color: var(--accent-500); border-color: rgba(245, 158, 11, 0.25);">
+                                <i data-lucide="printer"></i>
+                            </a>
+                        </div>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Période</span>

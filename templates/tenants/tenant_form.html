@@ -14,7 +14,7 @@
 </div>
 
 <div class="form-card animate-in" style="max-width: 800px; margin: 0 auto;">
-    <form method="post" class="flex-column gap-2">
+    <form method="post" enctype="multipart/form-data" class="flex-column gap-2">
         {% csrf_token %}
         
         <div class="form-section-title">Informations Générales</div>
@@ -56,6 +56,91 @@
             <label class="form-label" for="id_address">Adresse complète</label>
             <textarea name="address" id="id_address" class="form-control" rows="3">{{ form.address.value|default_if_none:'' }}</textarea>
         </div>
+
+        <div class="form-section-title">Documents & Accès</div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="id_cni_or_passport">Pièce d'Identité (PDF, Image)</label>
+                {{ form.cni_or_passport }}
+                {{ form.cni_or_passport.errors }}
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="id_ninea_or_rc">NINEA ou Reg. Commerce (PDF, Image)</label>
+                {{ form.ninea_or_rc }}
+                {{ form.ninea_or_rc.errors }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="id_user">Compte utilisateur lié (Accès au portail)</label>
+            {{ form.user }}
+            {{ form.user.errors }}
+        </div>
+
+        {% if is_new %}
+        <div class="lease-section animate-in">
+            <div class="lease-section-header">
+                <i data-lucide="key" style="color: var(--primary-400); width: 18px; height: 18px;"></i>
+                <h4>Bail & Boutique</h4>
+                <span class="lease-badge-optional">Optionnel</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 15px;">
+                Vous pouvez directement attribuer une boutique et définir les conditions de bail pour ce locataire lors de sa création.
+            </p>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="id_shop">Boutique / Magasin</label>
+                    {{ form.shop }}
+                    {{ form.shop.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="id_monthly_rent">Loyer Mensuel (FCFA)</label>
+                    {{ form.monthly_rent }}
+                    {{ form.monthly_rent.errors }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="id_deposit">Caution / Dépôt (FCFA)</label>
+                    {{ form.deposit }}
+                    {{ form.deposit.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="id_start_date">Date de début</label>
+                    {{ form.start_date }}
+                    {{ form.start_date.errors }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="id_end_date">Date de fin</label>
+                    {{ form.end_date }}
+                    {{ form.end_date.errors }}
+                </div>
+                <div class="form-group">
+                </div>
+            </div>
+
+            <div style="height: 1px; background: rgba(59, 130, 246, 0.15); margin: 20px 0;"></div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="id_initial_payment">Paiement Initial d'Entrée</label>
+                    {{ form.initial_payment }}
+                    {{ form.initial_payment.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="id_payment_method">Mode de paiement initial</label>
+                    {{ form.payment_method }}
+                    {{ form.payment_method.errors }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="form-actions">
             <a href="{% url 'tenant_list' %}" class="btn btn-outline">Annuler</a>
