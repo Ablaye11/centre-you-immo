@@ -377,7 +377,7 @@ class ReportOverviewView(LoginRequiredMixin, TemplateView):
         occupancy_rate = int((occupied_shops / total_shops * 100)) if total_shops > 0 else 0
 
         # Financials in period
-        invoices_in_period = Invoice.objects.filter(shop__mall=active_mall, issue_date__range=(start_date, end_date))
+        invoices_in_period = Invoice.objects.filter(shop__mall=active_mall, issue_date__range=(start_date, end_date)).select_related('tenant', 'shop')
         expenses_in_period = Expense.objects.filter(mall=active_mall, date__range=(start_date, end_date))
 
         revenue_collected = Payment.objects.filter(
