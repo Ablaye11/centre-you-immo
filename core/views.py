@@ -245,8 +245,7 @@ class RestoreDatabaseView(LoginRequiredMixin, View):
             call_command('seed_data')
             messages.success(
                 request,
-                "✅ Données de démonstration chargées. "
-                "Reconnectez-vous avec : admin / admin123"
+                "✅ Données de démonstration chargées."
             )
         except Exception as e:
             messages.error(request, f"Erreur lors de la restauration démo : {str(e)}")
