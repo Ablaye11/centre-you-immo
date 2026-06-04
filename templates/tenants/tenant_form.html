@@ -32,7 +32,7 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label" for="id_email">Adresse Email</label>
+                <label class="form-label" for="id_email">Adresse Email (Optionnel)</label>
                 <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
             </div>
             <div class="form-group">
@@ -47,13 +47,13 @@
                 <input type="text" name="company_name" id="id_company_name" class="form-control" value="{{ form.company_name.value|default_if_none:'' }}">
             </div>
             <div class="form-group">
-                <label class="form-label" for="id_id_number">Numéro Pièce d'Identité (CNI / Passeport)</label>
+                <label class="form-label" for="id_id_number">Numéro Pièce d'Identité (CNI / Passeport) (Optionnel)</label>
                 <input type="text" name="id_number" id="id_id_number" class="form-control" value="{{ form.id_number.value|default_if_none:'' }}">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="form-label" for="id_address">Adresse complète</label>
+            <label class="form-label" for="id_address">Adresse complète (Optionnel)</label>
             <textarea name="address" id="id_address" class="form-control" rows="3">{{ form.address.value|default_if_none:'' }}</textarea>
         </div>
 
@@ -61,12 +61,12 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label" for="id_cni_or_passport">Pièce d'Identité (PDF, Image)</label>
+                <label class="form-label" for="id_cni_or_passport">Pièce d'Identité (PDF, Image) (Optionnel)</label>
                 {{ form.cni_or_passport }}
                 {{ form.cni_or_passport.errors }}
             </div>
             <div class="form-group">
-                <label class="form-label" for="id_ninea_or_rc">NINEA ou Reg. Commerce (PDF, Image)</label>
+                <label class="form-label" for="id_ninea_or_rc">NINEA ou Reg. Commerce (PDF, Image) (Optionnel)</label>
                 {{ form.ninea_or_rc }}
                 {{ form.ninea_or_rc.errors }}
             </div>

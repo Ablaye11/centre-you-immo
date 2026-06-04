@@ -31,7 +31,7 @@ class InvoicePDFView(LoginRequiredMixin, View):
 
         # Header Text
         p.setFillColor(colors.white)
-        p.setFont("Helvetica-Bold", 24)
+        p.setFont("Helvetica-Bold", 16)
         p.drawString(40, height - 60, "CENTRE COMMERCIAL YOU IMMO")
         
         p.setFont("Helvetica", 10)
