@@ -123,7 +123,7 @@
                         <span>Centres Commerciaux</span>
                     </a>
                     {% endif %}
-                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'accountant' %}
                     <a href="{% url 'report_overview' %}" class="nav-item {% if active_menu == 'reports' %}active{% endif %}">
                         <i data-lucide="bar-chart-3" class="nav-icon"></i>
                         <span>Rapports & Inventaires</span>

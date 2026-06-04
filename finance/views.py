@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, CreateView, View, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
@@ -348,7 +348,20 @@ class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
-class ReportOverviewView(LoginRequiredMixin, TemplateView):
+class ReportPermissionMixin(UserPassesTestMixin):
+    """Restricts access to Report page and export to admin, accountant, or superuser."""
+    def test_func(self):
+        user = self.request.user
+        if user.is_superuser:
+            return True
+        return hasattr(user, 'profile') and user.profile.role in ['admin', 'accountant']
+
+    def handle_no_permission(self):
+        messages.error(self.request, "Accès refusé. Seuls l'administrateur et le comptable ont accès aux rapports et inventaires.")
+        return redirect('dashboard')
+
+
+class ReportOverviewView(LoginRequiredMixin, ReportPermissionMixin, TemplateView):
     template_name = 'finance/report_overview.html'
 
     def get_context_data(self, **kwargs):
@@ -475,8 +488,9 @@ class ReportOverviewView(LoginRequiredMixin, TemplateView):
             'maintenance_actual_cost': maintenance_actual_cost,
             'active_leases': active_leases,
             'recent_payments': recent_payments,
-            'invoices': invoices_in_period.order_by('-issue_date')[:10],
-            'expenses': expenses_in_period.order_by('-date')[:10],
+            'invoices': invoices_in_period.order_by('-issue_date'),
+            'expenses': expenses_in_period.order_by('-date'),
+            'maintenance_requests': maintenance_qs.order_by('-created_at'),
             # Salary data
             'employees_count': employees_count,
             'salaries_total': salaries_total,
@@ -487,7 +501,7 @@ class ReportOverviewView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class ExportReportExcelView(LoginRequiredMixin, View):
+class ExportReportExcelView(LoginRequiredMixin, ReportPermissionMixin, View):
     """Export activity reports for the active mall to an Excel workbook with multiple sheets."""
 
     def get(self, request):

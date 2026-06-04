@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Inventaires & Rapports — {{ request.active_mall.name }}{% endblock %}
+{% block title %}Rapports & Inventaires — {{ request.active_mall.name }}{% endblock %}
 {% block page_title %}Rapports & Inventaires{% endblock %}
 
 {% block content %}
@@ -14,12 +14,156 @@
     </a>
 </div>
 {% else %}
+
+<style>
+/* CSS local pour les onglets interactifs et filtres */
+.report-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.report-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+}
+
+.report-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.report-tab-btn.active {
+    color: #fff;
+    background: var(--primary-600);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.report-tab-content {
+    display: none;
+}
+
+.report-tab-content.active {
+    display: block;
+    animation: fadeIn var(--transition-normal);
+}
+
+.inner-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.inner-stat-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inner-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.inner-stat-val {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.tab-filter-bar {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tab-search-input {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.tab-search-input input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    transition: all var(--transition-fast);
+}
+
+.tab-search-input input:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+.tab-search-input i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    width: 16px;
+    height: 16px;
+}
+
+.tab-select-input {
+    min-width: 180px;
+    padding: 10px 16px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.88rem;
+}
+
+.tab-select-input:focus {
+    border-color: var(--primary-500);
+    outline: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
 <div class="page-header animate-in">
     <div>
-        <p>Résumé opérationnel et financier pour <strong>{{ request.active_mall.name }}</strong> (Période : {{ period_label }}).</p>
+        <p>Rapport d'activité pour <strong>{{ request.active_mall.name }}</strong> — Période : <strong>{{ period_label }}</strong></p>
     </div>
-    <div class="page-actions" style="display: flex; gap: var(--spacing-sm); align-items: center;">
-        <div class="btn-group" style="display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 2px;">
+    <div class="page-actions" style="display:flex; gap:var(--spacing-sm); align-items:center; flex-wrap:wrap;">
+        <div class="btn-group" style="display:flex; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:2px; gap:2px;">
             <a href="?period=week" class="btn btn-sm {% if period == 'week' %}btn-primary{% else %}btn-outline{% endif %}" style="border:none; border-radius:var(--radius-sm);">Semaine</a>
             <a href="?period=month" class="btn btn-sm {% if period == 'month' %}btn-primary{% else %}btn-outline{% endif %}" style="border:none; border-radius:var(--radius-sm);">Ce Mois</a>
             <a href="?period=last_month" class="btn btn-sm {% if period == 'last_month' %}btn-primary{% else %}btn-outline{% endif %}" style="border:none; border-radius:var(--radius-sm);">Mois Dernier</a>
@@ -30,181 +174,140 @@
     </div>
 </div>
 
-<div class="stats-grid">
-    <!-- Stat 1: Taux d'occupation -->
-    <div class="stat-card blue animate-in">
-        <div class="stat-icon blue">
-            <i data-lucide="pie-chart"></i>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label">Taux d'Occupation</div>
-            <div class="stat-value">{{ occupancy_rate }}%</div>
-            <span class="stat-change up">{{ occupied_shops }} / {{ total_shops }} boutiques</span>
-        </div>
-    </div>
-
-    <!-- Stat 2: Revenu Collecté -->
-    <div class="stat-card green animate-in">
-        <div class="stat-icon green">
-            <i data-lucide="trending-up"></i>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label">Loyers Encaissés</div>
-            <div class="stat-value">{{ revenue_collected }} FCFA</div>
-            <span class="stat-change up">Paiements de la période</span>
-        </div>
-    </div>
-
-    <!-- Stat 3: Dépenses Opérationnelles -->
-    <div class="stat-card red animate-in">
-        <div class="stat-icon red">
-            <i data-lucide="trending-down"></i>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label">Charges / Dépenses</div>
-            <div class="stat-value">{{ expenses_total }} FCFA</div>
-            <span class="stat-change down">Dépensé de la période</span>
-        </div>
-    </div>
-
-    <!-- Stat 4: Incidents de maintenance -->
-    <div class="stat-card gold animate-in">
-        <div class="stat-icon gold">
-            <i data-lucide="tool"></i>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label">Incidents Maintenance</div>
-            <div class="stat-value">{{ maintenance_count }}</div>
-            <span class="stat-change neutral">Coût: {{ maintenance_actual_cost }} FCFA</span>
-        </div>
-    </div>
+<!-- ===== NAVIGATION PAR ONGLETS ===== -->
+<div class="report-tabs animate-in">
+    <button class="report-tab-btn active" onclick="switchTab('overview')">
+        <i data-lucide="layout-dashboard" style="width:16px;height:16px;"></i>
+        <span>Vue d'ensemble</span>
+    </button>
+    <button class="report-tab-btn" onclick="switchTab('invoices')">
+        <i data-lucide="receipt" style="width:16px;height:16px;"></i>
+        <span>Inventaire Factures</span>
+    </button>
+    <button class="report-tab-btn" onclick="switchTab('expenses')">
+        <i data-lucide="trending-down" style="width:16px;height:16px;"></i>
+        <span>Inventaire Dépenses</span>
+    </button>
+    <button class="report-tab-btn" onclick="switchTab('employees')">
+        <i data-lucide="users" style="width:16px;height:16px;"></i>
+        <span>Personnel & Salaires</span>
+    </button>
+    <button class="report-tab-btn" onclick="switchTab('maintenance')">
+        <i data-lucide="wrench" style="width:16px;height:16px;"></i>
+        <span>Maintenance</span>
+    </button>
 </div>
 
-<!-- Masse Salariale -->
-<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-    <div class="stat-card green animate-in">
-        <div class="stat-icon green">
-            <i data-lucide="users"></i>
+<!-- ==============================================
+     ONGLET 1 : VUE D'ENSEMBLE
+     ============================================== -->
+<div id="tab-overview" class="report-tab-content active">
+    <div class="stats-grid animate-in">
+        <div class="stat-card blue animate-in">
+            <div class="stat-icon blue"><i data-lucide="pie-chart"></i></div>
+            <div class="stat-content">
+                <div class="stat-label">Taux d'Occupation</div>
+                <div class="stat-value">{{ occupancy_rate }}%</div>
+                <span class="stat-change up">{{ occupied_shops }}/{{ total_shops }} boutiques</span>
+            </div>
         </div>
-        <div class="stat-content">
-            <div class="stat-label">Employés Actifs</div>
-            <div class="stat-value">{{ employees_count }}</div>
-            <span class="stat-change neutral">Personnel du centre</span>
+        <div class="stat-card green animate-in">
+            <div class="stat-icon green"><i data-lucide="trending-up"></i></div>
+            <div class="stat-content">
+                <div class="stat-label">Loyers Encaissés</div>
+                <div class="stat-value">{{ revenue_collected }} FCFA</div>
+                <span class="stat-change up">Paiements de la période</span>
+            </div>
         </div>
-    </div>
-    <div class="stat-card red animate-in">
-        <div class="stat-icon red">
-            <i data-lucide="banknote"></i>
+        <div class="stat-card red animate-in">
+            <div class="stat-icon red"><i data-lucide="trending-down"></i></div>
+            <div class="stat-content">
+                <div class="stat-label">Charges & Dépenses</div>
+                <div class="stat-value">{{ expenses_total }} FCFA</div>
+                <span class="stat-change down">Total dépensé</span>
+            </div>
         </div>
-        <div class="stat-content">
-            <div class="stat-label">Masse Salariale Mensuelle</div>
-            <div class="stat-value">{{ salaries_total }} FCFA</div>
-            <span class="stat-change neutral">Salaires nets théoriques</span>
-        </div>
-    </div>
-    <div class="stat-card blue animate-in">
-        <div class="stat-icon blue">
-            <i data-lucide="receipt"></i>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label">Salaires Payés (Période)</div>
-            <div class="stat-value">{{ salary_expenses_total }} FCFA</div>
-            <span class="stat-change neutral">Dépenses catégorie Salaires</span>
-        </div>
-    </div>
-    <div class="stat-card gold animate-in">
-        <div class="stat-icon gold">
-            <i data-lucide="bar-chart-2"></i>
-        </div>
-        <div class="stat-content">
-            <div class="stat-label">Résultat Net</div>
-            {% if net_income >= 0 %}
-            <div class="stat-value" style="color: var(--success);">{{ net_income }} FCFA</div>
-            {% else %}
-            <div class="stat-value" style="color: var(--danger);">{{ net_income }} FCFA</div>
-            {% endif %}
-            <span class="stat-change neutral">Encaissé — Dépenses</span>
+        <div class="stat-card gold animate-in">
+            <div class="stat-icon gold"><i data-lucide="bar-chart-2"></i></div>
+            <div class="stat-content">
+                <div class="stat-label">Résultat Net</div>
+                <div class="stat-value {% if net_income >= 0 %}text-success{% else %}text-danger{% endif %}">{{ net_income }} FCFA</div>
+                <span class="stat-change neutral">Encaissé — Dépenses</span>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Graphiques Analytiques -->
-<div class="grid-2 mb-3 animate-in">
-    <!-- Doughnut Chart: Répartition des Dépenses par Catégorie -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <h3 class="card-title">Répartition des Dépenses par Catégorie</h3>
-        </div>
-        <div class="card-body" style="display: flex; align-items: center; gap: 24px;">
-            <div style="position: relative; height: 220px; width: 220px; flex-shrink: 0;">
-                <canvas id="expensePieChart"></canvas>
-                <div id="expense-data-container" style="display: none;">
-                    {% for cat in expense_by_category %}
-                        <span data-label="{{ cat.category|capfirst }}" data-value="{{ cat.total }}"></span>
-                    {% endfor %}
+    <div class="grid-2 mb-3 animate-in">
+        <!-- Résumé financier condensé -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <h3 class="card-title">Résumé de la Période</h3>
+            </div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:10px;">
+                <div class="report-kpi-row" style="background:rgba(59,130,246,0.07); border-left:3px solid var(--primary-400); padding:12px; border-radius:var(--radius-sm);">
+                    <div class="report-kpi-label" style="font-size:0.85rem; color:var(--text-secondary);">Total Facturé</div>
+                    <div class="report-kpi-value" style="font-size:1.25rem; font-weight:700;">{{ invoiced_amount|default:0|floatformat:0 }} FCFA</div>
+                    <div class="report-kpi-sub" style="font-size:0.75rem; color:var(--text-muted);">dont {{ paid_amount|default:0|floatformat:0 }} FCFA payés · {{ pending_amount|default:0|floatformat:0 }} FCFA en attente</div>
+                </div>
+                <div class="report-kpi-row" style="background:rgba(239,68,68,0.07); border-left:3px solid var(--danger); padding:12px; border-radius:var(--radius-sm);">
+                    <div class="report-kpi-label" style="font-size:0.85rem; color:var(--text-secondary);">Total Dépenses</div>
+                    <div class="report-kpi-value" style="font-size:1.25rem; font-weight:700; color:var(--danger);">{{ expenses_total|default:0|floatformat:0 }} FCFA</div>
+                    <div class="report-kpi-sub" style="font-size:0.75rem; color:var(--text-muted);">dont {{ salary_expenses_total|default:0|floatformat:0 }} FCFA de salaires payés</div>
+                </div>
+                <div class="report-kpi-row" style="padding:12px; border-radius:var(--radius-sm); {% if net_income >= 0 %}background:rgba(16,185,129,0.07); border-left:3px solid var(--success);{% else %}background:rgba(239,68,68,0.07); border-left:3px solid var(--danger);{% endif %}">
+                    <div class="report-kpi-label" style="font-size:0.85rem; color:var(--text-secondary);">Résultat Net</div>
+                    <div class="report-kpi-value {% if net_income >= 0 %}text-success{% else %}text-danger{% endif %}" style="font-size:1.5rem; font-weight:900;">{{ net_income|default:0|floatformat:0 }} FCFA</div>
+                    <div class="report-kpi-sub" style="font-size:0.75rem; color:var(--text-muted);">Loyers encaissés moins toutes les charges</div>
+                </div>
+                <div class="report-kpi-row" style="background:rgba(245,158,11,0.07); border-left:3px solid var(--warning); padding:12px; border-radius:var(--radius-sm);">
+                    <div class="report-kpi-label" style="font-size:0.85rem; color:var(--text-secondary);">Loyers en Retard (période)</div>
+                    <div class="report-kpi-value" style="font-size:1.25rem; font-weight:700; color:var(--warning);">{{ overdue_amount|default:0|floatformat:0 }} FCFA</div>
+                    <div class="report-kpi-sub" style="font-size:0.75rem; color:var(--text-muted);">Factures échues non réglées</div>
                 </div>
             </div>
-            <div style="flex: 1;">
-                {% if expense_by_category %}
-                    {% for cat in expense_by_category %}
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="expense-legend-dot" data-index="{{ forloop.counter0 }}" style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--primary-400);"></span>
-                            <span style="font-size: 0.83rem; color: var(--text-secondary);">{{ cat.category|capfirst }}</span>
-                        </div>
-                        <span style="font-size: 0.83rem; font-weight: 700; color: var(--text-primary);">{{ cat.total|floatformat:0 }} FCFA</span>
+        </div>
+
+        <!-- Graphique dépenses par catégorie -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <h3 class="card-title">Répartition des Dépenses par Catégorie</h3>
+            </div>
+            <div class="card-body" style="display:flex; align-items:center; gap:24px;">
+                <div style="position:relative; height:200px; width:200px; flex-shrink:0;">
+                    <canvas id="expensePieChart"></canvas>
+                    <div id="expense-data-container" style="display:none;">
+                        {% for cat in expense_by_category %}
+                            <span data-label="{{ cat.category|capfirst }}" data-value="{{ cat.total }}"></span>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-muted" style="font-size: 0.85rem;">Aucune dépense sur cette période.</p>
-                {% endif %}
+                </div>
+                <div style="flex:1; overflow:auto; max-height:200px;">
+                    {% if expense_by_category %}
+                        {% for cat in expense_by_category %}
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.04);">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span class="expense-legend-dot" data-index="{{ forloop.counter0 }}" style="display:inline-block; width:10px; height:10px; border-radius:2px; background:var(--primary-400);"></span>
+                                <span style="font-size:0.82rem; color:var(--text-secondary);">{{ cat.category|capfirst }}</span>
+                            </div>
+                            <span style="font-size:0.82rem; font-weight:700; color:var(--text-primary);">{{ cat.total|floatformat:0 }} FCFA</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted" style="font-size:0.85rem;">Aucune dépense sur cette période.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Summary Card -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <h3 class="card-title">Résumé Financier de la Période</h3>
-        </div>
-        <div class="card-body">
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <div style="background: rgba(59, 130, 246, 0.08); border-radius: var(--radius-md); padding: 14px; border-left: 3px solid var(--primary-400);">
-                    <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;">Total Facturé</div>
-                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--text-primary);">{{ invoiced_amount|default:0|floatformat:0 }} FCFA</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">Dont {{ paid_amount|default:0|floatformat:0 }} FCFA payés</div>
-                </div>
-                <div style="background: rgba(239, 68, 68, 0.08); border-radius: var(--radius-md); padding: 14px; border-left: 3px solid var(--danger);">
-                    <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;">Total Dépenses</div>
-                    <div style="font-size: 1.3rem; font-weight: 800; color: var(--danger);">{{ expenses_total|default:0|floatformat:0 }} FCFA</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">dont {{ salary_expenses_total|default:0|floatformat:0 }} FCFA de salaires</div>
-                </div>
-                {% if net_income >= 0 %}
-                <div style="background: rgba(16, 185, 129, 0.08); border-radius: var(--radius-md); padding: 14px; border-left: 3px solid var(--success);">
-                    <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;">Résultat Net</div>
-                    <div style="font-size: 1.5rem; font-weight: 900; color: var(--success);">{{ net_income|default:0|floatformat:0 }} FCFA</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">Encaissé moins les dépenses</div>
-                </div>
-                {% else %}
-                <div style="background: rgba(239, 68, 68, 0.08); border-radius: var(--radius-md); padding: 14px; border-left: 3px solid var(--danger);">
-                    <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px;">Résultat Net</div>
-                    <div style="font-size: 1.5rem; font-weight: 900; color: var(--danger);">{{ net_income|default:0|floatformat:0 }} FCFA</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">Encaissé moins les dépenses</div>
-                </div>
-                {% endif %}
+    <div class="grid-2 mb-3 animate-in">
+        <!-- Top Baux -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <h3 class="card-title">Top Baux (Loyers les Plus Élevés)</h3>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="grid-2 mb-3">
-    <!-- Leases & Top Tenants -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <h3 class="card-title">Baux Actifs & Loyers Élevés</h3>
-        </div>
-        <div class="card-body">
-            {% if active_leases %}
+            <div class="card-body">
+                {% if active_leases %}
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
@@ -218,30 +321,28 @@
                         <tbody>
                             {% for lease in active_leases %}
                             <tr>
-                                <td>{{ lease.shop.shop_number }}</td>
+                                <td><strong>{{ lease.shop.shop_number }}</strong></td>
                                 <td>{{ lease.tenant.full_name }}</td>
-                                <td>{{ lease.monthly_rent }} FCFA</td>
-                                <td>
-                                    <span class="badge badge-success">Actif</span>
-                                </td>
+                                <td style="font-weight:600; color:var(--success);">{{ lease.monthly_rent }} FCFA</td>
+                                <td><span class="badge badge-success">Actif</span></td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            {% else %}
-                <p class="text-muted">Aucun bail actif sur ce centre.</p>
-            {% endif %}
+                {% else %}
+                    <p class="text-muted">Aucun bail actif sur ce centre.</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
 
-    <!-- Recent Payments -->
-    <div class="card animate-in">
-        <div class="card-header">
-            <h3 class="card-title">Paiements de la Période</h3>
-        </div>
-        <div class="card-body">
-            {% if recent_payments %}
+        <!-- Derniers Paiements -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <h3 class="card-title">Derniers Paiements Encaissés</h3>
+            </div>
+            <div class="card-body">
+                {% if recent_payments %}
                 <div class="table-wrapper">
                     <table class="data-table">
                         <thead>
@@ -258,109 +359,434 @@
                                 <td>{{ pay.payment_date }}</td>
                                 <td>{{ pay.invoice.invoice_number }}</td>
                                 <td>{{ pay.invoice.tenant.full_name }}</td>
-                                <td style="color: var(--success); font-weight: 600;">+{{ pay.amount }} FCFA</td>
+                                <td style="color:var(--success); font-weight:600;">+{{ pay.amount }} FCFA</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            {% else %}
-                <p class="text-muted">Aucun paiement enregistré durant cette période.</p>
-            {% endif %}
+                {% else %}
+                    <p class="text-muted">Aucun paiement enregistré durant cette période.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
 
-<div class="grid-2 mb-3">
-    <!-- Invoices List in Period -->
+<!-- ==============================================
+     ONGLET 2 : INVENTAIRE FACTURES
+     ============================================== -->
+<div id="tab-invoices" class="report-tab-content">
+    <div class="inner-stats-grid animate-in">
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Loyers Facturés</span>
+            <span class="inner-stat-val" style="color:var(--primary-400);">{{ invoiced_amount|default:0|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Total Encaissé</span>
+            <span class="inner-stat-val" style="color:var(--success);">{{ paid_amount|default:0|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">En Attente</span>
+            <span class="inner-stat-val" style="color:var(--warning);">{{ pending_amount|default:0|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">En Retard</span>
+            <span class="inner-stat-val" style="color:var(--danger);">{{ overdue_amount|default:0|floatformat:0 }} FCFA</span>
+        </div>
+    </div>
+
     <div class="card animate-in">
-        <div class="card-header">
-            <h3 class="card-title">Factures de la Période</h3>
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--spacing-md);">
+            <h3 class="card-title">Registre des Factures Émises</h3>
+            <span class="text-muted" style="font-size:0.85rem;" id="invoiceCountLabel">{{ invoices|length }} facture(s) sur la période</span>
         </div>
         <div class="card-body">
-            {% if invoices %}
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>N°</th>
-                                <th>Locataire</th>
-                                <th>Montant</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for inv in invoices %}
-                            <tr>
-                                <td>{{ inv.invoice_number }}</td>
-                                <td>{{ inv.tenant.full_name }}</td>
-                                <td>{{ inv.amount }} FCFA</td>
-                                <td>
-                                    <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
-                                        {{ inv.get_status_display }}
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="tab-filter-bar">
+                <div class="tab-search-input">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="invoiceSearchInput" onkeyup="filterInvoicesTable()" placeholder="Rechercher par locataire, n° de facture, boutique...">
                 </div>
+            </div>
+
+            {% if invoices %}
+            <div class="table-wrapper">
+                <table class="data-table" id="invoicesReportTable">
+                    <thead>
+                        <tr>
+                            <th>N° Facture</th>
+                            <th>Locataire</th>
+                            <th>Boutique</th>
+                            <th>Type</th>
+                            <th>Montant</th>
+                            <th>Date d'Émission</th>
+                            <th>Échéance</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceReportTableBody">
+                        {% for inv in invoices %}
+                        <tr>
+                            <td><strong>{{ inv.invoice_number }}</strong></td>
+                            <td class="invoice-tenant">{{ inv.tenant.full_name }}</td>
+                            <td>{{ inv.shop.shop_number }}</td>
+                            <td>{{ inv.get_invoice_type_display }}</td>
+                            <td style="font-weight:600;">{{ inv.amount }} FCFA</td>
+                            <td>{{ inv.issue_date }}</td>
+                            <td>{{ inv.due_date }}</td>
+                            <td>
+                                <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
+                                    {{ inv.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
                 <p class="text-muted">Aucune facture émise sur cette période.</p>
             {% endif %}
         </div>
     </div>
+</div>
 
-    <!-- Expenses List in Period -->
+<!-- ==============================================
+     ONGLET 3 : INVENTAIRE DÉPENSES
+     ============================================== -->
+<div id="tab-expenses" class="report-tab-content">
+    <div class="inner-stats-grid animate-in">
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Total Dépenses</span>
+            <span class="inner-stat-val" style="color:var(--danger);">{{ expenses_total|default:0|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Masse Salariale Réelle</span>
+            <span class="inner-stat-val" style="color:var(--primary-400);">{{ salary_expenses_total|default:0|floatformat:0 }} FCFA</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Nombre de Dépenses</span>
+            <span class="inner-stat-val">{{ expenses|length }} enregistrement(s)</span>
+        </div>
+    </div>
+
     <div class="card animate-in">
-        <div class="card-header">
-            <h3 class="card-title">Dépenses de la Période</h3>
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:var(--spacing-md);">
+            <h3 class="card-title">Registre des Dépenses & Charges</h3>
+            <span class="text-muted" style="font-size:0.85rem;" id="expenseCountLabel">{{ expenses|length }} charge(s) enregistrée(s)</span>
         </div>
         <div class="card-body">
-            {% if expenses %}
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Catégorie</th>
-                                <th>Montant</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for exp in expenses %}
-                            <tr>
-                                <td>{{ exp.title }}</td>
-                                <td>{{ exp.get_category_display }}</td>
-                                <td style="color: var(--danger);">{{ exp.amount }} FCFA</td>
-                                <td>{{ exp.date }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="tab-filter-bar">
+                <div class="tab-search-input">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="expenseSearchInput" onkeyup="filterExpensesTable()" placeholder="Rechercher par titre, libellé ou fournisseur...">
                 </div>
+                <select id="expenseCategoryFilter" onchange="filterExpensesTable()" class="tab-select-input">
+                    <option value="">Toutes les catégories</option>
+                    <option value="maintenance">Maintenance</option>
+                    <option value="salary">Salaires</option>
+                    <option value="energy">Énergie & Eau</option>
+                    <option value="security">Sécurité</option>
+                    <option value="cleaning">Nettoyage</option>
+                    <option value="insurance">Assurance</option>
+                    <option value="taxes">Taxes & Impôts</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="equipment">Équipement</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+
+            {% if expenses %}
+            <div class="table-wrapper">
+                <table class="data-table" id="expensesReportTable">
+                    <thead>
+                        <tr>
+                            <th>Titre / Description</th>
+                            <th>Catégorie</th>
+                            <th>Montant</th>
+                            <th>Fournisseur / Bénéficiaire</th>
+                            <th>Date d'Enregistrement</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenseReportTableBody">
+                        {% for exp in expenses %}
+                        <tr data-category="{{ exp.category }}">
+                            <td>
+                                <strong class="expense-title">{{ exp.title }}</strong>
+                                {% if exp.description %}
+                                <div class="text-muted" style="font-size:0.78rem; margin-top:2px;">{{ exp.description }}</div>
+                                {% endif %}
+                            </td>
+                            <td><span class="badge badge-secondary">{{ exp.get_category_display }}</span></td>
+                            <td style="color:var(--danger); font-weight:600;">-{{ exp.amount }} FCFA</td>
+                            <td class="expense-supplier">{{ exp.supplier|default:"-" }}</td>
+                            <td>{{ exp.date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
                 <p class="text-muted">Aucune dépense enregistrée sur cette période.</p>
             {% endif %}
         </div>
     </div>
 </div>
+
+<!-- ==============================================
+     ONGLET 4 : PERSONNEL & SALAIRES
+     ============================================== -->
+<div id="tab-employees" class="report-tab-content">
+    <div class="inner-stats-grid animate-in">
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Employés Actifs</span>
+            <span class="inner-stat-val" style="color:var(--success);">{{ employees_count }}</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Masse Salariale Théorique</span>
+            <span class="inner-stat-val" style="color:var(--primary-400);">{{ salaries_total }} FCFA</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Salaires Réellement Payés (Période)</span>
+            <span class="inner-stat-val" style="color:var(--success);">{{ salary_expenses_total }} FCFA</span>
+        </div>
+    </div>
+
+    <div class="grid-2 mb-3 animate-in">
+        <!-- Liste nominative des employés actifs -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <h3 class="card-title">Membres du Personnel</h3>
+            </div>
+            <div class="card-body">
+                {% if active_employees %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nom Complet</th>
+                                <th>Poste</th>
+                                <th>Contrat</th>
+                                <th>Salaire Mensuel</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for emp in active_employees %}
+                            <tr>
+                                <td><strong>{{ emp.full_name }}</strong></td>
+                                <td>{{ emp.position }}</td>
+                                <td><span class="badge badge-secondary">{{ emp.get_contract_type_display }}</span></td>
+                                <td style="font-weight:600;">{{ emp.salary }} FCFA</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                    <p class="text-muted">Aucun employé actif enregistré pour ce centre.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Détail des salaires comptabilisés sur la période -->
+        <div class="card animate-in">
+            <div class="card-header">
+                <h3 class="card-title">Fiches de Paie Émises (Période)</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Bénéficiaire</th>
+                                <th>Libellé Dépense</th>
+                                <th>Montant</th>
+                                <th>Date de Règlement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exp in expenses %}
+                            {% if exp.category == 'salary' %}
+                            <tr>
+                                <td><strong>{{ exp.supplier }}</strong></td>
+                                <td>{{ exp.title }}</td>
+                                <td style="color:var(--danger); font-weight:600;">{{ exp.amount }} FCFA</td>
+                                <td>{{ exp.date }}</td>
+                            </tr>
+                            {% endif %}
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-muted" style="text-align:center;">Aucun versement de salaire comptabilisé sur cette période.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==============================================
+     ONGLET 5 : MAINTENANCE
+     ============================================== -->
+<div id="tab-maintenance" class="report-tab-content">
+    <div class="inner-stats-grid animate-in">
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Incidents Signalés</span>
+            <span class="inner-stat-val" style="color:var(--warning);">{{ maintenance_count }}</span>
+        </div>
+        <div class="inner-stat-card">
+            <span class="inner-stat-label">Coût Total Réel</span>
+            <span class="inner-stat-val" style="color:var(--danger);">{{ maintenance_actual_cost }} FCFA</span>
+        </div>
+    </div>
+
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Historique des Demandes de Maintenance</h3>
+        </div>
+        <div class="card-body">
+            {% if maintenance_requests %}
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Titre & Description</th>
+                            <th>Zone</th>
+                            <th>Priorité</th>
+                            <th>Statut</th>
+                            <th>Technicien / Assigné</th>
+                            <th>Coût Réel</th>
+                            <th>Date Signalement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in maintenance_requests %}
+                        <tr>
+                            <td>
+                                <strong>{{ req.title }}</strong>
+                                <div class="text-muted" style="font-size:0.8rem; margin-top:2px;">{{ req.description }}</div>
+                            </td>
+                            <td>{{ req.get_zone_display }}</td>
+                            <td>
+                                <span class="badge {% if req.priority == 'urgent' or req.priority == 'high' %}badge-danger{% elif req.priority == 'medium' %}badge-warning{% else %}badge-secondary{% endif %}">
+                                    {{ req.get_priority_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge {% if req.status == 'completed' %}badge-success{% elif req.status == 'in_progress' %}badge-warning{% elif req.status == 'cancelled' %}badge-danger{% else %}badge-secondary{% endif %}">
+                                    {{ req.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ req.assigned_to|default:"Non assigné" }}</td>
+                            <td style="font-weight:600;">
+                                {% if req.actual_cost %}
+                                    {{ req.actual_cost }} FCFA
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ req.created_at|date:"d M Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="text-muted">Aucun incident de maintenance signalé sur cette période.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 {% endif %}
 {% endblock %}
 
 {% block extra_js %}
 {% if not no_active_mall %}
 <script>
-(function() {
+// Gestion des Onglets
+function switchTab(tabId) {
+    document.querySelectorAll('.report-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    document.querySelectorAll('.report-tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    const targetContent = document.getElementById('tab-' + tabId);
+    if (targetContent) {
+        targetContent.classList.add('active');
+    }
+
+    const targetBtn = Array.from(document.querySelectorAll('.report-tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+    if (targetBtn) {
+        targetBtn.classList.add('active');
+    }
+
+    sessionStorage.setItem('activeReportTab', tabId);
+}
+
+// Recherche temps réel dans les Factures
+function filterInvoicesTable() {
+    const query = document.getElementById('invoiceSearchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#invoiceReportTableBody tr');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(query)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    document.getElementById('invoiceCountLabel').textContent = visibleCount + ' facture(s) trouvée(s)';
+}
+
+// Recherche temps réel + Catégorie dans les Dépenses
+function filterExpensesTable() {
+    const query = document.getElementById('expenseSearchInput').value.toLowerCase();
+    const cat = document.getElementById('expenseCategoryFilter').value;
+    const rows = document.querySelectorAll('#expenseReportTableBody tr');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const title = row.querySelector('.expense-title').textContent.toLowerCase();
+        const supplier = row.querySelector('.expense-supplier').textContent.toLowerCase();
+        const category = row.getAttribute('data-category');
+
+        const matchQuery = title.includes(query) || supplier.includes(query);
+        const matchCategory = !cat || category === cat;
+
+        if (matchQuery && matchCategory) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    document.getElementById('expenseCountLabel').textContent = visibleCount + ' charge(s) trouvée(s)';
+}
+
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    // Restauration de l'onglet actif
+    const activeTab = sessionStorage.getItem('activeReportTab') || 'overview';
+    switchTab(activeTab);
+
+    // Initialisation Chart.js
     const ctx = document.getElementById('expensePieChart');
     if (!ctx) return;
 
     const rawData = [];
     const dataContainer = document.getElementById('expense-data-container');
     if (dataContainer) {
-        const items = dataContainer.querySelectorAll('span');
-        items.forEach(item => {
+        dataContainer.querySelectorAll('span').forEach(item => {
             rawData.push({
                 label: item.getAttribute('data-label'),
                 value: parseFloat(item.getAttribute('data-value') || '0')
@@ -369,28 +795,19 @@
     }
 
     if (!rawData.length) {
-        ctx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:220px;color:var(--text-muted);font-size:0.85rem;">Aucune dépense</div>';
+        ctx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:200px;color:var(--text-muted);font-size:0.85rem;">Aucune dépense</div>';
         return;
     }
 
     const palette = [
-        'rgba(59, 130, 246, 0.85)',
-        'rgba(239, 68, 68, 0.85)',
-        'rgba(245, 158, 11, 0.85)',
-        'rgba(16, 185, 129, 0.85)',
-        'rgba(139, 92, 246, 0.85)',
-        'rgba(20, 184, 166, 0.85)',
-        'rgba(249, 115, 22, 0.85)',
-        'rgba(236, 72, 153, 0.85)',
+        'rgba(59,130,246,0.85)', 'rgba(239,68,68,0.85)', 'rgba(245,158,11,0.85)',
+        'rgba(16,185,129,0.85)', 'rgba(139,92,246,0.85)', 'rgba(20,184,166,0.85)',
+        'rgba(249,115,22,0.85)', 'rgba(236,72,153,0.85)',
     ];
 
-    // Color the HTML legend dots dynamically to match Chart.js slices
-    const dots = document.querySelectorAll('.expense-legend-dot');
-    dots.forEach(dot => {
+    document.querySelectorAll('.expense-legend-dot').forEach(dot => {
         const idx = parseInt(dot.getAttribute('data-index'), 10);
-        if (idx < palette.length) {
-            dot.style.backgroundColor = palette[idx];
-        }
+        if (idx < palette.length) dot.style.backgroundColor = palette[idx];
     });
 
     new Chart(ctx, {
@@ -400,7 +817,7 @@
             datasets: [{
                 data: rawData.map(d => d.value),
                 backgroundColor: palette.slice(0, rawData.length),
-                borderColor: 'rgba(15, 23, 42, 0.8)',
+                borderColor: 'rgba(15,23,42,0.8)',
                 borderWidth: 2,
                 hoverOffset: 6,
             }]
@@ -412,18 +829,15 @@
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    backgroundColor: 'rgba(15,23,42,0.95)',
                     titleColor: '#f1f5f9',
                     bodyColor: '#94a3b8',
-                    borderColor: 'rgba(148, 163, 184, 0.2)',
-                    borderWidth: 1,
-                    padding: 10,
-                    cornerRadius: 8,
-                    titleFont: { family: 'Inter', weight: '600' },
+                    borderColor: 'rgba(148,163,184,0.2)',
+                    borderWidth: 1, padding: 10, cornerRadius: 8,
                     callbacks: {
                         label: function(ctx) {
-                            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                            const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                            const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+                            const pct = total > 0 ? ((ctx.raw/total)*100).toFixed(1) : 0;
                             return ` ${ctx.raw.toLocaleString('fr-FR')} FCFA (${pct}%)`;
                         }
                     }
@@ -431,7 +845,7 @@
             }
         }
     });
-})();
+});
 </script>
 {% endif %}
 {% endblock %}
