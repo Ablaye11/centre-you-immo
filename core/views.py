@@ -10,7 +10,7 @@ from maintenance.models import MaintenanceRequest
 from parking.models import ParkingSpace, ParkingSubscription
 from finance.models import Invoice, Expense
 from employees.models import Employee, Department
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 import datetime
@@ -110,50 +110,76 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['monthly_chart_data'] = json.dumps(monthly_data)
 
         # ── Mise à jour automatique des factures en retard (overdue) ──────────
-        past_due_invoices = Invoice.objects.filter(
+        # Utiliser bulk_update pour éviter N requêtes individuelles
+        past_due_invoices_qs = Invoice.objects.filter(
             shop__mall=active_mall,
             status='pending',
             due_date__lt=today
         ).select_related('tenant', 'shop')
-        
-        if past_due_invoices.exists():
+
+        past_due_list = list(past_due_invoices_qs)
+        if past_due_list:
+            # 1. Mise à jour groupée du statut (1 seule requête SQL au lieu de N)
+            for inv in past_due_list:
+                inv.status = 'overdue'
+            Invoice.objects.bulk_update(past_due_list, ['status'])
+
+            # 2. Notifications groupées (éviter les boucles imbriquées)
             from core.models import Notification
             from django.contrib.auth.models import User
-            
-            # Rechercher le personnel à notifier (administrateurs, managers, comptables)
-            staff_users = User.objects.filter(
-                Q(is_superuser=True) | 
+
+            staff_users = list(User.objects.filter(
+                Q(is_superuser=True) |
                 Q(profile__role__in=['admin', 'manager', 'accountant'])
-            )
-            
-            for invoice in past_due_invoices:
-                invoice.status = 'overdue'
-                invoice.save(update_fields=['status'])
-                
-                # Créer une notification si elle n'existe pas déjà
+            ).only('id'))
+
+            # Récupérer les messages déjà existants en une seule requête
+            existing_msgs = set(Notification.objects.filter(
+                user__in=staff_users,
+                notif_type='danger'
+            ).values_list('message', flat=True))
+
+            new_notifications = []
+            for invoice in past_due_list:
                 notif_msg = f"La facture {invoice.invoice_number} ({invoice.tenant.full_name}) pour la boutique {invoice.shop.shop_number} est en retard."
-                for staff in staff_users:
-                    if not Notification.objects.filter(user=staff, message=notif_msg).exists():
-                        Notification.objects.create(
+                if notif_msg not in existing_msgs:
+                    for staff in staff_users:
+                        new_notifications.append(Notification(
                             user=staff,
                             title=f"Facture en retard: {invoice.invoice_number}",
                             message=notif_msg,
                             notif_type='danger'
-                        )
+                        ))
+                    existing_msgs.add(notif_msg)  # éviter les doublons dans le même batch
+
+            if new_notifications:
+                Notification.objects.bulk_create(new_notifications, ignore_conflicts=True)
 
         # ── Loyers en retard (alertes urgentes) ──────────────────────────────
         overdue_invoices = Invoice.objects.filter(
             shop__mall=active_mall,
             status='overdue'
         ).select_related('tenant', 'shop').order_by('due_date')
-        context['overdue_invoices_list'] = overdue_invoices[:10]
-        context['total_overdue_count'] = overdue_invoices.count()
-        context['total_overdue_amount'] = overdue_invoices.aggregate(total=Sum('amount'))['total'] or 0
+
+        # Charger jusqu'à 11 factures pour optimiser le nombre de requêtes SQL
+        overdue_list = list(overdue_invoices[:11])
+        if len(overdue_list) <= 10:
+            context['overdue_invoices_list'] = overdue_list
+            context['total_overdue_count'] = len(overdue_list)
+            context['total_overdue_amount'] = sum(inv.amount for inv in overdue_list)
+        else:
+            context['overdue_invoices_list'] = overdue_list[:10]
+            stats = overdue_invoices.aggregate(count=Count('id'), total=Sum('amount'))
+            context['total_overdue_count'] = stats['count'] or 0
+            context['total_overdue_amount'] = stats['total'] or 0
 
         # ── Masse salariale (infos rapides) ──────────────────────────────────
-        active_employees = Employee.objects.filter(mall=active_mall, status='active')
-        context['active_employees_count'] = active_employees.count()
-        context['total_salary_monthly'] = active_employees.aggregate(total=Sum('salary'))['total'] or 0
+        emp_stats = Employee.objects.filter(mall=active_mall, status='active').aggregate(
+            count=Count('id'),
+            total=Sum('salary')
+        )
+        context['active_employees_count'] = emp_stats['count'] or 0
+        context['total_salary_monthly'] = emp_stats['total'] or 0
 
         # ── Vérifier si loyers et salaires déjà générés ce mois ──────────────
         context['invoices_generated_this_month'] = Invoice.objects.filter(

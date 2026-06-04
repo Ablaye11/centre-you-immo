@@ -20,8 +20,13 @@ def global_context(request):
         context['all_malls'] = getattr(request, 'all_malls', [])
 
         from core.models import Notification
-        context['unread_notifications'] = Notification.objects.filter(user=request.user, is_read=False)[:10]
-        context['unread_notifications_count'] = Notification.objects.filter(user=request.user, is_read=False).count()
+        unread_notifs = list(Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')[:11])
+        if len(unread_notifs) <= 10:
+            context['unread_notifications'] = unread_notifs
+            context['unread_notifications_count'] = len(unread_notifs)
+        else:
+            context['unread_notifications'] = unread_notifs[:10]
+            context['unread_notifications_count'] = Notification.objects.filter(user=request.user, is_read=False).count()
 
         if active_mall:
             context['pending_maintenance'] = MaintenanceRequest.objects.filter(

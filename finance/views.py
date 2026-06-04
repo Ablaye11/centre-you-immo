@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from .models import Invoice, Expense, Payment
 from tenants.models import Tenant, Shop
-from django.db.models import Sum, Prefetch, Q
+from django.db.models import Sum, Prefetch, Q, Count
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
 
@@ -29,10 +29,16 @@ class FinanceOverviewView(LoginRequiredMixin, TemplateView):
             expenses_qs = expenses_qs.filter(mall=active_mall)
 
         # Totals
-        context['total_invoiced'] = invoices_qs.aggregate(total=Sum('amount'))['total'] or 0
-        context['total_collected'] = invoices_qs.filter(status='paid').aggregate(total=Sum('amount'))['total'] or 0
-        context['total_pending'] = invoices_qs.filter(status='pending').aggregate(total=Sum('amount'))['total'] or 0
-        context['total_overdue'] = invoices_qs.filter(status='overdue').aggregate(total=Sum('amount'))['total'] or 0
+        invoice_stats = invoices_qs.aggregate(
+            total=Sum('amount'),
+            collected=Sum('amount', filter=Q(status='paid')),
+            pending=Sum('amount', filter=Q(status='pending')),
+            overdue=Sum('amount', filter=Q(status='overdue'))
+        )
+        context['total_invoiced'] = invoice_stats['total'] or 0
+        context['total_collected'] = invoice_stats['collected'] or 0
+        context['total_pending'] = invoice_stats['pending'] or 0
+        context['total_overdue'] = invoice_stats['overdue'] or 0
         context['total_expenses'] = expenses_qs.aggregate(total=Sum('amount'))['total'] or 0
 
         # Balance
@@ -375,8 +381,12 @@ class ReportOverviewView(LoginRequiredMixin, TemplateView):
             period_label = today.strftime('%B %Y')
 
         # Basic counts
-        total_shops = Shop.objects.filter(mall=active_mall).count()
-        occupied_shops = Shop.objects.filter(mall=active_mall, status='occupied').count()
+        shop_stats = Shop.objects.filter(mall=active_mall).aggregate(
+            total=Count('id'),
+            occupied=Count('id', filter=Q(status='occupied'))
+        )
+        total_shops = shop_stats['total'] or 0
+        occupied_shops = shop_stats['occupied'] or 0
         occupancy_rate = int((occupied_shops / total_shops * 100)) if total_shops > 0 else 0
 
         # Financials in period
@@ -392,16 +402,26 @@ class ReportOverviewView(LoginRequiredMixin, TemplateView):
         net_income = revenue_collected - expenses_total
 
         # Invoices stats
-        invoiced_amount = invoices_in_period.aggregate(total=Sum('amount'))['total'] or 0
-        pending_amount = invoices_in_period.filter(status='pending').aggregate(total=Sum('amount'))['total'] or 0
-        overdue_amount = invoices_in_period.filter(status='overdue').aggregate(total=Sum('amount'))['total'] or 0
-        paid_amount = invoices_in_period.filter(status='paid').aggregate(total=Sum('amount'))['total'] or 0
+        invoice_stats = invoices_in_period.aggregate(
+            total=Sum('amount'),
+            pending=Sum('amount', filter=Q(status='pending')),
+            overdue=Sum('amount', filter=Q(status='overdue')),
+            paid=Sum('amount', filter=Q(status='paid'))
+        )
+        invoiced_amount = invoice_stats['total'] or 0
+        pending_amount = invoice_stats['pending'] or 0
+        overdue_amount = invoice_stats['overdue'] or 0
+        paid_amount = invoice_stats['paid'] or 0
 
         # Maintenance
         from maintenance.models import MaintenanceRequest
         maintenance_qs = MaintenanceRequest.objects.filter(mall=active_mall, created_at__date__range=(start_date, end_date))
-        maintenance_count = maintenance_qs.count()
-        maintenance_actual_cost = maintenance_qs.aggregate(total=Sum('actual_cost'))['total'] or 0
+        maintenance_stats = maintenance_qs.aggregate(
+            count=Count('id'),
+            total=Sum('actual_cost')
+        )
+        maintenance_count = maintenance_stats['count'] or 0
+        maintenance_actual_cost = maintenance_stats['total'] or 0
 
         # Top paying tenants / Leases in active mall
         from tenants.models import Lease
@@ -416,8 +436,12 @@ class ReportOverviewView(LoginRequiredMixin, TemplateView):
         # Salaries — employees of this mall and their salary costs
         from employees.models import Employee
         active_employees = Employee.objects.filter(mall=active_mall, status='active')
-        employees_count = active_employees.count()
-        salaries_total = active_employees.aggregate(total=Sum('salary'))['total'] or 0
+        emp_stats = active_employees.aggregate(
+            count=Count('id'),
+            total=Sum('salary')
+        )
+        employees_count = emp_stats['count'] or 0
+        salaries_total = emp_stats['total'] or 0
 
         # Salary expenses already registered in the period
         salary_expenses_in_period = expenses_in_period.filter(category='salary')
@@ -514,8 +538,12 @@ class ExportReportExcelView(LoginRequiredMixin, View):
         ws1.append([])
 
         # Gather stats
-        total_shops = Shop.objects.filter(mall=active_mall).count()
-        occupied_shops = Shop.objects.filter(mall=active_mall, status='occupied').count()
+        shop_stats = Shop.objects.filter(mall=active_mall).aggregate(
+            total=Count('id'),
+            occupied=Count('id', filter=Q(status='occupied'))
+        )
+        total_shops = shop_stats['total'] or 0
+        occupied_shops = shop_stats['occupied'] or 0
         occupancy_rate = f"{(occupied_shops / total_shops * 100):.1f}%" if total_shops > 0 else "0%"
 
         revenue_collected = Payment.objects.filter(
