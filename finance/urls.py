@@ -18,4 +18,5 @@ urlpatterns = [
     path('charges/repartition/', views.DistributeChargesView.as_view(), name='distribute_charges'),
     path('salaires/generer/', views.GenerateMonthlySalariesView.as_view(), name='generate_monthly_salaries'),
     path('cloture-mensuelle/', views.MonthlyClosureView.as_view(), name='monthly_closure'),
+    path('factures-salaires/', views.InvoicesSalariesView.as_view(), name='invoices_salaries'),
 ]

@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}Factures & Salaires{% endblock %}
+{% block page_title %}Factures & Salaires{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Gérez les factures de loyer et suivez le paiement des salaires des employés du centre commercial.</p>
+    </div>
+    <div class="page-actions" style="display: flex; gap: var(--spacing-sm); align-items: center; flex-wrap: wrap;">
+        <form method="post" action="{% url 'generate_monthly_invoices' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                <i data-lucide="refresh-cw"></i> Générer les loyers
+            </button>
+        </form>
+        <form method="post" action="{% url 'generate_monthly_salaries' %}" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">
+                <i data-lucide="users"></i> Générer les salaires
+            </button>
+        </form>
+        <a href="{% url 'invoice_create' %}" class="btn btn-outline">
+            <i data-lucide="plus-circle"></i> Émettre une Facture
+        </a>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <!-- Stat 1: Total Facturé -->
+    <div class="stat-card blue animate-in">
+        <div class="stat-icon blue">
+            <i data-lucide="file-text"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Total Loyers Facturés</div>
+            <div class="stat-value">{{ total_invoiced }} FCFA</div>
+            <span class="stat-change down">En attente : {{ total_pending }} FCFA</span>
+        </div>
+    </div>
+
+    <!-- Stat 2: Total Encaissé -->
+    <div class="stat-card green animate-in">
+        <div class="stat-icon green">
+            <i data-lucide="badge-check"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Total Loyers Encaissés</div>
+            <div class="stat-value">{{ total_collected }} FCFA</div>
+            <span class="stat-change up" style="color: var(--danger)">En retard : {{ total_overdue }} FCFA</span>
+        </div>
+    </div>
+
+    <!-- Stat 3: Masse Salariale -->
+    <div class="stat-card red animate-in">
+        <div class="stat-icon red">
+            <i data-lucide="contact"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Salaires Payés (Masse Salariale)</div>
+            <div class="stat-value">{{ total_salaries }} FCFA</div>
+            <div class="stat-label mt-1">Dépenses de personnel</div>
+        </div>
+    </div>
+
+    <!-- Stat 4: Solde Net -->
+    <div class="stat-card gold animate-in">
+        <div class="stat-icon gold">
+            <i data-lucide="wallet"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-label">Solde Loyers vs Salaires</div>
+            <div class="stat-value {% if net_balance >= 0 %}text-success{% else %}text-danger{% endif %}">{{ net_balance }} FCFA</div>
+            <div class="stat-label mt-1">Bénéfice opérationnel direct</div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
+    {% if not invoices_generated_this_month or not salaries_paid_this_month %}
+    <div class="monthly-action-banner card animate-in mb-3">
+        <div class="banner-content" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-md);">
+            <div class="banner-info">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="zap" style="color: var(--accent-500); width: 20px; height: 20px;"></i>
+                    Actions Mensuelles & Clôture
+                </h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 12px;">
+                    Certaines opérations de ce mois n'ont pas encore été générées. Effectuez la clôture mensuelle automatique en 1 clic.
+                </p>
+                <div class="banner-status-chips" style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                    <span class="status-chip {% if invoices_generated_this_month %}success{% else %}warning{% endif %}">
+                        <i data-lucide="{% if invoices_generated_this_month %}check-circle{% else %}alert-circle{% endif %}" style="width: 14px; height: 14px;"></i>
+                        Loyers du mois : {% if invoices_generated_this_month %}Générés{% else %}Non générés{% endif %}
+                    </span>
+                    <span class="status-chip {% if salaries_paid_this_month %}success{% else %}warning{% endif %}">
+                        <i data-lucide="{% if salaries_paid_this_month %}check-circle{% else %}alert-circle{% endif %}" style="width: 14px; height: 14px;"></i>
+                        Salaires du mois : {% if salaries_paid_this_month %}Générés{% else %}Non générés{% endif %}
+                    </span>
+                </div>
+            </div>
+            <form method="post" action="{% url 'monthly_closure' %}" onsubmit="return confirm('Confirmer la génération groupée des factures de loyers et des dépenses de salaires pour ce mois-ci ?')" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-accent btn-lg" style="box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">
+                    <i data-lucide="zap"></i> Clôture du mois en 1 clic
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+
+<!-- Filters -->
+<div class="filter-bar animate-in mb-3">
+    <form method="get" class="flex gap-2" style="width: 100%;">
+        <div class="search-input">
+            <i data-lucide="search" class="icon"></i>
+            <input type="text" name="q" placeholder="Rechercher une facture (N°, locataire...) ou un salaire (nom de l'employé, poste)..." value="{{ request.GET.q }}">
+        </div>
+        <button type="submit" class="btn btn-outline">Filtrer</button>
+    </form>
+</div>
+
+<div class="grid-2 mb-3">
+    <!-- Invoices List -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Factures de Loyers</h3>
+        </div>
+        <div class="card-body">
+            {% if invoices %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Facture</th>
+                                <th>Locataire</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inv in invoices %}
+                            <tr>
+                                <td>{{ inv.invoice_number }}</td>
+                                <td>{{ inv.tenant.full_name }}</td>
+                                <td>{{ inv.amount }} FCFA</td>
+                                <td>
+                                    <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
+                                        {{ inv.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="flex gap-1">
+                                        {% if inv.status != 'paid' %}
+                                        <button type="button" class="btn btn-outline btn-sm btn-icon" onclick="openPayModal('{{ inv.pk }}', '{{ inv.invoice_number }}', '{{ inv.amount }}')" title="Payer" style="color: var(--success); border-color: rgba(16, 185, 129, 0.2);">
+                                            <i data-lucide="check"></i>
+                                        </button>
+                                        <a href="https://api.whatsapp.com/send?phone={{ inv.tenant.whatsapp_phone }}&text=Bonjour%20{{ inv.tenant.full_name|urlencode }},%20voici%20un%20rappel%20concernant%20votre%20facture%20N%C2%B0%20{{ inv.invoice_number|urlencode }}%20d'un%20montant%20de%20{{ inv.amount|urlencode }}%20FCFA%20pour%20la%20boutique%20{{ inv.shop.shop_number|urlencode }}.%20Merci%20de%20proc%C3%A9der%20au%20r%C3%A8glement." target="_blank" class="btn btn-outline btn-sm btn-icon" title="Relancer via WhatsApp" style="color: #25d366; border-color: rgba(37, 211, 102, 0.25);">
+                                            <i data-lucide="message-square"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'invoice_pdf' inv.pk %}" class="btn btn-outline btn-sm btn-icon" title="Télécharger PDF">
+                                            <i data-lucide="file-down"></i>
+                                        </a>
+                                        <a href="{% url 'invoice_pdf' inv.pk %}?inline=true" target="_blank" class="btn btn-outline btn-sm btn-icon" title="Imprimer la facture" style="color: var(--primary-400); border-color: rgba(59, 130, 246, 0.25);">
+                                            <i data-lucide="printer"></i>
+                                        </a>
+                                        <a href="{% url 'invoice_delete' inv.pk %}" class="btn btn-outline btn-sm btn-icon" title="Supprimer" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                                            <i data-lucide="trash-2"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune facture enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Salaries List -->
+    <div class="card animate-in">
+        <div class="card-header">
+            <h3 class="card-title">Fiches de Salaires Payés</h3>
+        </div>
+        <div class="card-body">
+            {% if salaries %}
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Employé</th>
+                                <th>Montant</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sal in salaries %}
+                            <tr>
+                                <td>{{ sal.title }}</td>
+                                <td>{{ sal.supplier }}</td>
+                                <td style="color: var(--danger);">{{ sal.amount }} FCFA</td>
+                                <td>{{ sal.date }}</td>
+                                <td>
+                                    <a href="{% url 'expense_delete' sal.pk %}" class="btn btn-outline btn-sm btn-icon" title="Supprimer" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                                        <i data-lucide="trash-2"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune dépense de salaire enregistrée.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Quick Pay Modal -->
+<div class="modal-overlay" id="payModal" onclick="closePayModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-title" id="payModalTitle">Payer la facture</div>
+        <div style="margin-bottom: 20px;">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Montant à payer:</span>
+            <div id="payModalAmount" style="font-size: 1.4rem; font-weight: 700; color: var(--success); margin-top: 4px;">0 FCFA</div>
+        </div>
+        <form method="post" data-url-template="{% url 'mark_invoice_paid' 0 %}" class="flex-column gap-2">
+            {% csrf_token %}
+            <input type="hidden" name="invoice_id" id="payModalInvoiceId">
+            
+            <div class="form-group">
+                <label class="form-label" for="id_payment_method">Mode de Paiement</label>
+                <select name="payment_method" id="id_payment_method" class="form-control">
+                    <option value="cash">Espèces</option>
+                    <option value="bank_transfer">Virement bancaire</option>
+                    <option value="check">Chèque</option>
+                    <option value="mobile_money">Mobile Money</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="id_notes">Notes / Référence (Optionnel)</label>
+                <textarea name="notes" id="id_notes" class="form-control" rows="2" placeholder="Ex: Référence virement, N° de chèque..."></textarea>
+            </div>
+            
+            <div class="form-actions" style="margin-top: 20px;">
+                <button type="button" class="btn btn-outline" onclick="closePayModal()">Annuler</button>
+                <button type="submit" class="btn btn-primary">Confirmer le paiement</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

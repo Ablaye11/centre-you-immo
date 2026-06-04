@@ -983,5 +983,79 @@ class MonthlyClosureView(LoginRequiredMixin, View):
         except Exception as e:
             messages.error(request, f"❌ Erreur lors de la clôture mensuelle : {str(e)}")
 
+        referer = request.META.get('HTTP_REFERER')
+        if referer:
+            return redirect(referer)
         return redirect('dashboard')
+
+
+class InvoicesSalariesView(LoginRequiredMixin, TemplateView):
+    template_name = 'finance/invoices_salaries.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'invoices_salaries'
+
+        active_mall = self.request.active_mall
+
+        invoices_qs = Invoice.objects.select_related('tenant', 'shop')
+        salaries_qs = Expense.objects.filter(category='salary')
+
+        if active_mall:
+            invoices_qs = invoices_qs.filter(shop__mall=active_mall)
+            salaries_qs = salaries_qs.filter(mall=active_mall)
+
+        # Totals
+        invoice_stats = invoices_qs.aggregate(
+            total=Sum('amount'),
+            collected=Sum('amount', filter=Q(status='paid')),
+            pending=Sum('amount', filter=Q(status='pending')),
+            overdue=Sum('amount', filter=Q(status='overdue'))
+        )
+        context['total_invoiced'] = invoice_stats['total'] or 0
+        context['total_collected'] = invoice_stats['collected'] or 0
+        context['total_pending'] = invoice_stats['pending'] or 0
+        context['total_overdue'] = invoice_stats['overdue'] or 0
+        context['total_salaries'] = salaries_qs.aggregate(total=Sum('amount'))['total'] or 0
+        context['net_balance'] = context['total_collected'] - context['total_salaries']
+
+        # Search filter
+        q = self.request.GET.get('q')
+        invoices = invoices_qs.order_by('-issue_date')
+        salaries = salaries_qs.order_by('-date')
+
+        if q:
+            invoices = invoices.filter(
+                Q(invoice_number__icontains=q) |
+                Q(tenant__first_name__icontains=q) |
+                Q(tenant__last_name__icontains=q) |
+                Q(shop__shop_number__icontains=q) |
+                Q(shop__name__icontains=q)
+            )
+            salaries = salaries.filter(
+                Q(title__icontains=q) |
+                Q(supplier__icontains=q) |
+                Q(description__icontains=q)
+            )
+
+        context['invoices'] = invoices[:50]
+        context['salaries'] = salaries[:50]
+
+        # Monthly closure status for the banner
+        today = timezone.now().date()
+        if active_mall:
+            context['invoices_generated_this_month'] = Invoice.objects.filter(
+                shop__mall=active_mall,
+                invoice_type='rent',
+                issue_date__year=today.year,
+                issue_date__month=today.month,
+            ).exists()
+            context['salaries_paid_this_month'] = Expense.objects.filter(
+                mall=active_mall,
+                category='salary',
+                date__year=today.year,
+                date__month=today.month,
+            ).exists()
+
+        return context
 

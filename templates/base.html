@@ -91,6 +91,10 @@
                         <span class="nav-badge">{{ overdue_invoices }}</span>
                         {% endif %}
                     </a>
+                    <a href="{% url 'invoices_salaries' %}" class="nav-item {% if active_menu == 'invoices_salaries' %}active{% endif %}">
+                        <i data-lucide="file-text" class="nav-icon"></i>
+                        <span>Factures & Salaires</span>
+                    </a>
                     {% endif %}
                     
                     {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' %}
