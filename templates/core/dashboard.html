@@ -88,11 +88,11 @@
                 {% endif %}
             </p>
             <div class="banner-status-chips" style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                <span class="status-chip {% if invoices_generated_this_month %}success{% else %}warning{% endif %}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-sm); {% if invoices_generated_this_month %}background: var(--success-bg); color: var(--success);{% else %}background: var(--warning-bg); color: var(--warning);{% endif %}">
+                <span class="status-chip {% if invoices_generated_this_month %}success{% else %}warning{% endif %}">
                     <i data-lucide="{% if invoices_generated_this_month %}check-circle{% else %}alert-circle{% endif %}" style="width: 14px; height: 14px;"></i>
                     Loyers du mois : {% if invoices_generated_this_month %}Générés{% else %}Non générés{% endif %}
                 </span>
-                <span class="status-chip {% if salaries_paid_this_month %}success{% else %}warning{% endif %}" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-sm); {% if salaries_paid_this_month %}background: var(--success-bg); color: var(--success);{% else %}background: var(--warning-bg); color: var(--warning);{% endif %}">
+                <span class="status-chip {% if salaries_paid_this_month %}success{% else %}warning{% endif %}">
                     <i data-lucide="{% if salaries_paid_this_month %}check-circle{% else %}alert-circle{% endif %}" style="width: 14px; height: 14px;"></i>
                     Salaires du mois : {% if salaries_paid_this_month %}Générés{% else %}Non générés{% endif %}
                 </span>
@@ -339,7 +339,7 @@
     // Financial Chart - Revenue vs Expenses
     const ctx = document.getElementById('financialChart');
     if (ctx) {
-        const chartData = {{ monthly_chart_data|safe }};
+        const chartData = JSON.parse('{{ monthly_chart_data|escapejs }}');
         const labels = chartData.map(d => d.month);
         const revenues = chartData.map(d => d.revenue);
         const expenses = chartData.map(d => d.expenses);
