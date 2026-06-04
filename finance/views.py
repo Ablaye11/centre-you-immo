@@ -134,6 +134,9 @@ class MarkInvoicePaidView(LoginRequiredMixin, View):
             messages.success(request, f"✅ Facture {invoice.invoice_number} payée — {invoice.amount} FCFA enregistrés.")
         else:
             messages.info(request, f"Facture {invoice.invoice_number} est deja payee.")
+        referer = request.META.get('HTTP_REFERER')
+        if referer:
+            return redirect(referer)
         return redirect('finance_overview')
 
 
@@ -830,3 +833,127 @@ class GenerateMonthlySalariesView(LoginRequiredMixin, View):
         if skipped:
             messages.info(request, f"ℹ️ {skipped} employé(s) déjà traité(s) ce mois-ci — non dupliqués.")
         return redirect('finance_overview')
+
+
+class MonthlyClosureView(LoginRequiredMixin, View):
+    """Unified one-click monthly closure: generates rent invoices and records employee salaries."""
+
+    def post(self, request):
+        from django.db import transaction
+        from tenants.models import Lease
+        from employees.models import Employee
+        import datetime
+
+        active_mall = request.active_mall
+        if not active_mall:
+            messages.error(request, "Aucun centre commercial actif sélectionné.")
+            return redirect('dashboard')
+
+        # Check permission: admin, manager, accountant, or superuser
+        is_authorized = request.user.is_superuser or (
+            hasattr(request.user, 'profile') and 
+            request.user.profile.role in ['admin', 'manager', 'accountant']
+        )
+        if not is_authorized:
+            messages.error(request, "Permission refusée. Vous n'avez pas l'autorisation d'effectuer la clôture mensuelle.")
+            return redirect('dashboard')
+
+        today = timezone.now().date()
+        month_label = today.strftime('%B %Y')
+        first_day = today.replace(day=1)
+
+        # Calculate last day of the month
+        if today.month == 12:
+            last_day = today.replace(day=31)
+        else:
+            last_day = today.replace(month=today.month + 1, day=1) - datetime.timedelta(days=1)
+
+        try:
+            with transaction.atomic():
+                # 1. GENERATE RENT INVOICES
+                active_leases = Lease.objects.filter(shop__mall=active_mall, status='active').select_related('tenant', 'shop')
+                invoices_created = 0
+                invoices_skipped = 0
+
+                for lease in active_leases:
+                    prefix = f"FAC-{today.year}-"
+                    already_exists = Invoice.objects.filter(
+                        tenant=lease.tenant,
+                        shop=lease.shop,
+                        invoice_type='rent',
+                        issue_date__year=today.year,
+                        issue_date__month=today.month,
+                    ).exists()
+
+                    if already_exists:
+                        invoices_skipped += 1
+                        continue
+
+                    last = Invoice.objects.filter(invoice_number__startswith=prefix).order_by('-invoice_number').first()
+                    seq = 1
+                    if last:
+                        try:
+                            seq = int(last.invoice_number.split('-')[-1]) + 1
+                        except ValueError:
+                            pass
+                    inv_number = f"{prefix}{seq:04d}"
+
+                    Invoice.objects.create(
+                        invoice_number=inv_number,
+                        tenant=lease.tenant,
+                        shop=lease.shop,
+                        invoice_type='rent',
+                        amount=lease.monthly_rent,
+                        issue_date=first_day,
+                        due_date=last_day,
+                        status='pending',
+                        description=f"Loyer mensuel — {month_label} — {lease.shop.name}",
+                    )
+                    invoices_created += 1
+
+                # 2. GENERATE EMPLOYEE SALARIES
+                active_employees = Employee.objects.filter(mall=active_mall, status='active')
+                salaries_created = 0
+                salaries_skipped = 0
+
+                for emp in active_employees:
+                    title = f"Salaire — {emp.full_name} ({month_label})"
+                    already_exists = Expense.objects.filter(
+                        mall=active_mall,
+                        category='salary',
+                        title=title,
+                        date__year=today.year,
+                        date__month=today.month,
+                    ).exists()
+
+                    if already_exists:
+                        salaries_skipped += 1
+                        continue
+
+                    Expense.objects.create(
+                        mall=active_mall,
+                        title=title,
+                        category='salary',
+                        amount=emp.salary,
+                        date=first_day,
+                        description=f"Salaire mensuel — Poste : {emp.position} | Contrat : {emp.get_contract_type_display()}",
+                        supplier=emp.full_name,
+                    )
+                    salaries_created += 1
+
+            # 3. SUCCESS / INFO MESSAGES
+            if invoices_created > 0 or salaries_created > 0:
+                msg_parts = []
+                if invoices_created > 0:
+                    msg_parts.append(f"{invoices_created} facture(s) de loyer")
+                if salaries_created > 0:
+                    msg_parts.append(f"{salaries_created} dépense(s) de salaire")
+                messages.success(request, f"✅ Clôture mensuelle de {month_label} effectuée avec succès pour {active_mall.name} : {' et '.join(msg_parts)} générée(s).")
+            else:
+                messages.info(request, f"ℹ️ La clôture pour {month_label} a déjà été effectuée pour {active_mall.name} (factures et salaires déjà générés).")
+
+        except Exception as e:
+            messages.error(request, f"❌ Erreur lors de la clôture mensuelle : {str(e)}")
+
+        return redirect('dashboard')
+

@@ -1872,3 +1872,49 @@ textarea.form-control {
     color: var(--success);
     font-weight: 600;
 }
+
+/* ---- Monthly Action Banner & Overdue Alert Card ---- */
+.monthly-action-banner {
+    border-left: 4px solid var(--accent-500);
+    background: rgba(245, 158, 11, 0.03);
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    width: 100%;
+}
+
+.banner-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.status-chip {
+    transition: all var(--transition-fast);
+}
+
+.alert-overdue-card {
+    transition: all var(--transition-normal);
+}
+
+.alert-overdue-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.alert-overdue-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+}
+
+/* Make sure 5 cards fit nicely in stats-grid */
+@media (min-width: 1400px) {
+    .stats-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+

@@ -10,7 +10,7 @@ from maintenance.models import MaintenanceRequest
 from parking.models import ParkingSpace, ParkingSubscription
 from finance.models import Invoice, Expense
 from employees.models import Employee, Department
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 import datetime
@@ -70,8 +70,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         # Recent activities & warnings (filtered by active mall)
         context['recent_requests'] = MaintenanceRequest.objects.filter(mall=active_mall).order_by('-created_at')[:5]
-        context['recent_invoices'] = Invoice.objects.filter(shop__mall=active_mall).order_by('-issue_date')[:5]
-        context['expiring_leases'] = [l for l in Lease.objects.filter(shop__mall=active_mall, status='active') if l.is_expiring_soon][:5]
+        context['recent_invoices'] = Invoice.objects.filter(shop__mall=active_mall).select_related('tenant').order_by('-issue_date')[:5]
+        context['expiring_leases'] = [l for l in Lease.objects.filter(shop__mall=active_mall, status='active').select_related('tenant', 'shop') if l.is_expiring_soon][:5]
 
         # Monthly income list for visual bar chart
         today = timezone.now().date()
@@ -108,6 +108,67 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             })
 
         context['monthly_chart_data'] = json.dumps(monthly_data)
+
+        # ── Mise à jour automatique des factures en retard (overdue) ──────────
+        past_due_invoices = Invoice.objects.filter(
+            shop__mall=active_mall,
+            status='pending',
+            due_date__lt=today
+        ).select_related('tenant', 'shop')
+        
+        if past_due_invoices.exists():
+            from core.models import Notification
+            from django.contrib.auth.models import User
+            
+            # Rechercher le personnel à notifier (administrateurs, managers, comptables)
+            staff_users = User.objects.filter(
+                Q(is_superuser=True) | 
+                Q(profile__role__in=['admin', 'manager', 'accountant'])
+            )
+            
+            for invoice in past_due_invoices:
+                invoice.status = 'overdue'
+                invoice.save(update_fields=['status'])
+                
+                # Créer une notification si elle n'existe pas déjà
+                notif_msg = f"La facture {invoice.invoice_number} ({invoice.tenant.full_name}) pour la boutique {invoice.shop.shop_number} est en retard."
+                for staff in staff_users:
+                    if not Notification.objects.filter(user=staff, message=notif_msg).exists():
+                        Notification.objects.create(
+                            user=staff,
+                            title=f"Facture en retard: {invoice.invoice_number}",
+                            message=notif_msg,
+                            notif_type='danger'
+                        )
+
+        # ── Loyers en retard (alertes urgentes) ──────────────────────────────
+        overdue_invoices = Invoice.objects.filter(
+            shop__mall=active_mall,
+            status='overdue'
+        ).select_related('tenant', 'shop').order_by('due_date')
+        context['overdue_invoices_list'] = overdue_invoices[:10]
+        context['total_overdue_count'] = overdue_invoices.count()
+        context['total_overdue_amount'] = overdue_invoices.aggregate(total=Sum('amount'))['total'] or 0
+
+        # ── Masse salariale (infos rapides) ──────────────────────────────────
+        active_employees = Employee.objects.filter(mall=active_mall, status='active')
+        context['active_employees_count'] = active_employees.count()
+        context['total_salary_monthly'] = active_employees.aggregate(total=Sum('salary'))['total'] or 0
+
+        # ── Vérifier si loyers et salaires déjà générés ce mois ──────────────
+        context['invoices_generated_this_month'] = Invoice.objects.filter(
+            shop__mall=active_mall,
+            invoice_type='rent',
+            issue_date__year=today.year,
+            issue_date__month=today.month,
+        ).exists()
+        context['salaries_paid_this_month'] = Expense.objects.filter(
+            mall=active_mall,
+            category='salary',
+            date__year=today.year,
+            date__month=today.month,
+        ).exists()
+
         return context
 
 
