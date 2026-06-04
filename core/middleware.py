@@ -89,22 +89,22 @@ class RolePermissionMiddleware:
                     denied = True
                     msg = "Seuls les Administrateurs, Managers et Comptables peuvent accéder aux finances."
 
-                # Maintenance (Admin, manager, maintenance)
-                elif path.startswith('/maintenance/') and role not in ['admin', 'manager', 'maintenance']:
+                # Maintenance (Admin, manager, maintenance, secretary)
+                elif path.startswith('/maintenance/') and role not in ['admin', 'manager', 'maintenance', 'secretary']:
                     denied = True
-                    msg = "Seuls les Administrateurs, Managers et Agents de Maintenance peuvent gérer les demandes de maintenance."
+                    msg = "Seuls les Administrateurs, Managers, Secrétaires et Agents de Maintenance peuvent gérer les demandes de maintenance."
 
-                # Structural parts (shops, floors, malls) (Only admin, manager)
+                # Structural parts (shops, floors, malls) (Only admin, manager, secretary)
                 elif (path.startswith('/locataires/boutiques/') or 
                       path.startswith('/locataires/etages/') or 
-                      path.startswith('/locataires/centres/')) and role not in ['admin', 'manager']:
+                      path.startswith('/locataires/centres/')) and role not in ['admin', 'manager', 'secretary']:
                     denied = True
-                    msg = "Seuls les Administrateurs et Managers peuvent modifier la structure du centre commercial."
+                    msg = "Seuls les Administrateurs, Managers et Secrétaires peuvent modifier la structure du centre commercial."
 
-                # General Tenants / Leases list and detail (Admin, manager, accountant)
-                elif path.startswith('/locataires/') and role not in ['admin', 'manager', 'accountant']:
+                # General Tenants / Leases list and detail (Admin, manager, accountant, secretary)
+                elif path.startswith('/locataires/') and role not in ['admin', 'manager', 'accountant', 'secretary']:
                     denied = True
-                    msg = "Seuls les Administrateurs, Managers et Comptables peuvent accéder aux locataires et contrats de baux."
+                    msg = "Seuls les Administrateurs, Managers, Comptables et Secrétaires peuvent accéder aux locataires et contrats de baux."
 
                 if denied:
                     messages.error(request, f"Accès refusé : {msg}")

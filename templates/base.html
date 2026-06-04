@@ -65,7 +65,7 @@
 
                 <div class="nav-section">
                     <div class="nav-section-title">Opérations</div>
-                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' %}
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'secretary' %}
                     <a href="{% url 'shop_list' %}" class="nav-item {% if active_menu == 'shops' %}active{% endif %}">
                         <i data-lucide="store" class="nav-icon"></i>
                         <span>Plan des Boutiques</span>
@@ -76,11 +76,14 @@
                     </a>
                     {% endif %}
                     
-                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' or user.profile.role == 'secretary' %}
                     <a href="{% url 'tenant_list' %}" class="nav-item {% if active_menu == 'tenants' %}active{% endif %}">
                         <i data-lucide="users" class="nav-icon"></i>
                         <span>Locataires</span>
                     </a>
+                    {% endif %}
+                    
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
                     <a href="{% url 'finance_overview' %}" class="nav-item {% if active_menu == 'finance' %}active{% endif %}">
                         <i data-lucide="wallet" class="nav-icon"></i>
                         <span>Finances</span>
@@ -97,7 +100,7 @@
                     </a>
                     {% endif %}
                     
-                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'maintenance' %}
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'maintenance' or user.profile.role == 'secretary' %}
                     <a href="{% url 'maintenance_list' %}" class="nav-item {% if active_menu == 'maintenance' %}active{% endif %}">
                         <i data-lucide="wrench" class="nav-icon"></i>
                         <span>Maintenance</span>

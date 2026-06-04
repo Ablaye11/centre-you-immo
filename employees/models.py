@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Department(models.Model):
@@ -31,6 +32,7 @@ class Employee(models.Model):
     ]
 
     mall = models.ForeignKey('tenants.Mall', on_delete=models.SET_NULL, null=True, blank=True, related_name='employees', verbose_name='Centre Commercial')
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='employee', verbose_name='Compte utilisateur lié')
     first_name = models.CharField(max_length=100, verbose_name='Prénom')
     last_name = models.CharField(max_length=100, verbose_name='Nom')
     email = models.EmailField(blank=True, verbose_name='Email')
@@ -44,6 +46,12 @@ class Employee(models.Model):
     address = models.TextField(blank=True, verbose_name='Adresse')
     emergency_contact = models.CharField(max_length=100, blank=True, verbose_name='Contact d\'urgence')
     emergency_phone = models.CharField(max_length=20, blank=True, verbose_name='Tél. urgence')
+    
+    # Tâches / Rôles d'activité
+    is_accountant = models.BooleanField(default=False, verbose_name="Gère la comptabilité (Comptable)")
+    is_maintenance = models.BooleanField(default=False, verbose_name="Gère la maintenance (Technicien)")
+    is_secretary = models.BooleanField(default=False, verbose_name="Gère le secrétariat (Secrétaire)")
+    
     notes = models.TextField(blank=True, verbose_name='Notes')
     created_at = models.DateTimeField(auto_now_add=True)
 

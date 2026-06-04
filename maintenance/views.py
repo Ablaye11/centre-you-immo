@@ -39,9 +39,11 @@ class MaintenanceCreateView(LoginRequiredMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         active_mall = self.request.active_mall
+        from employees.models import Employee
         if active_mall:
-            from employees.models import Employee
-            form.fields['assigned_employee'].queryset = Employee.objects.filter(mall=active_mall, status='active')
+            form.fields['assigned_employee'].queryset = Employee.objects.filter(mall=active_mall, status='active', is_maintenance=True)
+        else:
+            form.fields['assigned_employee'].queryset = Employee.objects.filter(status='active', is_maintenance=True)
         return form
 
     def form_valid(self, form):
@@ -67,9 +69,11 @@ class MaintenanceUpdateView(LoginRequiredMixin, UpdateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         active_mall = self.request.active_mall
+        from employees.models import Employee
         if active_mall:
-            from employees.models import Employee
-            form.fields['assigned_employee'].queryset = Employee.objects.filter(mall=active_mall, status='active')
+            form.fields['assigned_employee'].queryset = Employee.objects.filter(mall=active_mall, status='active', is_maintenance=True)
+        else:
+            form.fields['assigned_employee'].queryset = Employee.objects.filter(status='active', is_maintenance=True)
         return form
 
     def form_valid(self, form):

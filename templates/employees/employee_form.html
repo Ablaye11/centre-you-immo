@@ -23,10 +23,16 @@
             <div class="form-group">
                 <label class="form-label" for="id_first_name">Prénom</label>
                 <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ form.first_name.value|default_if_none:'' }}" required>
+                {% if form.first_name.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.first_name.errors.0 }}</span>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label class="form-label" for="id_last_name">Nom</label>
                 <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ form.last_name.value|default_if_none:'' }}" required>
+                {% if form.last_name.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.last_name.errors.0 }}</span>
+                {% endif %}
             </div>
         </div>
 
@@ -34,10 +40,16 @@
             <div class="form-group">
                 <label class="form-label" for="id_email">Email</label>
                 <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}">
+                {% if form.email.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.email.errors.0 }}</span>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label class="form-label" for="id_phone">Téléphone</label>
                 <input type="text" name="phone" id="id_phone" class="form-control" value="{{ form.phone.value|default_if_none:'' }}" required>
+                {% if form.phone.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.phone.errors.0 }}</span>
+                {% endif %}
             </div>
         </div>
 
@@ -52,10 +64,16 @@
                         {% endif %}
                     {% endfor %}
                 </select>
+                {% if form.department.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.department.errors.0 }}</span>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label class="form-label" for="id_position">Poste occupé</label>
                 <input type="text" name="position" id="id_position" class="form-control" value="{{ form.position.value|default_if_none:'' }}" required>
+                {% if form.position.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.position.errors.0 }}</span>
+                {% endif %}
             </div>
         </div>
 
@@ -83,17 +101,90 @@
             <div class="form-group">
                 <label class="form-label" for="id_salary">Salaire Mensuel (FCFA)</label>
                 <input type="number" name="salary" id="id_salary" class="form-control" value="{{ form.salary.value|default_if_none:'' }}" required>
+                {% if form.salary.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.salary.errors.0 }}</span>
+                {% endif %}
             </div>
             <div class="form-group">
                 <label class="form-label" for="id_hire_date">Date d'embauche</label>
-                <!-- Simple fallback formatting -->
                 <input type="date" name="hire_date" id="id_hire_date" class="form-control" value="{% if form.hire_date.value %}{{ form.hire_date.value|date:'Y-m-d' }}{% endif %}" required>
+                {% if form.hire_date.errors %}
+                    <span class="text-danger" style="font-size: 0.8rem;">{{ form.hire_date.errors.0 }}</span>
+                {% endif %}
             </div>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="id_address">Adresse</label>
             <textarea name="address" id="id_address" class="form-control" rows="2">{{ form.address.value|default_if_none:'' }}</textarea>
+            {% if form.address.errors %}
+                <span class="text-danger" style="font-size: 0.8rem;">{{ form.address.errors.0 }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-section-title">Tâches & Fonctions</div>
+        <div class="form-row" style="display: flex; gap: var(--spacing-md); margin-bottom: 20px; flex-wrap: wrap;">
+            <div class="form-group" style="flex: 1; min-width: 200px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="is_accountant" id="id_is_accountant" class="form-checkbox" {% if form.is_accountant.value %}checked{% endif %}>
+                <label for="id_is_accountant" style="margin: 0; font-size: 0.9rem; cursor: pointer;">Gère la comptabilité (Comptable)</label>
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 200px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="is_maintenance" id="id_is_maintenance" class="form-checkbox" {% if form.is_maintenance.value %}checked{% endif %}>
+                <label for="id_is_maintenance" style="margin: 0; font-size: 0.9rem; cursor: pointer;">Gère la maintenance (Technicien)</label>
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 200px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" name="is_secretary" id="id_is_secretary" class="form-checkbox" {% if form.is_secretary.value %}checked{% endif %}>
+                <label for="id_is_secretary" style="margin: 0; font-size: 0.9rem; cursor: pointer;">Gère le secrétariat (Secrétaire)</label>
+            </div>
+        </div>
+
+        <div class="form-section-title">Compte d'accès utilisateur</div>
+        
+        {% if form.instance.user %}
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px; color: var(--success); font-weight: 600; margin-bottom: 8px;">
+                    <i data-lucide="shield-check"></i>
+                    Compte d'accès actif lié : <code>{{ form.instance.user.username }}</code>
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label class="form-label" for="id_password_field">Nouveau mot de passe (laisser vide pour ne pas modifier)</label>
+                    <input type="password" name="password" id="id_password_field" class="form-control" placeholder="Entrez le nouveau mot de passe">
+                    {% if form.password.errors %}
+                        <span class="text-danger" style="font-size: 0.8rem;">{{ form.password.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+                <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <input type="checkbox" name="create_user_account" id="id_create_user_account" class="form-checkbox" {% if form.create_user_account.value %}checked{% endif %} onchange="toggleUserFields()">
+                    <label for="id_create_user_account" style="margin: 0; font-weight: 600; cursor: pointer;">Créer un compte d'accès pour cet employé</label>
+                </div>
+                
+                <div id="user-fields" style="display: {% if form.create_user_account.value %}block{% else %}none{% endif %}; transition: all 0.3s ease;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="id_username_field">Nom d'utilisateur</label>
+                            <input type="text" name="username" id="id_username_field" class="form-control" value="{{ form.username.value|default_if_none:'' }}" placeholder="Nom d'utilisateur d'accès">
+                            {% if form.username.errors %}
+                                <span class="text-danger" style="font-size: 0.8rem;">{{ form.username.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="id_password_field">Mot de passe initial</label>
+                            <input type="password" name="password" id="id_password_field" class="form-control" placeholder="Mot de passe d'accès">
+                            {% if form.password.errors %}
+                                <span class="text-danger" style="font-size: 0.8rem;">{{ form.password.errors.0 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="form-group">
+            <label class="form-label" for="id_notes">Notes</label>
+            <textarea name="notes" id="id_notes" class="form-control" rows="2">{{ form.notes.value|default_if_none:'' }}</textarea>
         </div>
 
         <div class="form-actions">
@@ -102,4 +193,32 @@
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleUserFields() {
+    const chk = document.getElementById('id_create_user_account');
+    const fields = document.getElementById('user-fields');
+    if (chk && fields) {
+        fields.style.display = chk.checked ? 'block' : 'none';
+        
+        const usernameInput = document.getElementById('id_username_field');
+        const passwordInput = document.getElementById('id_password_field');
+        if (usernameInput && passwordInput) {
+            if (chk.checked) {
+                usernameInput.setAttribute('required', 'required');
+                passwordInput.setAttribute('required', 'required');
+            } else {
+                usernameInput.removeAttribute('required');
+                passwordInput.removeAttribute('required');
+            }
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    toggleUserFields();
+});
+</script>
 {% endblock %}

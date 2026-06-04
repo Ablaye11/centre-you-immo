@@ -9,6 +9,7 @@ class UserProfile(models.Model):
         ('manager', 'Manager'),
         ('accountant', 'Comptable'),
         ('maintenance', 'Agent de Maintenance'),
+        ('secretary', 'Secrétaire'),
         ('employee', 'Employé'),
     ]
 
