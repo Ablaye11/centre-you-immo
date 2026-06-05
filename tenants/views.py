@@ -1,9 +1,9 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db import transaction
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from .models import Tenant, Shop, Lease, Floor, Mall
 from .forms import ShopForm, TenantForm, FloorForm, MallForm
@@ -431,4 +431,111 @@ class LeasePrintView(LoginRequiredMixin, DetailView):
         context['active_menu'] = 'tenants'
         context['today'] = timezone.now().date()
         return context
+
+
+class AddLeaseView(LoginRequiredMixin, View):
+    """Assign a new shop (bail) to an existing tenant."""
+
+    def get(self, request, pk):
+        tenant = Tenant.objects.get(pk=pk)
+        active_mall = request.active_mall
+        if active_mall:
+            available_shops = Shop.objects.filter(mall=active_mall, status='available')
+        else:
+            available_shops = Shop.objects.filter(status='available')
+        return render(request, 'tenants/add_lease.html', {
+            'tenant': tenant,
+            'available_shops': available_shops,
+            'active_menu': 'tenants',
+            'today': timezone.now().date().isoformat(),
+        })
+
+    @transaction.atomic
+    def post(self, request, pk):
+        tenant = Tenant.objects.get(pk=pk)
+        active_mall = request.active_mall
+
+        shop_id = request.POST.get('shop')
+        monthly_rent = request.POST.get('monthly_rent')
+        deposit = request.POST.get('deposit') or 0
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        initial_payment = request.POST.get('initial_payment', 'none')
+        payment_method = request.POST.get('payment_method', 'cash')
+
+        if not (shop_id and monthly_rent and start_date and end_date):
+            messages.error(request, "Veuillez remplir tous les champs obligatoires : boutique, loyer, dates de début et de fin.")
+            if active_mall:
+                available_shops = Shop.objects.filter(mall=active_mall, status='available')
+            else:
+                available_shops = Shop.objects.filter(status='available')
+            return render(request, 'tenants/add_lease.html', {
+                'tenant': tenant,
+                'available_shops': available_shops,
+                'active_menu': 'tenants',
+                'today': timezone.now().date().isoformat(),
+            })
+
+        try:
+            shop = Shop.objects.get(pk=shop_id)
+        except Shop.DoesNotExist:
+            messages.error(request, "Boutique introuvable.")
+            return redirect('tenant_detail', pk=pk)
+
+        from datetime import date
+        start_date = date.fromisoformat(start_date)
+        end_date = date.fromisoformat(end_date)
+
+        lease = Lease.objects.create(
+            shop=shop,
+            tenant=tenant,
+            start_date=start_date,
+            end_date=end_date,
+            monthly_rent=monthly_rent,
+            deposit=deposit or 0,
+            status='active',
+        )
+        shop.status = 'occupied'
+        shop.save(update_fields=['status'])
+
+        today = timezone.now().date()
+
+        def _make_invoice(inv_type, amount, description, paid=False):
+            inv = Invoice.objects.create(
+                invoice_number=_generate_invoice_number(),
+                tenant=tenant,
+                shop=shop,
+                invoice_type=inv_type,
+                amount=amount,
+                issue_date=today,
+                due_date=today,
+                status='paid' if paid else 'pending',
+                paid_date=today if paid else None,
+                description=description,
+            )
+            if paid:
+                Payment.objects.create(
+                    invoice=inv,
+                    amount=amount,
+                    payment_date=today,
+                    method=payment_method,
+                    notes="Paiement initial à la signature du bail",
+                )
+            return inv
+
+        deposit_val = float(deposit) if deposit else 0
+        rent_val = float(monthly_rent)
+
+        if initial_payment in ('deposit', 'both') and deposit_val:
+            _make_invoice('charges', deposit_val, f"Caution - Bail {shop}", paid=True)
+        elif deposit_val:
+            _make_invoice('charges', deposit_val, f"Caution - Bail {shop}", paid=False)
+
+        if initial_payment in ('rent', 'both'):
+            _make_invoice('rent', rent_val, f"Premier loyer - {start_date.strftime('%B %Y')}", paid=True)
+        else:
+            _make_invoice('rent', rent_val, f"Loyer - {start_date.strftime('%B %Y')}", paid=False)
+
+        messages.success(request, f"✅ Bail pour la boutique {shop.shop_number} ({shop.name}) ajouté avec succès à {tenant.full_name}. Factures générées.")
+        return redirect('tenant_detail', pk=pk)
 

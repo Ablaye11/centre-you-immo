@@ -12,7 +12,10 @@
         <h2>{{ tenant.full_name }}</h2>
         <p>{{ tenant.company_name|default:"Particulier" }}</p>
     </div>
-    <div style="margin-left: auto;">
+    <div style="margin-left: auto; display:flex; gap:var(--spacing-sm); flex-wrap:wrap;">
+        <a href="{% url 'add_lease' tenant.pk %}" class="btn btn-primary">
+            <i data-lucide="plus-circle"></i> Ajouter un Bail
+        </a>
         <a href="{% url 'tenant_update' tenant.pk %}" class="btn btn-outline">
             <i data-lucide="edit"></i> Modifier le profil
         </a>
@@ -73,8 +76,11 @@
 
     <!-- Leases/Baux Card -->
     <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Contrats de Bail</h3>
+        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 class="card-title">Contrats de Bail ({{ leases|length }} bail(s))</h3>
+            <a href="{% url 'add_lease' tenant.pk %}" class="btn btn-primary btn-sm">
+                <i data-lucide="plus"></i> Ajouter un bail
+            </a>
         </div>
         <div class="card-body">
             {% if leases %}

@@ -12,6 +12,7 @@ urlpatterns = [
     path('<int:pk>/modifier/', views.TenantUpdateView.as_view(), name='tenant_update'),
     path('<int:pk>/supprimer/', views.TenantDeleteView.as_view(), name='tenant_delete'),
     path('baux/<int:pk>/imprimer/', views.LeasePrintView.as_view(), name='lease_print'),
+    path('<int:pk>/ajouter-bail/', views.AddLeaseView.as_view(), name='add_lease'),
 
     path('etages/', views.FloorListView.as_view(), name='floor_list'),
     path('etages/creer/', views.FloorCreateView.as_view(), name='floor_create'),

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Ajouter un Bail — {{ tenant.full_name }}{% endblock %}
+{% block page_title %}Ajouter un Bail{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Assigner un nouveau magasin / boutique à <strong>{{ tenant.full_name }}</strong>.</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'tenant_detail' tenant.pk %}" class="btn btn-outline">
+            <i data-lucide="arrow-left"></i> Retour à la fiche
+        </a>
+    </div>
+</div>
+
+<div class="card animate-in" style="max-width: 700px; margin: 0 auto;">
+    <div class="card-header">
+        <h3 class="card-title" style="display:flex; align-items:center; gap:10px;">
+            <i data-lucide="file-plus" style="color:var(--primary-400);"></i>
+            Nouveau Contrat de Bail — {{ tenant.full_name }}
+        </h3>
+    </div>
+    <div class="card-body">
+        {% if available_shops %}
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="id_shop">
+                    <i data-lucide="store" style="width:14px;height:14px;"></i>
+                    Boutique / Magasin disponible *
+                </label>
+                <select name="shop" id="id_shop" class="form-control" required>
+                    <option value="">— Choisir une boutique —</option>
+                    {% for shop in available_shops %}
+                    <option value="{{ shop.pk }}">
+                        {{ shop.shop_number }} — {{ shop.name }} ({{ shop.surface }}m² · {{ shop.get_category_display }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="grid-2" style="gap: var(--spacing-md);">
+                <div class="form-group">
+                    <label class="form-label" for="id_monthly_rent">
+                        <i data-lucide="wallet" style="width:14px;height:14px;"></i>
+                        Loyer Mensuel (FCFA) *
+                    </label>
+                    <input type="number" name="monthly_rent" id="id_monthly_rent" class="form-control" placeholder="Ex: 250 000" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="id_deposit">
+                        <i data-lucide="shield" style="width:14px;height:14px;"></i>
+                        Caution / Dépôt (FCFA) <span class="text-muted" style="font-weight:400;">(Optionnel)</span>
+                    </label>
+                    <input type="number" name="deposit" id="id_deposit" class="form-control" placeholder="Ex: 500 000" min="0">
+                </div>
+            </div>
+
+            <div class="grid-2" style="gap: var(--spacing-md);">
+                <div class="form-group">
+                    <label class="form-label" for="id_start_date">
+                        <i data-lucide="calendar" style="width:14px;height:14px;"></i>
+                        Date de Début du Bail *
+                    </label>
+                    <input type="date" name="start_date" id="id_start_date" class="form-control" value="{{ today }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="id_end_date">
+                        <i data-lucide="calendar-x" style="width:14px;height:14px;"></i>
+                        Date de Fin du Bail *
+                    </label>
+                    <input type="date" name="end_date" id="id_end_date" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_initial_payment">
+                    <i data-lucide="credit-card" style="width:14px;height:14px;"></i>
+                    Paiement Initial à la Signature
+                </label>
+                <select name="initial_payment" id="id_initial_payment" class="form-control">
+                    <option value="none">Pas de paiement immédiat (générer factures en attente)</option>
+                    <option value="rent">Payer le premier loyer uniquement</option>
+                    <option value="deposit">Payer la caution uniquement</option>
+                    <option value="both">Payer la caution + le premier loyer</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_payment_method">
+                    <i data-lucide="banknote" style="width:14px;height:14px;"></i>
+                    Mode de Paiement
+                </label>
+                <select name="payment_method" id="id_payment_method" class="form-control">
+                    <option value="cash">Espèces</option>
+                    <option value="bank_transfer">Virement bancaire</option>
+                    <option value="check">Chèque</option>
+                    <option value="mobile_money">Mobile Money</option>
+                </select>
+            </div>
+
+            <div class="form-actions" style="display:flex; gap:var(--spacing-md); margin-top:var(--spacing-lg); padding-top:var(--spacing-md); border-top:1px solid var(--border-color);">
+                <a href="{% url 'tenant_detail' tenant.pk %}" class="btn btn-outline" style="flex:1; text-align:center;">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-primary" style="flex:2;">
+                    <i data-lucide="plus-circle"></i>
+                    Créer le Bail & Générer les Factures
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <div class="empty-state">
+            <i data-lucide="store"></i>
+            <h3>Aucune boutique disponible</h3>
+            <p>Toutes les boutiques du centre commercial sont actuellement occupées ou en maintenance.</p>
+            <a href="{% url 'shop_list' %}" class="btn btn-outline">
+                <i data-lucide="layout-grid"></i> Voir le plan des boutiques
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
