@@ -33,9 +33,12 @@ def global_context(request):
                 mall=active_mall,
                 status__in=['new', 'in_progress']
             ).count()
+            from django.db.models import Q
+            from django.utils import timezone
             context['overdue_invoices'] = Invoice.objects.filter(
-                shop__mall=active_mall,
-                status='overdue'
+                shop__mall=active_mall
+            ).filter(
+                Q(status='overdue') | Q(status='pending', due_date__lt=timezone.now().date())
             ).count()
         else:
             context['pending_maintenance'] = 0

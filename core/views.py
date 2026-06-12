@@ -109,56 +109,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         context['monthly_chart_data'] = json.dumps(monthly_data)
 
-        # ── Mise à jour automatique des factures en retard (overdue) ──────────
-        # Utiliser une seule requête update() SQL pour tout mettre à jour d'un coup
-        past_due_invoices_qs = Invoice.objects.filter(
-            shop__mall=active_mall,
-            status='pending',
-            due_date__lt=today
-        )
-
-        past_due_count = past_due_invoices_qs.count()
-        if past_due_count > 0:
-            # 1. Mise à jour groupée en une seule requête SQL
-            past_due_invoices_qs.update(status='overdue')
-
-            # 2. Notification globale unique pour le personnel (évite de saturer la base de données)
-            from core.models import Notification
-            from django.contrib.auth.models import User
-
-            staff_users = list(User.objects.filter(
-                Q(is_superuser=True) |
-                Q(profile__role__in=['admin', 'manager', 'accountant'])
-            ).only('id'))
-
-            notif_title = "Factures en retard détectées"
-            notif_msg = f"{past_due_count} facture(s) sont arrivées à échéance et sont en retard aujourd'hui."
-
-            # Trouver les IDs des membres du personnel qui ont déjà reçu cette notification aujourd'hui
-            notified_staff_ids = set(Notification.objects.filter(
-                user__in=staff_users,
-                title=notif_title,
-                message=notif_msg,
-                created_at__date=today
-            ).values_list('user_id', flat=True))
-
-            new_notifications = []
-            for staff in staff_users:
-                if staff.id not in notified_staff_ids:
-                    new_notifications.append(Notification(
-                        user=staff,
-                        title=notif_title,
-                        message=notif_msg,
-                        notif_type='danger'
-                    ))
-
-            if new_notifications:
-                Notification.objects.bulk_create(new_notifications, ignore_conflicts=True)
-
         # ── Loyers en retard (alertes urgentes) ──────────────────────────────
+        # On détermine les loyers en retard dynamiquement (status='overdue' OU status='pending' avec date dépassée)
+        # sans faire d'écriture en base de données pour éviter de bloquer SQLite
         overdue_invoices = Invoice.objects.filter(
-            shop__mall=active_mall,
-            status='overdue'
+            shop__mall=active_mall
+        ).filter(
+            Q(status='overdue') | Q(status='pending', due_date__lt=today)
         ).select_related('tenant', 'shop').order_by('due_date')
 
         # Charger jusqu'à 11 factures pour optimiser le nombre de requêtes SQL

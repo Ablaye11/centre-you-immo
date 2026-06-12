@@ -14,6 +14,11 @@ class Command(BaseCommand):
         today = timezone.now().date()
         sent_count = 0
 
+        # ---- 0. Mark pending past-due invoices as overdue ----
+        updated = Invoice.objects.filter(status='pending', due_date__lt=today).update(status='overdue')
+        if updated > 0:
+            self.stdout.write(self.style.SUCCESS(f"Marked {updated} pending past-due invoices as overdue."))
+
         # ---- 1. Overdue Invoice Reminders ----
         overdue_invoices = Invoice.objects.select_related('tenant', 'shop').filter(status='overdue')
         self.stdout.write(f"Found {overdue_invoices.count()} overdue invoices.")
