@@ -77,8 +77,18 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 30,  # Attendre jusqu'à 30 secondes si la DB est verrouillée (NFS PythonAnywhere)
+        }
     }
 }
+
+# Sessions stockées dans des cookies signés (pas d'écriture en base de données)
+# Cela évite les timeouts liés aux verrous SQLite sur PythonAnywhere
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_SECURE = True  # HTTPS uniquement en production
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 
 # Password validation
