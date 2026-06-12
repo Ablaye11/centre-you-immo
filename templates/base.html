@@ -8,10 +8,9 @@
     <!-- Load custom styles -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v={% now 'U' %}">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons (version fixe, defer pour ne pas bloquer le rendu) -->
+    <script src="https://unpkg.com/lucide@0.474.0/dist/umd/lucide.min.js" defer></script>
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
     {% if user.is_authenticated %}
@@ -371,8 +370,10 @@
 
     <!-- Global Scripts -->
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // Initialize Lucide Icons (après defer, on attend DOMContentLoaded)
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
 
         // Responsive Mobile Sidebar Toggle
         const mobileToggle = document.getElementById('mobileToggle');

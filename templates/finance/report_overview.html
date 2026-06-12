@@ -3,6 +3,12 @@
 {% block title %}Rapports & Inventaires — {{ request.active_mall.name }}{% endblock %}
 {% block page_title %}Rapports & Inventaires{% endblock %}
 
+{% block extra_head %}
+<!-- Chart.js uniquement pour la page Rapports -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+{% endblock %}
+
+
 {% block content %}
 {% if no_active_mall %}
 <div class="card animate-in" style="text-align:center; padding: 60px 40px; max-width: 600px; margin: 40px auto;">
