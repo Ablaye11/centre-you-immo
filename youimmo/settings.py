@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'youimmo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db_v2.sqlite3',
         'OPTIONS': {
             'timeout': 30,  # Attendre jusqu'à 30 secondes si la DB est verrouillée (NFS PythonAnywhere)
         }
