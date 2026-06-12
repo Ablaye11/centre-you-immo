@@ -14,15 +14,18 @@ def _generate_invoice_number():
     """Generate a unique sequential invoice number like FAC-2024-0042."""
     today = timezone.now()
     prefix = f"FAC-{today.year}-"
-    last = Invoice.objects.filter(invoice_number__startswith=prefix).order_by('-invoice_number').first()
-    if last:
+    invoice_numbers = Invoice.objects.filter(invoice_number__startswith=prefix).values_list('invoice_number', flat=True)
+    
+    max_seq = 0
+    for num in invoice_numbers:
         try:
-            seq = int(last.invoice_number.split('-')[-1]) + 1
+            seq = int(num.split('-')[-1])
+            if seq > max_seq:
+                max_seq = seq
         except ValueError:
-            seq = 1
-    else:
-        seq = 1
-    return f"{prefix}{seq:04d}"
+            pass
+            
+    return f"{prefix}{(max_seq + 1):04d}"
 
 
 class TenantListView(LoginRequiredMixin, ListView):
@@ -538,4 +541,512 @@ class AddLeaseView(LoginRequiredMixin, View):
 
         messages.success(request, f"✅ Bail pour la boutique {shop.shop_number} ({shop.name}) ajouté avec succès à {tenant.full_name}. Factures générées.")
         return redirect('tenant_detail', pk=pk)
+
+
+class ShopImportTemplateView(LoginRequiredMixin, View):
+    """Generates a downloadable Excel template for importing shops and tenants."""
+    def get(self, request):
+        import openpyxl
+        from django.http import HttpResponse
+        
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Modèle Importation"
+        
+        # Header style
+        header_fill = openpyxl.styles.PatternFill(start_color="1E3A8A", end_color="1E3A8A", fill_type="solid")
+        header_font = openpyxl.styles.Font(bold=True, color="FFFFFF", size=11)
+        header_align = openpyxl.styles.Alignment(horizontal="center", vertical="center", wrap_text=True)
+        
+        headers = [
+            "Étage / Niveau",
+            "Boutique - Numéro",
+            "Boutique - Nom",
+            "Boutique - Catégorie",
+            "Boutique - Surface (m²)",
+            "Boutique - Description",
+            "Locataire - Prénom",
+            "Locataire - Nom",
+            "Locataire - Téléphone",
+            "Locataire - Email",
+            "Locataire - Raison Sociale",
+            "Locataire - N° Pièce d'identité",
+            "Bail - Date de début (AAAA-MM-JJ)",
+            "Bail - Date de fin (AAAA-MM-JJ)",
+            "Bail - Loyer Mensuel (FCFA)",
+            "Bail - Caution (FCFA)"
+        ]
+        
+        ws.append(headers)
+        
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num)
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = header_align
+            
+        # Add a sample row to guide the user
+        sample_row = [
+            "Rez-de-chaussée",  # Floor
+            "A-101",           # Shop Number
+            "Boutique Orange",   # Shop Name
+            "Télécommunications",# Shop Category
+            "25.5",             # Surface
+            "Boutique de vente de téléphones et forfaits", # Description
+            "Mamadou",          # Tenant First Name
+            "Diop",             # Tenant Last Name
+            "771234567",        # Tenant Phone
+            "mamadou.diop@email.com", # Tenant Email
+            "Diop Telecom SARL", # Company Name
+            "1234567890123",    # ID number
+            "2026-01-01",       # Lease Start
+            "2026-12-31",       # Lease End
+            "150000",           # Rent
+            "300000"            # Deposit
+        ]
+        ws.append(sample_row)
+        
+        # Format columns width
+        col_widths = [20, 20, 20, 25, 20, 30, 20, 20, 18, 25, 22, 22, 28, 28, 25, 20]
+        for i, width in enumerate(col_widths, 1):
+            ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = width
+            
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="modele_import_boutiques.xlsx"'
+        wb.save(response)
+        return response
+
+
+class ShopImportView(LoginRequiredMixin, View):
+    """Handles parsing and validation of uploaded Excel/CSV file to register shops and baux."""
+    
+    def get(self, request):
+        active_mall = request.active_mall
+        malls = Mall.objects.all()
+        return render(request, 'tenants/shop_import.html', {
+            'malls': malls,
+            'active_menu': 'shops',
+        })
+        
+    def post(self, request):
+        import io
+        import csv
+        import openpyxl
+        from decimal import Decimal
+        from datetime import date
+        
+        active_mall = request.active_mall
+        
+        # Determine mall
+        if not active_mall:
+            mall_id = request.POST.get('mall')
+            if not mall_id:
+                messages.error(request, "Veuillez sélectionner un centre commercial de destination.")
+                return redirect('shop_import')
+            try:
+                mall = Mall.objects.get(pk=mall_id)
+            except Mall.DoesNotExist:
+                messages.error(request, "Centre commercial sélectionné introuvable.")
+                return redirect('shop_import')
+        else:
+            mall = active_mall
+            
+        # Options
+        overwrite = request.POST.get('overwrite') == 'true'
+        initial_invoices = request.POST.get('initial_invoices', 'none')
+        
+        # File checks
+        uploaded_file = request.FILES.get('file')
+        if not uploaded_file:
+            messages.error(request, "Veuillez charger un fichier Excel (.xlsx) ou CSV.")
+            return redirect('shop_import')
+            
+        file_name = uploaded_file.name.lower()
+        rows = []
+        errors = [] # list of tuples: (row_num, field, value, error_msg)
+        
+        # 1. READ FILE
+        try:
+            if file_name.endswith('.xlsx'):
+                wb = openpyxl.load_workbook(uploaded_file, data_only=True)
+                ws = wb.active
+                # Openpyxl is 1-indexed for rows and cols. Header is row 1, data starts at row 2.
+                for r_idx in range(2, ws.max_row + 1):
+                    row_vals = [ws.cell(row=r_idx, column=c_idx).value for c_idx in range(1, 17)]
+                    # If the entire row is empty, skip it
+                    if not any(v is not None and str(v).strip() != '' for v in row_vals):
+                        continue
+                    rows.append((r_idx, row_vals))
+            elif file_name.endswith('.csv'):
+                # Handle CSV
+                text_file = io.TextIOWrapper(uploaded_file, encoding='utf-8-sig')
+                # Check dialect/delimiter (defaulting to semicolon or comma)
+                sample = text_file.read(2048)
+                text_file.seek(0)
+                delimiter = ';' if ';' in sample else ','
+                reader = csv.reader(text_file, delimiter=delimiter)
+                header = next(reader, None) # Skip header
+                r_idx = 1
+                for row_vals in reader:
+                    r_idx += 1
+                    # Pad to 16 columns if needed
+                    row_vals += [None] * (16 - len(row_vals))
+                    # Convert empty strings to None
+                    row_vals = [v if str(v).strip() != '' else None for v in row_vals]
+                    if not any(v is not None for v in row_vals):
+                        continue
+                    rows.append((r_idx, row_vals))
+            else:
+                messages.error(request, "Format de fichier non supporté. Veuillez charger un fichier .xlsx ou .csv.")
+                return redirect('shop_import')
+        except Exception as e:
+            messages.error(request, f"Erreur lors de la lecture du fichier : {str(e)}")
+            return redirect('shop_import')
+            
+        if not rows:
+            messages.warning(request, "Le fichier chargé est vide ou ne contient aucune ligne de données.")
+            return redirect('shop_import')
+
+        # 2. VALIDATION
+        def clean_decimal(val):
+            if val is None:
+                return None
+            val_str = str(val).replace(' ', '').replace('F', '').replace('f', '').replace('\xa0', '').replace(',', '.').replace('\'', '').strip()
+            # Strip all non-numeric characters for rents and deposits
+            return "".join(c for c in val_str if c.isdigit())
+            
+        def clean_surface(val):
+            if val is None:
+                return None
+            val_str = str(val).replace(' ', '').replace(',', '.').replace('\'', '').strip()
+            # If there's a dot, keep it, but only one
+            parts = val_str.split('.')
+            if len(parts) > 2:
+                val_str = "".join(parts[:-1]) + "." + parts[-1]
+            try:
+                return Decimal(val_str)
+            except:
+                return None
+
+        def parse_date_val(val):
+            if isinstance(val, (date, timezone.datetime)):
+                return val.date() if isinstance(val, timezone.datetime) else val
+            if not val:
+                return None
+            val_str = str(val).strip()
+            from django.utils.dateparse import parse_date
+            d = parse_date(val_str)
+            if d:
+                return d
+            for fmt in ('%d/%m/%Y', '%d-%m-%Y', '%Y/%m/%d', '%d/%m/%y', '%d-%m-%y'):
+                try:
+                    return timezone.datetime.strptime(val_str, fmt).date()
+                except ValueError:
+                    continue
+            return None
+
+        def resolve_category(label):
+            if not label:
+                return 'other'
+            label_clean = str(label).strip().lower()
+            
+            # Direct keys
+            keys = [c[0] for c in Shop.CATEGORY_CHOICES]
+            if label_clean in keys:
+                return label_clean
+                
+            # Standard mapping
+            mapping = {
+                'vêtements & mode': 'clothing',
+                'vêtements': 'clothing',
+                'mode': 'clothing',
+                'vetements': 'clothing',
+                'restauration': 'food',
+                'restaurant': 'food',
+                'nourriture': 'food',
+                'électronique': 'electronics',
+                'electronique': 'electronics',
+                'bijouterie': 'jewelry',
+                'bijoux': 'jewelry',
+                'beauté & cosmétiques': 'beauty',
+                'beauté': 'beauty',
+                'beaute': 'beauty',
+                'cosmétiques': 'beauty',
+                'cosmetiques': 'beauty',
+                'sport & loisirs': 'sports',
+                'sport': 'sports',
+                'loisirs': 'sports',
+                'maison & décoration': 'home',
+                'maison': 'home',
+                'décoration': 'home',
+                'decoration': 'home',
+                'services': 'services',
+                'service': 'services',
+                'supermarché': 'supermarket',
+                'supermarche': 'supermarket',
+                'pharmacie': 'pharmacy',
+                'banque & finance': 'bank',
+                'banque': 'bank',
+                'finance': 'bank',
+                'télécommunications': 'telecom',
+                'telecommunications': 'telecom',
+                'telecom': 'telecom',
+                'autre': 'other',
+            }
+            return mapping.get(label_clean, 'other')
+
+        # Keep track of shop numbers in the uploaded file to detect duplicates in the file itself
+        seen_shop_numbers = set()
+
+        for r_idx, row in rows:
+            floor_name = row[0]
+            shop_number = row[1]
+            shop_name = row[2]
+            shop_category = row[3]
+            shop_surface = row[4]
+            tenant_first_name = row[6]
+            tenant_last_name = row[7]
+            tenant_phone = row[8]
+            lease_start_raw = row[12]
+            lease_end_raw = row[13]
+            lease_rent_raw = row[14]
+            
+            # Floor check
+            if not floor_name:
+                errors.append((r_idx, "Étage / Niveau", floor_name, "L'étage est obligatoire."))
+                
+            # Shop number check
+            if not shop_number:
+                errors.append((r_idx, "Boutique - Numéro", shop_number, "Le numéro de boutique est obligatoire."))
+            else:
+                shop_num_str = str(shop_number).strip()
+                if shop_num_str in seen_shop_numbers:
+                    errors.append((r_idx, "Boutique - Numéro", shop_number, f"Le numéro de boutique '{shop_num_str}' apparaît plusieurs fois dans le fichier."))
+                else:
+                    seen_shop_numbers.add(shop_num_str)
+                    
+                # DB check if not overwrite
+                if not overwrite:
+                    if Shop.objects.filter(shop_number=shop_num_str).exists():
+                        errors.append((r_idx, "Boutique - Numéro", shop_number, "Une boutique avec ce numéro existe déjà dans le système (activez l'option d'écrasement pour la modifier)."))
+            
+            # Shop name check
+            if not shop_name:
+                errors.append((r_idx, "Boutique - Nom", shop_name, "Le nom de la boutique est obligatoire."))
+                
+            # Shop surface check
+            if shop_surface is not None:
+                surface_val = clean_surface(shop_surface)
+                if surface_val is None or surface_val <= 0:
+                    errors.append((r_idx, "Boutique - Surface", shop_surface, "La surface doit être un nombre décimal positif."))
+            else:
+                errors.append((r_idx, "Boutique - Surface", shop_surface, "La surface est obligatoire."))
+                
+            # Tenant occupancy check: if ANY tenant/lease field is filled, we validate lease info
+            has_tenant_data = any([tenant_first_name, tenant_last_name, tenant_phone, lease_start_raw, lease_end_raw, lease_rent_raw])
+            
+            if has_tenant_data:
+                if not tenant_first_name:
+                    errors.append((r_idx, "Locataire - Prénom", tenant_first_name, "Le prénom du locataire est obligatoire car la boutique est occupée."))
+                if not tenant_last_name:
+                    errors.append((r_idx, "Locataire - Nom", tenant_last_name, "Le nom du locataire est obligatoire car la boutique est occupée."))
+                if not tenant_phone:
+                    errors.append((r_idx, "Locataire - Téléphone", tenant_phone, "Le téléphone du locataire est obligatoire car la boutique est occupée."))
+                
+                # Lease Dates
+                start_date = parse_date_val(lease_start_raw)
+                end_date = parse_date_val(lease_end_raw)
+                
+                if not lease_start_raw:
+                    errors.append((r_idx, "Bail - Date de début", lease_start_raw, "La date de début de bail est obligatoire."))
+                elif not start_date:
+                    errors.append((r_idx, "Bail - Date de début", lease_start_raw, "Format de date de début invalide (utilisez AAAA-MM-JJ ou JJ/MM/AAAA)."))
+                    
+                if not lease_end_raw:
+                    errors.append((r_idx, "Bail - Date de fin", lease_end_raw, "La date de fin de bail est obligatoire."))
+                elif not end_date:
+                    errors.append((r_idx, "Bail - Date de fin", lease_end_raw, "Format de date de fin invalide (utilisez AAAA-MM-JJ ou JJ/MM/AAAA)."))
+                    
+                if start_date and end_date and end_date <= start_date:
+                    errors.append((r_idx, "Bail - Dates", f"{lease_start_raw} à {lease_end_raw}", "La date de fin de bail doit être après la date de début."))
+                    
+                # Rent
+                if not lease_rent_raw:
+                    errors.append((r_idx, "Bail - Loyer Mensuel", lease_rent_raw, "Le loyer mensuel est obligatoire."))
+                else:
+                    rent_clean = clean_decimal(lease_rent_raw)
+                    try:
+                        rent_val = int(rent_clean) if rent_clean else 0
+                        if rent_val <= 0:
+                            errors.append((r_idx, "Bail - Loyer Mensuel", lease_rent_raw, "Le loyer doit être un montant positif."))
+                    except ValueError:
+                        errors.append((r_idx, "Bail - Loyer Mensuel", lease_rent_raw, "Le loyer doit être un nombre entier valide."))
+                        
+                # Deposit (Caution)
+                lease_deposit_raw = row[15]
+                if lease_deposit_raw:
+                    deposit_clean = clean_decimal(lease_deposit_raw)
+                    try:
+                        dep_val = int(deposit_clean) if deposit_clean else 0
+                        if dep_val < 0:
+                            errors.append((r_idx, "Bail - Caution", lease_deposit_raw, "La caution ne peut pas être négative."))
+                    except ValueError:
+                        errors.append((r_idx, "Bail - Caution", lease_deposit_raw, "La caution doit être un nombre entier valide."))
+                        
+        # 3. SAVE IF NO ERRORS
+        if errors:
+            malls = Mall.objects.all()
+            return render(request, 'tenants/shop_import.html', {
+                'errors': errors,
+                'malls': malls,
+                'active_menu': 'shops',
+            })
+            
+        # Execute save
+        created_shops = 0
+        updated_shops = 0
+        created_leases = 0
+        
+        try:
+            with transaction.atomic():
+                for r_idx, row in rows:
+                    floor_name = str(row[0]).strip()
+                    shop_number = str(row[1]).strip()
+                    shop_name = str(row[2]).strip()
+                    shop_category = row[3]
+                    shop_surface = clean_surface(row[4])
+                    shop_description = str(row[5]).strip() if row[5] else ""
+                    
+                    tenant_first_name = str(row[6]).strip() if row[6] else None
+                    tenant_last_name = str(row[7]).strip() if row[7] else None
+                    tenant_phone = str(row[8]).strip() if row[8] else None
+                    tenant_email = str(row[9]).strip() if row[9] else ""
+                    tenant_company = str(row[10]).strip() if row[10] else ""
+                    tenant_id_number = str(row[11]).strip() if row[11] else ""
+                    
+                    lease_start = parse_date_val(row[12])
+                    lease_end = parse_date_val(row[13])
+                    
+                    lease_rent_clean = clean_decimal(row[14])
+                    lease_rent = int(lease_rent_clean) if lease_rent_clean else 0
+                    
+                    lease_deposit_clean = clean_decimal(row[15]) if row[15] else None
+                    lease_deposit = int(lease_deposit_clean) if lease_deposit_clean else 0
+                    
+                    # 3.1 Get or Create Floor
+                    floor, _ = Floor.objects.get_or_create(
+                        mall=mall,
+                        name=floor_name,
+                        defaults={'level': 0}
+                    )
+                    
+                    # 3.2 Get or Create Shop
+                    category_code = resolve_category(shop_category)
+                    status = 'occupied' if tenant_first_name else 'available'
+                    
+                    shop_obj = Shop.objects.filter(shop_number=shop_number).first()
+                    if shop_obj:
+                        # Update existing
+                        shop_obj.mall = mall
+                        shop_obj.name = shop_name
+                        shop_obj.category = category_code
+                        shop_obj.floor = floor
+                        shop_obj.surface = shop_surface
+                        shop_obj.status = status
+                        shop_obj.description = shop_description
+                        shop_obj.save()
+                        updated_shops += 1
+                    else:
+                        # Create new
+                        shop_obj = Shop.objects.create(
+                            mall=mall,
+                            shop_number=shop_number,
+                            name=shop_name,
+                            category=category_code,
+                            floor=floor,
+                            surface=shop_surface,
+                            status=status,
+                            description=shop_description
+                        )
+                        created_shops += 1
+                        
+                    # 3.3 Create Tenant and Lease if occupied
+                    if tenant_first_name:
+                        # Check if tenant exists by phone
+                        tenant_obj = Tenant.objects.filter(phone=tenant_phone).first()
+                        if not tenant_obj:
+                            tenant_obj = Tenant.objects.create(
+                                first_name=tenant_first_name,
+                                last_name=tenant_last_name,
+                                phone=tenant_phone,
+                                email=tenant_email,
+                                company_name=tenant_company,
+                                id_number=tenant_id_number,
+                            )
+                        else:
+                            # Update tenant email / company if they were empty
+                            updated_fields = []
+                            if not tenant_obj.email and tenant_email:
+                                tenant_obj.email = tenant_email
+                                updated_fields.append('email')
+                            if not tenant_obj.company_name and tenant_company:
+                                tenant_obj.company_name = tenant_company
+                                updated_fields.append('company_name')
+                            if not tenant_obj.id_number and tenant_id_number:
+                                tenant_obj.id_number = tenant_id_number
+                                updated_fields.append('id_number')
+                            if updated_fields:
+                                tenant_obj.save(update_fields=updated_fields)
+                                
+                        # Create Lease (Terminate existing active leases on this shop just in case)
+                        Lease.objects.filter(shop=shop_obj, status='active').update(status='terminated')
+                        
+                        lease_obj = Lease.objects.create(
+                            shop=shop_obj,
+                            tenant=tenant_obj,
+                            start_date=lease_start,
+                            end_date=lease_end,
+                            monthly_rent=lease_rent,
+                            deposit=lease_deposit,
+                            status='active',
+                        )
+                        created_leases += 1
+                        
+                        # 3.4 Generate initial invoices if requested
+                        if initial_invoices != 'none':
+                            is_paid = initial_invoices == 'paid'
+                            today_date = timezone.now().date()
+                            
+                            def _make_invoice(inv_type, amount, desc):
+                                inv = Invoice.objects.create(
+                                    invoice_number=_generate_invoice_number(),
+                                    tenant=tenant_obj,
+                                    shop=shop_obj,
+                                    invoice_type=inv_type,
+                                    amount=amount,
+                                    issue_date=today_date,
+                                    due_date=today_date,
+                                    status='paid' if is_paid else 'pending',
+                                    paid_date=today_date if is_paid else None,
+                                    description=desc,
+                                )
+                                if is_paid:
+                                    Payment.objects.create(
+                                        invoice=inv,
+                                        amount=amount,
+                                        payment_date=today_date,
+                                        method='cash',
+                                        notes="Paiement initial enregistré lors de l'importation de masse",
+                                    )
+                                    
+                            if lease_deposit > 0:
+                                _make_invoice('charges', lease_deposit, f"Caution - Bail {shop_obj.shop_number}")
+                            if lease_rent > 0:
+                                _make_invoice('rent', lease_rent, f"Premier loyer - {lease_start.strftime('%B %Y')}")
+                                
+            messages.success(request, f"✅ Importation réussie ! {created_shops} boutique(s) créée(s), {updated_shops} modifiée(s) et {created_leases} bail(baux) actif(s) enregistré(s).")
+            return redirect('shop_list')
+        except Exception as e:
+            messages.error(request, f"Une erreur imprévue est survenue lors de l'enregistrement en base de données : {str(e)}")
+            return redirect('shop_import')
 

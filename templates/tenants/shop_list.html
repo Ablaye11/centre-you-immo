@@ -12,6 +12,9 @@
         <a href="{% url 'shop_create' %}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
             <i data-lucide="plus"></i> Ajouter un Emplacement
         </a>
+        <a href="{% url 'shop_import' %}" class="btn btn-outline" style="border-color: var(--accent); color: var(--accent);">
+            <i data-lucide="upload"></i> Importer Excel/CSV
+        </a>
         <a href="{% url 'tenant_list' %}" class="btn btn-outline">
             <i data-lucide="users"></i> Voir les Locataires
         </a>
@@ -60,10 +63,8 @@
     <div class="card-body" style="padding: 16px 24px;">
         <div style="display: flex; align-items: center; gap: 16px;">
             <span style="font-size: 0.85rem; color: var(--text-muted); min-width: 120px;">Taux d'occupation</span>
-            <div style="flex: 1; background: rgba(148,163,184,0.15); border-radius: 999px; height: 12px; overflow: hidden;">
-                <div style="width: {{ occupancy_rate }}%; height: 100%; border-radius: 999px;
-                    background: linear-gradient(90deg, var(--success), #34d399);
-                    transition: width 1s ease;"></div>
+            <div style="flex: 1; background: rgba(148,163,184,0.15); border-radius: 999px; height: 12px; overflow: hidden; --occupancy-rate: {{ occupancy_rate }}%;">
+                <div style="width: var(--occupancy-rate); height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--success), #34d399); transition: width 1s ease;"></div>
             </div>
             <span style="font-size: 1rem; font-weight: 700; color: var(--success); min-width: 50px; text-align: right;">{{ occupancy_rate }}%</span>
         </div>

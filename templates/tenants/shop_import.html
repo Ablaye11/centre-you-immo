@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Importer des Boutiques{% endblock %}
+{% block page_title %}Importation de masse (Excel / CSV){% endblock %}
+
+{% block content %}
+<div class="animate-in" style="max-width: 900px; margin: 0 auto;">
+    
+    <!-- Info Panel / Instructions -->
+    <div class="card mb-3" style="border-left: 4px solid var(--primary);">
+        <div class="card-body" style="padding: 24px;">
+            <div style="display: flex; gap: 16px; align-items: flex-start;">
+                <div style="background: rgba(30, 58, 138, 0.2); color: var(--primary); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="info" style="width: 22px; height: 22px;"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 8px; font-weight: 700; font-size: 1.05rem;">Comment importer vos données ?</h4>
+                    <p style="margin: 0 0 16px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                        Préparez un fichier Excel (.xlsx) ou CSV contenant la liste de vos boutiques. Si des informations de locataire (prénom, nom, téléphone) sont renseignées, un locataire et un bail actif seront créés automatiquement, et la boutique sera marquée comme <strong>Occupée</strong>. Sinon, elle sera créée comme <strong>Disponible</strong>.
+                    </p>
+                    <a href="{% url 'shop_import_template' %}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary); display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+                        <i data-lucide="download" style="width: 16px; height: 16px;"></i> Télécharger le modèle Excel (.xlsx)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Errors Display -->
+    {% if errors %}
+    <div class="card mb-3" style="border-left: 4px solid var(--danger);">
+        <div class="card-header" style="background: rgba(239, 68, 68, 0.05); border-bottom: 1px solid rgba(239, 68, 68, 0.1);">
+            <h3 class="card-title" style="color: var(--danger); display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="alert-triangle"></i> Erreurs de validation détectées ({{ errors|length }})
+            </h3>
+        </div>
+        <div class="card-body" style="padding: 0;">
+            <div style="max-height: 350px; overflow-y: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.02); border-bottom: 1.5px solid var(--border-color);">
+                            <th style="padding: 12px 16px; width: 80px; font-weight: 700;">Ligne</th>
+                            <th style="padding: 12px 16px; width: 180px; font-weight: 700;">Colonne / Champ</th>
+                            <th style="padding: 12px 16px; width: 180px; font-weight: 700;">Valeur lue</th>
+                            <th style="padding: 12px 16px; font-weight: 700;">Détail de l'erreur</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row_idx, field, value, msg in errors %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                            <td style="padding: 10px 16px; font-weight: 700; color: var(--text-muted);">Ligne {{ row_idx }}</td>
+                            <td style="padding: 10px 16px; font-weight: 600;">{{ field }}</td>
+                            <td style="padding: 10px 16px; font-family: monospace; color: var(--text-secondary);">{{ value|default:"[Vide]" }}</td>
+                            <td style="padding: 10px 16px; color: var(--danger);">{{ msg }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer" style="padding: 12px 24px; background: rgba(239, 68, 68, 0.02); border-top: 1px solid rgba(239, 68, 68, 0.1); font-size: 0.8rem; color: var(--text-muted);">
+            ⚠️ Aucune donnée n'a été importée en base de données afin d'éviter les doublons ou corruptions. Veuillez corriger votre fichier et le soumettre à nouveau.
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Upload Form Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Importer le fichier</h3>
+        </div>
+        <div class="card-body" style="padding: 24px;">
+            <form method="post" enctype="multipart/form-data" class="form" id="importForm">
+                {% csrf_token %}
+
+                <!-- Mall Selector if no active mall -->
+                {% if not request.active_mall %}
+                <div class="form-group mb-3">
+                    <label class="form-label" style="font-weight: 600;">Sélectionner le Centre Commercial de destination *</label>
+                    <select name="mall" class="form-control" required style="width: 100%; max-width: 400px;">
+                        <option value="" disabled selected>-- Choisir un centre --</option>
+                        {% for mall in malls %}
+                        <option value="{{ mall.id }}">{{ mall.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+                <!-- Options -->
+                <div class="form-row mb-3" style="display: flex; gap: 24px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 250px;">
+                        <label class="form-label" style="font-weight: 600;">Factures initiales (Entrée)</label>
+                        <select name="initial_invoices" class="form-control">
+                            <option value="none" selected>Ne pas générer (Saisie historique uniquement)</option>
+                            <option value="pending">Générer comme en attente de paiement</option>
+                            <option value="paid">Générer comme déjà payées (Espèces)</option>
+                        </select>
+                        <small class="text-muted" style="display: block; margin-top: 4px; font-size: 0.75rem;">
+                            Si activé, génère automatiquement une facture pour le Loyer du 1er mois et une pour la Caution (si applicable).
+                        </small>
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1; min-width: 250px; display: flex; align-items: center; padding-top: 28px;">
+                        <label class="checkbox-container" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 500;">
+                            <input type="checkbox" name="overwrite" value="true" style="width: 18px; height: 18px; cursor: pointer;">
+                            <span>Mettre à jour les informations des boutiques existantes (si le numéro correspond)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Drag & Drop Zone -->
+                <div class="upload-drop-zone" id="dropZone" style="border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 40px; text-align: center; background: rgba(255,255,255,0.01); transition: border-color 0.2s, background 0.2s; cursor: pointer; margin-bottom: 24px; position: relative;">
+                    <input type="file" name="file" id="fileInput" accept=".xlsx, .csv" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;">
+                    <div class="upload-prompt" id="uploadPrompt">
+                        <div style="background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <i data-lucide="upload-cloud" style="width: 30px; height: 30px; color: var(--text-muted);"></i>
+                        </div>
+                        <h5 style="margin: 0 0 4px; font-weight: 700; font-size: 1rem;">Cliquez ou glissez-déposez le fichier ici</h5>
+                        <p class="text-muted" style="margin: 0; font-size: 0.8rem;">Formats acceptés : .xlsx (Excel) ou .csv (Séparateur point-virgule)</p>
+                    </div>
+                    <div class="file-details" id="fileDetails" style="display: none;">
+                        <div style="background: rgba(34, 197, 94, 0.1); color: var(--success); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                            <i data-lucide="file-spreadsheet" style="width: 30px; height: 30px;"></i>
+                        </div>
+                        <h5 style="margin: 0 0 4px; font-weight: 700; font-size: 1rem; color: var(--success);" id="fileName">Nom_du_fichier.xlsx</h5>
+                        <p class="text-muted" style="margin: 0; font-size: 0.8rem;" id="fileSize">15 KB</p>
+                        <span style="display: inline-block; margin-top: 12px; font-size: 0.75rem; color: var(--primary); text-decoration: underline;">Changer de fichier</span>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 24px;">
+                    <a href="{% url 'shop_list' %}" class="btn btn-outline">Annuler</a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" style="min-width: 140px;">
+                        <i data-lucide="upload" style="width: 16px; height: 16px;"></i> Importer les données
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.upload-drop-zone:hover {
+    border-color: var(--primary) !important;
+    background: rgba(30, 58, 138, 0.05) !important;
+}
+.upload-drop-zone.dragover {
+    border-color: var(--success) !important;
+    background: rgba(34, 197, 94, 0.05) !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const uploadPrompt = document.getElementById('uploadPrompt');
+    const fileDetails = document.getElementById('fileDetails');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+
+    // Drag-and-drop support
+    fileInput.addEventListener('dragenter', () => dropZone.classList.add('dragover'));
+    fileInput.addEventListener('dragover', () => dropZone.classList.add('dragover'));
+    fileInput.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    fileInput.addEventListener('drop', () => dropZone.classList.remove('dragover'));
+
+    // Handle file selection
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            const file = this.files[0];
+            fileName.textContent = file.name;
+            
+            // Format size
+            let size = file.size;
+            if (size > 1024 * 1024) {
+                fileSize.textContent = (size / (1024 * 1024)).toFixed(2) + ' MB';
+            } else {
+                fileSize.textContent = (size / 1024).toFixed(1) + ' KB';
+            }
+            
+            uploadPrompt.style.display = 'none';
+            fileDetails.style.display = 'block';
+        } else {
+            uploadPrompt.style.display = 'block';
+            fileDetails.style.display = 'none';
+        }
+    });
+
+    // Loading indicator on submit
+    const importForm = document.getElementById('importForm');
+    const submitBtn = document.getElementById('submitBtn');
+    importForm.addEventListener('submit', function() {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span style="display:inline-flex; align-items:center; gap:8px;"><i data-lucide="loader" class="animate-spin" style="width:16px;height:16px;"></i> Traitement en cours...</span>';
+        lucide.createIcons();
+    });
+</script>
+<style>
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+</style>
+{% endblock %}

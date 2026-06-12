@@ -32,11 +32,12 @@ class InvoicePDFView(LoginRequiredMixin, View):
         # Header Text
         p.setFillColor(colors.white)
         p.setFont("Helvetica-Bold", 16)
-        p.drawString(40, height - 60, "CENTRE COMMERCIAL YOU IMMO")
+        mall_name = invoice.shop.mall.name.upper() if (invoice.shop and invoice.shop.mall) else "YOU-IMMO"
+        p.drawString(40, height - 60, mall_name)
         
-        p.setFont("Helvetica", 10)
-        p.drawString(40, height - 85, "Une autre idée de l'immobilier")
-        p.drawString(40, height - 98, "Dakar, Sénégal | Tel: +221 33 800 00 00")
+        p.setFont("Helvetica", 9)
+        p.drawString(40, height - 85, "YOU-IMMO - Une autre idée de l'immobilier")
+        p.drawString(40, height - 98, "Rond Point Keur Massar, Route de Diaxay | Tél: 76 754 30 30 / 77 873 01 00")
 
         # Invoice Status Banner
         p.setFillColor(colors.HexColor('#f59e0b')) # Gold Accent
@@ -57,9 +58,9 @@ class InvoicePDFView(LoginRequiredMixin, View):
         p.setFont("Helvetica-Bold", 11)
         p.drawString(40, height - 180, "ÉMIS PAR :")
         p.setFont("Helvetica", 10)
-        p.drawString(40, height - 200, "Administration YOU IMMO")
-        p.drawString(40, height - 215, "Bureau de Gestion Commerciale")
-        p.drawString(40, height - 230, "contact@youimmo.com")
+        p.drawString(40, height - 200, "YOU-IMMO")
+        p.drawString(40, height - 215, "Rond Point Keur Massar, Route de Diaxay")
+        p.drawString(40, height - 230, "youimmobtp@gmail.com")
 
         p.setFont("Helvetica-Bold", 11)
         p.drawString(width / 2 + 40, height - 180, "DESTINATAIRE / LOCATAIRE :")
