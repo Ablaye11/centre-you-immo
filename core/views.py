@@ -110,21 +110,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['monthly_chart_data'] = json.dumps(monthly_data)
 
         # ── Mise à jour automatique des factures en retard (overdue) ──────────
-        # Utiliser bulk_update pour éviter N requêtes individuelles
+        # Utiliser une seule requête update() SQL pour tout mettre à jour d'un coup
         past_due_invoices_qs = Invoice.objects.filter(
             shop__mall=active_mall,
             status='pending',
             due_date__lt=today
-        ).select_related('tenant', 'shop')
+        )
 
-        past_due_list = list(past_due_invoices_qs)
-        if past_due_list:
-            # 1. Mise à jour groupée du statut (1 seule requête SQL au lieu de N)
-            for inv in past_due_list:
-                inv.status = 'overdue'
-            Invoice.objects.bulk_update(past_due_list, ['status'])
+        past_due_count = past_due_invoices_qs.count()
+        if past_due_count > 0:
+            # 1. Mise à jour groupée en une seule requête SQL
+            past_due_invoices_qs.update(status='overdue')
 
-            # 2. Notifications groupées (éviter les boucles imbriquées)
+            # 2. Notification globale unique pour le personnel (évite de saturer la base de données)
             from core.models import Notification
             from django.contrib.auth.models import User
 
@@ -133,24 +131,26 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 Q(profile__role__in=['admin', 'manager', 'accountant'])
             ).only('id'))
 
-            # Récupérer les messages déjà existants en une seule requête
-            existing_msgs = set(Notification.objects.filter(
+            notif_title = "Factures en retard détectées"
+            notif_msg = f"{past_due_count} facture(s) sont arrivées à échéance et sont en retard aujourd'hui."
+
+            # Trouver les IDs des membres du personnel qui ont déjà reçu cette notification aujourd'hui
+            notified_staff_ids = set(Notification.objects.filter(
                 user__in=staff_users,
-                notif_type='danger'
-            ).values_list('message', flat=True))
+                title=notif_title,
+                message=notif_msg,
+                created_at__date=today
+            ).values_list('user_id', flat=True))
 
             new_notifications = []
-            for invoice in past_due_list:
-                notif_msg = f"La facture {invoice.invoice_number} ({invoice.tenant.full_name}) pour la boutique {invoice.shop.shop_number} est en retard."
-                if notif_msg not in existing_msgs:
-                    for staff in staff_users:
-                        new_notifications.append(Notification(
-                            user=staff,
-                            title=f"Facture en retard: {invoice.invoice_number}",
-                            message=notif_msg,
-                            notif_type='danger'
-                        ))
-                    existing_msgs.add(notif_msg)  # éviter les doublons dans le même batch
+            for staff in staff_users:
+                if staff.id not in notified_staff_ids:
+                    new_notifications.append(Notification(
+                        user=staff,
+                        title=notif_title,
+                        message=notif_msg,
+                        notif_type='danger'
+                    ))
 
             if new_notifications:
                 Notification.objects.bulk_create(new_notifications, ignore_conflicts=True)
