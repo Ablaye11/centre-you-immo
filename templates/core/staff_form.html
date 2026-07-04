@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="detail-header animate-in">
+    <a href="{% url 'staff_list' %}" class="back-btn">
+        <i data-lucide="arrow-left"></i>
+    </a>
+    <div>
+        <h2>{{ title }}</h2>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:2px;">Remplissez les accès de l'utilisateur pour la plateforme</p>
+    </div>
+</div>
+
+<div class="form-card animate-in" style="max-width: 720px; margin: 0 auto;">
+    <form method="post" class="flex-column gap-2">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="form-error" style="margin-bottom: 15px; padding: 10px; border-radius: 6px; background: rgba(239,68,68,0.1); color: var(--danger);">
+            {% for err in form.non_field_errors %}
+                {{ err }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label class="form-label" for="id_username">
+                    <i data-lucide="user" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                    Nom d'utilisateur {% if not form.instance.pk %}<span style="color:var(--danger)">*</span>{% endif %}
+                </label>
+                {{ form.username }}
+                {% if form.username.errors %}<div class="form-error">{{ form.username.errors.0 }}</div>{% endif %}
+                {% if form.instance.pk %}
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+                    Le nom d'utilisateur d'un compte existant ne peut pas être modifié.
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_role">
+                    <i data-lucide="shield" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                    Rôle / Accès <span style="color:var(--danger)">*</span>
+                </label>
+                {{ form.role }}
+                {% if form.role.errors %}<div class="form-error">{{ form.role.errors.0 }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label class="form-label" for="id_first_name">Prénom</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}<div class="form-error">{{ form.first_name.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_last_name">Nom de famille</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}<div class="form-error">{{ form.last_name.errors.0 }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label class="form-label" for="id_email">Adresse email</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="form-error">{{ form.email.errors.0 }}</div>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_phone">Téléphone</label>
+                {{ form.phone }}
+                {% if form.phone.errors %}<div class="form-error">{{ form.phone.errors.0 }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label class="form-label" for="id_password">
+                    <i data-lucide="lock" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                    {{ form.password.label }} {% if not form.instance.pk %}<span style="color:var(--danger)">*</span>{% endif %}
+                </label>
+                {{ form.password }}
+                {% if form.password.errors %}<div class="form-error">{{ form.password.errors.0 }}</div>{% endif %}
+                {% if form.password.help_text %}
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
+                    {{ form.password.help_text }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_confirm_password">
+                    <i data-lucide="key-round" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                    Confirmer le mot de passe {% if not form.instance.pk %}<span style="color:var(--danger)">*</span>{% endif %}
+                </label>
+                {{ form.confirm_password }}
+                {% if form.confirm_password.errors %}<div class="form-error">{{ form.confirm_password.errors.0 }}</div>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:8px;">
+            <label class="form-label" style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                {{ form.is_active }}
+                <span>
+                    <strong>Activer ce compte utilisateur</strong> (Décochez pour suspendre l'accès)
+                </span>
+            </label>
+            {% if form.is_active.errors %}<div class="form-error">{{ form.is_active.errors.0 }}</div>{% endif %}
+        </div>
+
+        <div class="form-actions" style="margin-top:20px;">
+            <a href="{% url 'staff_list' %}" class="btn btn-outline">Annuler</a>
+            <button type="submit" class="btn btn-primary">
+                <i data-lucide="save"></i> Enregistrer
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

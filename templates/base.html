@@ -131,6 +131,12 @@
                         <span>Rapports & Inventaires</span>
                     </a>
                     {% endif %}
+                    {% if user.is_superuser or user.profile.role == 'admin' %}
+                    <a href="{% url 'staff_list' %}" class="nav-item {% if active_menu == 'staff' %}active{% endif %}">
+                        <i data-lucide="user-cog" class="nav-icon"></i>
+                        <span>Comptes Utilisateurs</span>
+                    </a>
+                    {% endif %}
                 </div>
 
                 <div class="nav-section" style="margin-top: auto;">

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Comptes Utilisateurs{% endblock %}
+{% block page_title %}Gestion des Comptes Utilisateurs{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <p>Gérez les comptes d'accès à la plateforme (Administrateurs, Managers, Comptables, Secrétaires, Techniciens).</p>
+    </div>
+    <div class="page-actions">
+        <a href="{% url 'staff_create' %}" class="btn btn-primary">
+            <i data-lucide="user-plus"></i> Créer un Compte
+        </a>
+    </div>
+</div>
+
+<div class="filter-bar animate-in">
+    <form method="get" class="flex gap-2" style="width: 100%;">
+        <div class="search-input">
+            <i data-lucide="search" class="icon"></i>
+            <input type="text" name="q" placeholder="Rechercher par nom, prénom, nom d'utilisateur, email..." value="{{ request.GET.q }}">
+        </div>
+        <button type="submit" class="btn btn-outline">Rechercher</button>
+    </form>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header">
+        <h3 class="card-title">Comptes d'accès enregistrés</h3>
+    </div>
+    <div class="card-body">
+        {% if staff_users %}
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nom d'utilisateur</th>
+                            <th>Nom complet</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Rôle / Accès</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usr in staff_users %}
+                        <tr>
+                            <td class="font-bold" style="color: var(--primary-400);">{{ usr.username }}</td>
+                            <td>{{ usr.get_full_name|default:"-" }}</td>
+                            <td>{{ usr.email|default:"-" }}</td>
+                            <td>{{ usr.profile.phone|default:"-" }}</td>
+                            <td>
+                                {% if usr.profile.role == 'admin' %}
+                                    <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25);">
+                                        <i data-lucide="shield" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>Administrateur
+                                    </span>
+                                {% elif usr.profile.role == 'manager' %}
+                                    <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: #a855f7; border: 1px solid rgba(168, 85, 247, 0.25);">
+                                        <i data-lucide="briefcase" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>Manager
+                                    </span>
+                                {% elif usr.profile.role == 'accountant' %}
+                                    <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.25);">
+                                        <i data-lucide="calculator" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>Comptable
+                                    </span>
+                                {% elif usr.profile.role == 'secretary' %}
+                                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25);">
+                                        <i data-lucide="pencil-line" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>Secrétaire
+                                    </span>
+                                {% elif usr.profile.role == 'maintenance' %}
+                                    <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25);">
+                                        <i data-lucide="wrench" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>Maintenance
+                                    </span>
+                                {% else %}
+                                    <span class="badge" style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.25);">
+                                        <i data-lucide="user" style="width:12px;height:12px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>{{ usr.profile.get_role_display }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if usr.is_active %}
+                                    <span class="badge badge-success">Actif</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Désactivé</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="flex gap-1">
+                                    <a href="{% url 'staff_update' usr.pk %}" class="btn btn-outline btn-sm btn-icon" title="Modifier">
+                                        <i data-lucide="edit"></i>
+                                    </a>
+                                    {% if usr.pk != request.user.pk %}
+                                    <a href="{% url 'staff_delete' usr.pk %}" class="btn btn-outline btn-sm btn-icon" title="Supprimer" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                                        <i data-lucide="trash-2"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if is_paginated %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-outline btn-sm">&laquo; Début</a>
+                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-outline btn-sm">Précédent</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-outline btn-sm">Suivant</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" class="btn btn-outline btn-sm">Fin &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <i data-lucide="users"></i>
+                <h3>Aucun utilisateur trouvé</h3>
+                <p>Modifiez vos critères de recherche ou ajoutez un nouveau compte utilisateur.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

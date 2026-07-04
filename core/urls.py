@@ -15,4 +15,10 @@ urlpatterns = [
     path('locataire/maintenance/signaler/', tenant_portal.TenantMaintenanceCreateView.as_view(), name='tenant_maintenance_create'),
     path('notifications/<int:pk>/lire/', views.MarkNotificationReadView.as_view(), name='mark_notification_read'),
     path('notifications/tout-lire/', views.MarkAllNotificationsReadView.as_view(), name='mark_all_notifications_read'),
+    
+    # Gestion des Comptes Utilisateurs (Staff)
+    path('personnel/utilisateurs/', views.StaffListView.as_view(), name='staff_list'),
+    path('personnel/utilisateurs/creer/', views.StaffCreateView.as_view(), name='staff_create'),
+    path('personnel/utilisateurs/<int:pk>/modifier/', views.StaffUpdateView.as_view(), name='staff_update'),
+    path('personnel/utilisateurs/<int:pk>/supprimer/', views.StaffDeleteView.as_view(), name='staff_delete'),
 ]

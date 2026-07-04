@@ -322,3 +322,134 @@ class MarkAllNotificationsReadView(LoginRequiredMixin, View):
             return redirect(referer)
         return redirect('dashboard')
 
+
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import User
+from core.forms import StaffUserForm
+from django.db import transaction
+from django.urls import reverse_lazy
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    """Enforces that the user is an admin or superuser to access the view."""
+    def test_func(self):
+        return self.request.user.is_authenticated and (
+            self.request.user.is_superuser or 
+            (hasattr(self.request.user, 'profile') and self.request.user.profile.role == 'admin')
+        )
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            messages.error(self.request, "Accès refusé : Seuls les Administrateurs ont accès à cette page.")
+            return redirect('dashboard')
+        return redirect('login')
+
+
+class StaffListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
+    model = User
+    template_name = 'core/staff_list.html'
+    context_object_name = 'staff_users'
+    paginate_by = 20
+
+    def get_queryset(self):
+        queryset = User.objects.all().select_related('profile').order_by('username')
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(
+                Q(username__icontains=q) |
+                Q(first_name__icontains=q) |
+                Q(last_name__icontains=q) |
+                Q(email__icontains=q)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'staff'
+        return context
+
+
+class StaffCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
+    model = User
+    form_class = StaffUserForm
+    template_name = 'core/staff_form.html'
+    success_url = reverse_lazy('staff_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'staff'
+        context['title'] = "Créer un Compte Utilisateur"
+        return context
+
+    @transaction.atomic
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        if password:
+            user.set_password(password)
+        user.save()
+
+        # Create or update profile
+        role = form.cleaned_data.get('role')
+        phone = form.cleaned_data.get('phone')
+        UserProfile.objects.update_or_create(
+            user=user,
+            defaults={'role': role, 'phone': phone}
+        )
+
+        messages.success(self.request, f"Le compte utilisateur '{user.username}' a été créé avec succès.")
+        return redirect(self.success_url)
+
+
+class StaffUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
+    model = User
+    form_class = StaffUserForm
+    template_name = 'core/staff_form.html'
+    success_url = reverse_lazy('staff_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'staff'
+        context['title'] = f"Modifier le Compte : {self.object.username}"
+        return context
+
+    @transaction.atomic
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        if password:
+            user.set_password(password)
+        user.save()
+
+        # Update profile
+        role = form.cleaned_data.get('role')
+        phone = form.cleaned_data.get('phone')
+        UserProfile.objects.update_or_create(
+            user=user,
+            defaults={'role': role, 'phone': phone}
+        )
+
+        messages.success(self.request, f"Le compte utilisateur '{user.username}' a été mis à jour.")
+        return redirect(self.success_url)
+
+
+class StaffDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
+    model = User
+    template_name = 'core/staff_confirm_delete.html'
+    success_url = reverse_lazy('staff_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_menu'] = 'staff'
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user_to_delete = self.get_object()
+        if user_to_delete == request.user:
+            messages.error(request, "Erreur : Vous ne pouvez pas supprimer votre propre compte connecté.")
+            return redirect('staff_list')
+        
+        messages.success(request, f"Le compte utilisateur '{user_to_delete.username}' a été supprimé.")
+        return super().post(request, *args, **kwargs)
+
+

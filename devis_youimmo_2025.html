@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Devis - Système de Gestion Immobilière YOU IMMO</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-bg: #eff6ff;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --dark: #0f172a;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --light: #f8fafc;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f1f5f9;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: white;
+      margin: 30px auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+      padding: 40px 48px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 40px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .logo-block .company {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-block .company span {
+      color: #fbbf24;
+    }
+
+    .logo-block .tagline {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      margin-top: 3px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .devis-badge {
+      text-align: right;
+    }
+
+    .devis-badge .label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+    }
+
+    .devis-badge .number {
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -1px;
+    }
+
+    .devis-badge .date {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 2px;
+    }
+
+    .header-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      margin: 24px 0 20px;
+    }
+
+    .header-subtitle {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .header-subtitle span {
+      color: #fbbf24;
+    }
+
+    /* ─── PARTIES ─── */
+    .parties {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .party {
+      flex: 1;
+      padding: 28px 36px;
+    }
+
+    .party:first-child {
+      border-right: 1px solid var(--border);
+    }
+
+    .party-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary-light);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .party-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--primary-bg);
+    }
+
+    .party-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .party-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ─── BODY ─── */
+    .body {
+      padding: 36px 48px;
+    }
+
+    /* ─── SECTION TITRE ─── */
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ─── TABLEAU ─── */
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: var(--dark);
+    }
+
+    thead th {
+      padding: 12px 18px;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.7);
+      text-align: left;
+    }
+
+    thead th:last-child,
+    thead th:nth-last-child(2) {
+      text-align: right;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--light);
+    }
+
+    td {
+      padding: 14px 18px;
+      vertical-align: top;
+    }
+
+    .td-ref {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--primary-light);
+      white-space: nowrap;
+    }
+
+    .td-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 3px;
+    }
+
+    .td-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .td-right {
+      text-align: right;
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .td-total {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ─── TOTAUX ─── */
+    .totals {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 32px;
+    }
+
+    .totals-box {
+      width: 280px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .total-row:last-child {
+      border-bottom: none;
+      background: var(--dark);
+      padding: 14px 18px;
+    }
+
+    .total-row:last-child .total-label,
+    .total-row:last-child .total-value {
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .total-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .total-value {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ─── GARANTIE ─── */
+    .guarantee-box {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .guarantee-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .guarantee-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 6px;
+    }
+
+    .guarantee-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .guarantee-list li {
+      font-size: 11.5px;
+      color: #15803d;
+      padding: 2px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .guarantee-list li::before {
+      content: '→';
+      font-weight: 700;
+      color: #16a34a;
+    }
+
+    /* ─── CONDITIONS ─── */
+    .conditions {
+      background: var(--primary-bg);
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 28px;
+    }
+
+    .conditions-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .conditions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .condition-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--text);
+    }
+
+    .condition-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    /* ─── SIGNATURE ─── */
+    .signature-section {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .sig-box {
+      flex: 1;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 100px;
+    }
+
+    .sig-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .sig-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .sig-line {
+      margin-top: 30px;
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--text-muted);
+      padding-top: 6px;
+    }
+
+    /* ─── PRINT ─── */
+    @media print {
+      body { background: white; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+      }
+
+      .print-btn { display: none !important; }
+    }
+
+    /* ─── BOUTON IMPRESSION ─── */
+    .print-btn {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .print-btn button {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.35);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .print-btn button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 30px rgba(37,99,235,0.45);
+    }
+
+    .subtag {
+      display: inline-block;
+      font-size: 9.5px;
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .tag-new { background: #dcfce7; color: #166534; }
+    .tag-impl { background: #eff6ff; color: #1d4ed8; }
+  </style>
+</head>
+<body>
+
+<div class="print-btn">
+  <button onclick="window.print()">
+    🖨️ Télécharger / Imprimer en PDF
+  </button>
+</div>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-block">
+        <div class="company">YOU <span>IMMO</span></div>
+        <div class="tagline">Développement · Gestion Immobilière Digitale</div>
+      </div>
+      <div class="devis-badge">
+        <div class="label">Devis N°</div>
+        <div class="number">DV-2025-001</div>
+        <div class="date">Émis le 04 Juillet 2025</div>
+      </div>
+    </div>
+    <hr class="header-divider" />
+    <div class="header-subtitle">
+      Système de <span>Gestion Immobilière</span> — Modules Avancés
+      <span class="status-badge">En attente d'approbation</span>
+    </div>
+  </div>
+
+  <!-- PARTIES -->
+  <div class="parties">
+    <div class="party">
+      <div class="party-label">Prestataire</div>
+      <div class="party-name">Ablaye Seck</div>
+      <div class="party-info">
+        Développeur Web & Mobile Senior<br/>
+        Sénégal<br/>
+        Tel: +221 77 792 40 65<br/>
+        Email: seckablaye519@gmail.com
+      </div>
+    </div>
+    <div class="party">
+      <div class="party-label">Client</div>
+      <div class="party-name">Agence YOU IMMO</div>
+      <div class="party-info">
+        Gestionnaire Immobilier<br/>
+        Sénégal<br/>
+        &nbsp;<br/>
+        &nbsp;
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <div class="section-title">Détail des prestations</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60px;">Réf.</th>
+            <th>Description de la prestation</th>
+            <th style="width:70px;">Qté</th>
+            <th style="width:110px;">Prix unitaire</th>
+            <th style="width:110px;">Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="td-ref">P-01</td>
+            <td>
+              <div class="td-title">
+                Gestion Multi-Propriétés
+                <span class="subtag tag-new">NOUVEAU</span>
+              </div>
+              <div class="td-desc">
+                Support de 3 types de propriétés : Centre Commercial, Immeuble, Maison/Villa.
+                Interface dynamique avec icônes et labels adaptatifs selon le type.
+                Formulaire de création enrichi avec sélection du type.
+              </div>
+            </td>
+            <td class="td-right">1</td>
+            <td class="td-right">125 000 FCFA</td>
+            <td class="td-right td-total">125 000 FCFA</td>
+          </tr>
+
+          <tr>
+            <td class="td-ref">P-02</td>
+            <td>
+              <div class="td-title">
+                Auto-création d'Unités pour Maison/Villa
+                <span class="subtag tag-new">NOUVEAU</span>
+              </div>
+              <div class="td-desc">
+                Lors de la création d'une propriété de type « Maison/Villa », le système
+                génère automatiquement une unité de location prête à être attribuée
+                à un locataire. Logique métier intégrée au modèle Django.
+              </div>
+            </td>
+            <td class="td-right">1</td>
+            <td class="td-right">75 000 FCFA</td>
+            <td class="td-right td-total">75 000 FCFA</td>
+          </tr>
+
+          <tr>
+            <td class="td-ref">P-03</td>
+            <td>
+              <div class="td-title">
+                Restriction de Rôles — Secrétaire
+                <span class="subtag tag-impl">IMPLÉMENTÉ</span>
+              </div>
+              <div class="td-desc">
+                Configuration fine des accès : le secrétaire peut créer, voir et imprimer
+                les factures de loyers et gérer les locataires. Accès bloqué aux
+                rapports financiers, salaires, inventaires et tableau de bord financier.
+                Middleware Django sécurisé + masquage conditionnel dans les templates.
+              </div>
+            </td>
+            <td class="td-right">1</td>
+            <td class="td-right">175 000 FCFA</td>
+            <td class="td-right td-total">175 000 FCFA</td>
+          </tr>
+
+          <tr>
+            <td class="td-ref">P-04</td>
+            <td>
+              <div class="td-title">
+                Migration de Base de Données & Déploiement
+                <span class="subtag tag-impl">IMPLÉMENTÉ</span>
+              </div>
+              <div class="td-desc">
+                Création et application des migrations Django (champ property_type sur Mall).
+                Synchronisation Git (PythonAnywhere ↔ GitHub). Résolution des conflits de
+                merge. Tests complets du système (16/16 tests passés).
+              </div>
+            </td>
+            <td class="td-right">1</td>
+            <td class="td-right">100 000 FCFA</td>
+            <td class="td-right td-total">100 000 FCFA</td>
+          </tr>
+
+          <tr>
+            <td class="td-ref">P-05</td>
+            <td>
+              <div class="td-title">
+                Interface Utilisateur Adaptative
+                <span class="subtag tag-impl">IMPLÉMENTÉ</span>
+              </div>
+              <div class="td-desc">
+                Adaptation dynamique du menu de navigation, des labels et titres de pages
+                selon le rôle connecté et le type de propriété active. Masquage intelligent
+                des sections non autorisées (tableau de bord, factures, salaires).
+              </div>
+            </td>
+            <td class="td-right">1</td>
+            <td class="td-right">75 000 FCFA</td>
+            <td class="td-right td-total">75 000 FCFA</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TOTAUX -->
+    <div class="totals">
+      <div class="totals-box">
+        <div class="total-row">
+          <span class="total-label">Sous-total HT</span>
+          <span class="total-value">550 000 FCFA</span>
+        </div>
+        <div class="total-row">
+          <span class="total-label">TVA (0% — Prestation locale)</span>
+          <span class="total-value">0 FCFA</span>
+        </div>
+        <div class="total-row">
+          <span class="total-label">TOTAL TTC</span>
+          <span class="total-value">550 000 FCFA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GARANTIE -->
+    <div class="section-title">Garantie & Support inclus</div>
+    <div class="guarantee-box">
+      <div class="guarantee-icon">🛡️</div>
+      <div>
+        <div class="guarantee-title">Support & Garantie — 3 mois offerts après livraison</div>
+        <ul class="guarantee-list">
+          <li>Correction gratuite de tout bug ou anomalie lié aux développements livrés</li>
+          <li>Support technique par message ou appel pour accompagnement à l'utilisation</li>
+          <li>Mises à jour mineures incluses (ajustements d'interface, corrections de libellés)</li>
+          <li>Documentation fonctionnelle des modules livrés disponible sur demande</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CONDITIONS -->
+    <div class="section-title">Conditions</div>
+    <div class="conditions">
+      <div class="conditions-title">Modalités de réalisation et de paiement</div>
+      <div class="conditions-grid">
+        <div class="condition-item">
+          <span class="condition-dot"></span>
+          Devis valable 30 jours à compter de la date d'émission
+        </div>
+        <div class="condition-item">
+          <span class="condition-dot"></span>
+          Délai de réalisation : prestations déjà livrées
+        </div>
+        <div class="condition-item">
+          <span class="condition-dot"></span>
+          Paiement par virement, Wave ou Orange Money
+        </div>
+        <div class="condition-item">
+          <span class="condition-dot"></span>
+          Propriété du code transférée après paiement intégral
+        </div>
+        <div class="condition-item">
+          <span class="condition-dot"></span>
+          Hébergement PythonAnywhere à charge du client
+        </div>
+        <div class="condition-item">
+          <span class="condition-dot"></span>
+          Toute modification hors périmètre fera l'objet d'un avenant
+        </div>
+      </div>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="section-title">Validation</div>
+    <div class="signature-section">
+      <div class="sig-box">
+        <div class="sig-label">Bon pour accord — Client</div>
+        <div class="sig-name">Agence YOU IMMO</div>
+        <div class="sig-line">Signature &amp; cachet</div>
+      </div>
+      <div class="sig-box">
+        <div class="sig-label">Prestataire</div>
+        <div class="sig-name">Ablaye Seck</div>
+        <div class="sig-line">Signature</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">YOU <span>IMMO</span> Digital</div>
+    <div class="footer-note">
+      Ce document est un devis officiel · Non contractuel avant signature
+    </div>
+    <div class="footer-validity">
+      Valide jusqu'au<br/>
+      <span class="validity-bold">04 Août 2025</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
