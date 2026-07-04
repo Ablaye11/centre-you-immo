@@ -326,6 +326,7 @@ class MarkAllNotificationsReadView(LoginRequiredMixin, View):
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
+from core.models import UserProfile
 from core.forms import StaffUserForm
 from django.db import transaction
 from django.urls import reverse_lazy
