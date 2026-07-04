@@ -125,9 +125,10 @@ class TenantForm(forms.ModelForm):
 class MallForm(forms.ModelForm):
     class Meta:
         model = Mall
-        fields = ['name', 'address', 'description']
+        fields = ['name', 'property_type', 'address', 'description']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom du centre commercial'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom de la propriété'}),
+            'property_type': forms.Select(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Adresse...'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Description...'}),
         }

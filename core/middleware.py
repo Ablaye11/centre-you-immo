@@ -84,10 +84,32 @@ class RolePermissionMiddleware:
                     denied = True
                     msg = "Seuls les Administrateurs et Managers peuvent gérer le personnel."
 
-                # Finances (Admin, manager, accountant)
-                elif path.startswith('/finances/') and role not in ['admin', 'manager', 'accountant']:
-                    denied = True
-                    msg = "Seuls les Administrateurs, Managers et Comptables peuvent accéder aux finances."
+                # Finances (Admin, manager, accountant, with special restricted access for secretary)
+                elif path.startswith('/finances/'):
+                    if role == 'secretary':
+                        allowed_for_secretary = [
+                            '/finances/factures-salaires/',
+                            '/finances/factures/creer/',
+                            '/finances/factures/generer/',
+                            '/finances/export/factures/',
+                            '/finances/export/locataires/',
+                        ]
+                        is_allowed = False
+                        for allowed_path in allowed_for_secretary:
+                            if path == allowed_path:
+                                is_allowed = True
+                                break
+                        
+                        import re
+                        if re.match(r'^/finances/factures/\d+/pdf/$', path) or re.match(r'^/finances/factures/\d+/payer/$', path):
+                            is_allowed = True
+                        
+                        if not is_allowed:
+                            denied = True
+                            msg = "Les Secrétaires n'ont accès qu'aux factures et encaissements de loyer, pas aux autres données financières."
+                    elif role not in ['admin', 'manager', 'accountant']:
+                        denied = True
+                        msg = "Seuls les Administrateurs, Managers et Comptables peuvent accéder aux finances."
 
                 # Maintenance (Admin, manager, maintenance, secretary)
                 elif path.startswith('/maintenance/') and role not in ['admin', 'manager', 'maintenance', 'secretary']:

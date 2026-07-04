@@ -1,0 +1,7208 @@
+[
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$ZA3gs9a9tz6r7LtvSUGyQJ$PinlKusPO5BIp3Z01jFraLMrluWT4qrp5PK4mZ4YfCs=",
+    "last_login": "2026-06-12T02:05:09.811Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Alioune",
+    "last_name": "Sow",
+    "email": "admin@youimmo.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-02T19:01:33.866Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$BPYjIkvEi3Qfcoec7pdIGY$fOepFuFAGDCwcIyrfV2to37Gxt+a+vz/JYefcn/TyVE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "manager",
+    "first_name": "Mariama",
+    "last_name": "Diallo",
+    "email": "manager@youimmo.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-02T19:01:35.898Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "3853c0w2crb0l88iz0wzft1war18y2ko",
+  "fields": {
+    "session_data": ".eJxVjr0OgkAQhN_lanM5YO_P0p5nuCy7i6DIJfzYGN9dMBTaTDHzzWReKuG6dGmdZUo9q7Oy6vTrNUh3GfeAbzhes6Y8LlPf6B3RRzrrOrMMl4P9G-hw7rZ2wSVEQ-A8AEtrfWRvpfVIRmIlQhC4dWFTKU2I4MuqMBRi8JZNALeNIi39U9IDh-F71b0_OdY90Q:1wUUQZ:OtynAea2ECIZAWv8ACdtQYYS01-hKu4Qo4UBjHfMSKQ",
+    "expire_date": "2026-06-16T19:05:27.902Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "baap0qi17rs0wdobknd1tfaxnha1ps76",
+  "fields": {
+    "session_data": ".eJxVjr0OgkAQhN_lanM5YI_bs7TnGS7L7iIoQsKPjfHdBUOhzRQz30zmZRKtS5vWWafUiTkbb06_Xk1812EP5EbDdbQ8DsvU1XZH7JHOthpF-8vB_g20NLdbO5McomMoA4Bo40OU4LUJxE5jocqA0pS4qeYOI4S8yBxjxODFIZTbKPHSPTU9qO-_V_H9ATnaPdM:1wXsAU:GwdGR3i9IU68Jh-jEcgB7HLMrP_iBNuk_1yUuv_OhMM",
+    "expire_date": "2026-06-26T03:02:50.055Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "c0mv57296y90g49wwcpleciih5qfj1cb",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAQRe_iGlleJl4o6TmDNeMFB5AtxUmFuDtESgHtf-_9Fwu4rTVsIy9hTuzMJDv9boTxkdsO0h3brfPY27rMxHeFH3Twa0_5eTncv4OKo35rsiWDnwoosEoZQJoAEWSRVihNWSRDRWtpPQjltHBorIs-GUmlGGnZ-wPKZzcQ:1wSIXB:iCt0C78r0zhv8Ge8ibt7Geqvlar-UjAXN1-W7NwHwN4",
+    "expire_date": "2026-06-10T17:59:13.377Z"
+  }
+},
+{
+  "model": "core.userprofile",
+  "pk": 5,
+  "fields": {
+    "user": 5,
+    "role": "admin",
+    "phone": "+221 77 123 45 67",
+    "avatar": ""
+  }
+},
+{
+  "model": "core.userprofile",
+  "pk": 6,
+  "fields": {
+    "user": 7,
+    "role": "manager",
+    "phone": "+221 77 987 65 43",
+    "avatar": ""
+  }
+},
+{
+  "model": "core.notification",
+  "pk": 1,
+  "fields": {
+    "user": 5,
+    "title": "Facture en retard: FAC-2026-003",
+    "message": "La facture FAC-2026-003 (Ousmane Fall) pour la boutique C02 est en retard.",
+    "notif_type": "danger",
+    "is_read": false,
+    "created_at": "2026-06-12T02:05:09.930Z"
+  }
+},
+{
+  "model": "core.notification",
+  "pk": 2,
+  "fields": {
+    "user": 7,
+    "title": "Facture en retard: FAC-2026-003",
+    "message": "La facture FAC-2026-003 (Ousmane Fall) pour la boutique C02 est en retard.",
+    "notif_type": "danger",
+    "is_read": false,
+    "created_at": "2026-06-12T02:05:09.930Z"
+  }
+},
+{
+  "model": "tenants.mall",
+  "pk": 7,
+  "fields": {
+    "name": "CENTRE COMMERCIAL FALLOU NDIAYE",
+    "address": "KEUR MASSAR",
+    "description": "Centre Commercial YOU IMMO",
+    "created_at": "2026-06-12T02:34:34.452Z"
+  }
+},
+{
+  "model": "tenants.mall",
+  "pk": 8,
+  "fields": {
+    "name": "CENTRE COMMERCIAL CIF",
+    "address": "Dakar, Sénégal",
+    "description": "Centre Commercial CIF",
+    "created_at": "2026-06-12T02:55:33.859Z"
+  }
+},
+{
+  "model": "tenants.mall",
+  "pk": 9,
+  "fields": {
+    "name": "CENTRE COMMERCIAL SOUHAIBOU",
+    "address": "Dakar, Sénégal",
+    "description": "Centre Commercial SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.390Z"
+  }
+},
+{
+  "model": "tenants.floor",
+  "pk": 15,
+  "fields": {
+    "mall": 7,
+    "name": "Rez-de-chaussée",
+    "level": 0,
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.453Z"
+  }
+},
+{
+  "model": "tenants.floor",
+  "pk": 16,
+  "fields": {
+    "mall": 7,
+    "name": "1er Étage",
+    "level": 1,
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.454Z"
+  }
+},
+{
+  "model": "tenants.floor",
+  "pk": 18,
+  "fields": {
+    "mall": 8,
+    "name": "Rez-de-chaussée",
+    "level": 0,
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.862Z"
+  }
+},
+{
+  "model": "tenants.floor",
+  "pk": 19,
+  "fields": {
+    "mall": 9,
+    "name": "Section A",
+    "level": 0,
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.394Z"
+  }
+},
+{
+  "model": "tenants.floor",
+  "pk": 20,
+  "fields": {
+    "mall": 9,
+    "name": "Section B",
+    "level": 1,
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.396Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 24,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique EL.MASSAMBA THIAM",
+    "shop_number": "A-00",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.455Z",
+    "updated_at": "2026-06-12T02:34:34.455Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 25,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique M.CHEIKH DIENG",
+    "shop_number": "A-01",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.460Z",
+    "updated_at": "2026-06-12T02:34:34.460Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 26,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique M.GOOR DIOUF",
+    "shop_number": "A-02",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.465Z",
+    "updated_at": "2026-06-12T02:34:34.465Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 27,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique IBRAHIMA NDIAYE",
+    "shop_number": "A-03",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.469Z",
+    "updated_at": "2026-06-12T02:34:34.469Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 28,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique ELHADJI TOURE",
+    "shop_number": "A-04",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.473Z",
+    "updated_at": "2026-06-12T02:34:34.473Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 29,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique EL MAMADOU NDIAYE",
+    "shop_number": "A-05",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.477Z",
+    "updated_at": "2026-06-12T02:34:34.477Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 30,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MOR DIA",
+    "shop_number": "A-06",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.482Z",
+    "updated_at": "2026-06-12T02:34:34.482Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 31,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MOR DIA",
+    "shop_number": "A-07",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.486Z",
+    "updated_at": "2026-06-12T02:34:34.486Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 32,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique AMATH NDIEGUENE",
+    "shop_number": "A-08",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.488Z",
+    "updated_at": "2026-06-12T02:34:34.488Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 33,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique ELHADJI NDIEGUENE",
+    "shop_number": "A-09",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.492Z",
+    "updated_at": "2026-06-12T02:34:34.492Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 34,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique TAMSIR NDIEGUENE",
+    "shop_number": "A-10",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.497Z",
+    "updated_at": "2026-06-12T02:34:34.497Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 35,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MBAYE SECK",
+    "shop_number": "A-11",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.502Z",
+    "updated_at": "2026-06-12T02:34:34.502Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 36,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique LOUM LOUM",
+    "shop_number": "A-12",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.506Z",
+    "updated_at": "2026-06-12T02:34:34.506Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 37,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique BAYE MOR NDIEGUENE",
+    "shop_number": "A-13",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.513Z",
+    "updated_at": "2026-06-12T02:34:34.513Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 38,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique EL HADJI NDIEGUENE",
+    "shop_number": "A-14",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.518Z",
+    "updated_at": "2026-06-12T02:34:34.518Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 39,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique EL HADJI NDIEGUENE",
+    "shop_number": "A-15",
+    "category": "other",
+    "floor": 15,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.523Z",
+    "updated_at": "2026-06-12T02:34:34.523Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 40,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MOUSSA.W NDOUR",
+    "shop_number": "B-16",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.528Z",
+    "updated_at": "2026-06-12T02:34:34.528Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 41,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique NDIAGA SYLLA",
+    "shop_number": "B-17",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.536Z",
+    "updated_at": "2026-06-12T02:34:34.536Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 42,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique OUSMANE DIENG",
+    "shop_number": "B-18",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.540Z",
+    "updated_at": "2026-06-12T02:34:34.540Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 43,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique EL HADJI S. DIOP",
+    "shop_number": "B-19",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.544Z",
+    "updated_at": "2026-06-12T02:34:34.544Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 44,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique EL HADJI S. DIOP",
+    "shop_number": "B-20",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.549Z",
+    "updated_at": "2026-06-12T02:34:34.549Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 45,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MBAYE DIOUF",
+    "shop_number": "B-21",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.552Z",
+    "updated_at": "2026-06-12T02:34:34.552Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 46,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique ABDOU NIANG",
+    "shop_number": "B-22",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.557Z",
+    "updated_at": "2026-06-12T02:34:34.557Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 47,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique DJIB DIOUF",
+    "shop_number": "B-23",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.560Z",
+    "updated_at": "2026-06-12T02:34:34.560Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 48,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique S.OMAR NIANG",
+    "shop_number": "B-24",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.566Z",
+    "updated_at": "2026-06-12T02:34:34.566Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 49,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MAMADOU MBENGUE",
+    "shop_number": "B-25",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.570Z",
+    "updated_at": "2026-06-12T02:34:34.570Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 50,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique OUSMANE KANE",
+    "shop_number": "B-26",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.574Z",
+    "updated_at": "2026-06-12T02:34:34.574Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 51,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique MBATHIE SECK",
+    "shop_number": "B-27",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.578Z",
+    "updated_at": "2026-06-12T02:34:34.578Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 52,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique OUSMANE NDIAYE",
+    "shop_number": "B-28",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.584Z",
+    "updated_at": "2026-06-12T02:34:34.584Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 53,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique SALIOU GUEYE",
+    "shop_number": "B-29",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.588Z",
+    "updated_at": "2026-06-12T02:34:34.588Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 54,
+  "fields": {
+    "mall": 7,
+    "name": "Boutique ALIOU DIALLO",
+    "shop_number": "B-30",
+    "category": "other",
+    "floor": 16,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:34:34.592Z",
+    "updated_at": "2026-06-12T02:34:34.592Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 56,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique M. Lamine Seck",
+    "shop_number": "CIF-15",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.864Z",
+    "updated_at": "2026-06-12T02:55:33.864Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 57,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Idrissa Diop",
+    "shop_number": "CIF-16",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.872Z",
+    "updated_at": "2026-06-12T02:55:33.872Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 58,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Abdou Khadir Diouf",
+    "shop_number": "CIF-17",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.876Z",
+    "updated_at": "2026-06-12T02:55:33.876Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 59,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Locataire Boutique 18",
+    "shop_number": "CIF-18",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.880Z",
+    "updated_at": "2026-06-12T02:55:33.880Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 60,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Djigane Kama",
+    "shop_number": "CIF-19",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.885Z",
+    "updated_at": "2026-06-12T02:55:33.885Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 61,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Aliou Diallo",
+    "shop_number": "CIF-20",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.889Z",
+    "updated_at": "2026-06-12T02:55:33.889Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 62,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Ahmad Dia",
+    "shop_number": "CIF-21",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.892Z",
+    "updated_at": "2026-06-12T02:55:33.892Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 63,
+  "fields": {
+    "mall": 8,
+    "name": "Dépôt 22",
+    "shop_number": "CIF-22",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Dépôt / Stockage",
+    "created_at": "2026-06-12T02:55:33.896Z",
+    "updated_at": "2026-06-12T02:55:33.896Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 64,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Tidiane Coulibaly",
+    "shop_number": "CIF-23",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.897Z",
+    "updated_at": "2026-06-12T02:55:33.897Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 65,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Didje Vincent Sina",
+    "shop_number": "CIF-24",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.901Z",
+    "updated_at": "2026-06-12T02:55:33.901Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 66,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Pape Diouf",
+    "shop_number": "CIF-25",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.904Z",
+    "updated_at": "2026-06-12T02:55:33.904Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 67,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique 26",
+    "shop_number": "CIF-26",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Boutique vide",
+    "created_at": "2026-06-12T02:55:33.908Z",
+    "updated_at": "2026-06-12T02:55:33.908Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 68,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique 27",
+    "shop_number": "CIF-27",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Boutique vide",
+    "created_at": "2026-06-12T02:55:33.909Z",
+    "updated_at": "2026-06-12T02:55:33.909Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 69,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Cheikhou Niane",
+    "shop_number": "CIF-28",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.910Z",
+    "updated_at": "2026-06-12T02:55:33.910Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 70,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Khadim Diop",
+    "shop_number": "CIF-29",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.913Z",
+    "updated_at": "2026-06-12T02:55:33.913Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 71,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique 30",
+    "shop_number": "CIF-30",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Boutique vide",
+    "created_at": "2026-06-12T02:55:33.917Z",
+    "updated_at": "2026-06-12T02:55:33.917Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 72,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Youssoupha Thiam",
+    "shop_number": "CIF-31",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.918Z",
+    "updated_at": "2026-06-12T02:55:33.918Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 73,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Momath Seck",
+    "shop_number": "CIF-32",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.922Z",
+    "updated_at": "2026-06-12T02:55:33.922Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 74,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique 33",
+    "shop_number": "CIF-33",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Boutique vide",
+    "created_at": "2026-06-12T02:55:33.925Z",
+    "updated_at": "2026-06-12T02:55:33.925Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 75,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Gora Diagne",
+    "shop_number": "CIF-34",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.926Z",
+    "updated_at": "2026-06-12T02:55:33.926Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 76,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Moustapha Ndiaye",
+    "shop_number": "CIF-35",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.930Z",
+    "updated_at": "2026-06-12T02:55:33.930Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 77,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique 36",
+    "shop_number": "CIF-36",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Boutique vide",
+    "created_at": "2026-06-12T02:55:33.934Z",
+    "updated_at": "2026-06-12T02:55:33.934Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 78,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique Hassamiou Soumare",
+    "shop_number": "CIF-37",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T02:55:33.935Z",
+    "updated_at": "2026-06-12T02:55:33.935Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 79,
+  "fields": {
+    "mall": 8,
+    "name": "Boutique 38",
+    "shop_number": "CIF-38",
+    "category": "other",
+    "floor": 18,
+    "surface": "20.00",
+    "status": "available",
+    "description": "Boutique vide",
+    "created_at": "2026-06-12T02:55:33.938Z",
+    "updated_at": "2026-06-12T02:55:33.938Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 80,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Ousmane Ndongo Dieng Sarr",
+    "shop_number": "SOU-16A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.397Z",
+    "updated_at": "2026-06-12T03:00:18.397Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 81,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Khadim Gueye",
+    "shop_number": "SOU-17A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.407Z",
+    "updated_at": "2026-06-12T03:00:18.407Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 82,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Cheikh Tidiane Bassoum",
+    "shop_number": "SOU-18A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.413Z",
+    "updated_at": "2026-06-12T03:00:18.413Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 83,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Babacar Ndieguene",
+    "shop_number": "SOU-19A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.418Z",
+    "updated_at": "2026-06-12T03:00:18.418Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 84,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Babacar Ndieguene",
+    "shop_number": "SOU-20A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.424Z",
+    "updated_at": "2026-06-12T03:00:18.424Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 85,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique S. Fallou Mbacke Kane",
+    "shop_number": "SOU-21A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.427Z",
+    "updated_at": "2026-06-12T03:00:18.427Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 86,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique S. Fallou Mbacke Kane",
+    "shop_number": "SOU-22A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.432Z",
+    "updated_at": "2026-06-12T03:00:18.432Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 87,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Khouma Et F",
+    "shop_number": "SOU-23A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.436Z",
+    "updated_at": "2026-06-12T03:00:18.436Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 88,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Khouma Et F",
+    "shop_number": "SOU-24A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.440Z",
+    "updated_at": "2026-06-12T03:00:18.440Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 89,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Sens/Can",
+    "shop_number": "SOU-25A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.445Z",
+    "updated_at": "2026-06-12T03:00:18.445Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 90,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Sens/Can",
+    "shop_number": "SOU-26A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.451Z",
+    "updated_at": "2026-06-12T03:00:18.451Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 91,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Modou Faye",
+    "shop_number": "SOU-27A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.456Z",
+    "updated_at": "2026-06-12T03:00:18.456Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 92,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Cheikh Ibrah Abou Latif Dia",
+    "shop_number": "SOU-28A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.461Z",
+    "updated_at": "2026-06-12T03:00:18.461Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 93,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique M. Moustapha Tidiane Diallo Diallo",
+    "shop_number": "SOU-29A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.466Z",
+    "updated_at": "2026-06-12T03:00:18.466Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 94,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Babacar Dia",
+    "shop_number": "SOU-30A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.470Z",
+    "updated_at": "2026-06-12T03:00:18.470Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 95,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Sen Express",
+    "shop_number": "SOU-31A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.475Z",
+    "updated_at": "2026-06-12T03:00:18.475Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 96,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Arame Ndong",
+    "shop_number": "SOU-32A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.481Z",
+    "updated_at": "2026-06-12T03:00:18.481Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 97,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Mamoudou Diallo",
+    "shop_number": "SOU-33A",
+    "category": "other",
+    "floor": 19,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.486Z",
+    "updated_at": "2026-06-12T03:00:18.486Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 98,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Ndiaga Diallo",
+    "shop_number": "SOU-16B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.490Z",
+    "updated_at": "2026-06-12T03:00:18.490Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 99,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Cheikh Omar Mbaye",
+    "shop_number": "SOU-17B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.496Z",
+    "updated_at": "2026-06-12T03:00:18.496Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 100,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Modou Faye",
+    "shop_number": "SOU-18B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.500Z",
+    "updated_at": "2026-06-12T03:00:18.500Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 101,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Olimata Gueye",
+    "shop_number": "SOU-19B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.504Z",
+    "updated_at": "2026-06-12T03:00:18.504Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 102,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Sakho",
+    "shop_number": "SOU-20B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.508Z",
+    "updated_at": "2026-06-12T03:00:18.508Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 103,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Moustapha Cisse",
+    "shop_number": "SOU-21B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.515Z",
+    "updated_at": "2026-06-12T03:00:18.515Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 104,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Babacar Ndiaye",
+    "shop_number": "SOU-22B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.521Z",
+    "updated_at": "2026-06-12T03:00:18.521Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 105,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Babacar Dia",
+    "shop_number": "SOU-23B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.528Z",
+    "updated_at": "2026-06-12T03:00:18.528Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 106,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Babacar Dia",
+    "shop_number": "SOU-24B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.534Z",
+    "updated_at": "2026-06-12T03:00:18.534Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 107,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Sens",
+    "shop_number": "SOU-25B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.540Z",
+    "updated_at": "2026-06-12T03:00:18.540Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 108,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Sens",
+    "shop_number": "SOU-26B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.549Z",
+    "updated_at": "2026-06-12T03:00:18.549Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 109,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Mbene Badiane",
+    "shop_number": "SOU-27B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.554Z",
+    "updated_at": "2026-06-12T03:00:18.554Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 110,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Fama Ndiaye",
+    "shop_number": "SOU-28B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.567Z",
+    "updated_at": "2026-06-12T03:00:18.567Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 111,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Ablaye Faye",
+    "shop_number": "SOU-29B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.573Z",
+    "updated_at": "2026-06-12T03:00:18.573Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 112,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Moustapha Cisse",
+    "shop_number": "SOU-30B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.580Z",
+    "updated_at": "2026-06-12T03:00:18.580Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 113,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Moustapha Cisse",
+    "shop_number": "SOU-31B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.588Z",
+    "updated_at": "2026-06-12T03:00:18.588Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 114,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Amsata Sall",
+    "shop_number": "SOU-32B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.595Z",
+    "updated_at": "2026-06-12T03:00:18.595Z"
+  }
+},
+{
+  "model": "tenants.shop",
+  "pk": 115,
+  "fields": {
+    "mall": 9,
+    "name": "Boutique Mame Maty Cisse",
+    "shop_number": "SOU-33B",
+    "category": "other",
+    "floor": 20,
+    "surface": "20.00",
+    "status": "occupied",
+    "description": "",
+    "created_at": "2026-06-12T03:00:18.608Z",
+    "updated_at": "2026-06-12T03:00:18.608Z"
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 14,
+  "fields": {
+    "first_name": "El.Massamba",
+    "last_name": "Thiam",
+    "email": "",
+    "phone": "77650667",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.456Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 15,
+  "fields": {
+    "first_name": "M.Cheikh",
+    "last_name": "Dieng",
+    "email": "",
+    "phone": "76337520",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.460Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 16,
+  "fields": {
+    "first_name": "M.Goor",
+    "last_name": "Diouf",
+    "email": "",
+    "phone": "77505255",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.466Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 17,
+  "fields": {
+    "first_name": "Ibrahima",
+    "last_name": "Ndiaye",
+    "email": "",
+    "phone": "77630285",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.470Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 18,
+  "fields": {
+    "first_name": "Elhadji",
+    "last_name": "Toure",
+    "email": "",
+    "phone": "78167534",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.474Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 19,
+  "fields": {
+    "first_name": "El Mamadou",
+    "last_name": "Ndiaye",
+    "email": "",
+    "phone": "77120760",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.478Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 20,
+  "fields": {
+    "first_name": "Mor",
+    "last_name": "Dia",
+    "email": "",
+    "phone": "76665885",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.483Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 21,
+  "fields": {
+    "first_name": "Amath",
+    "last_name": "Ndieguene",
+    "email": "",
+    "phone": "77573923",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.489Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 22,
+  "fields": {
+    "first_name": "Elhadji",
+    "last_name": "Ndieguene",
+    "email": "",
+    "phone": "77681735",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.493Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 23,
+  "fields": {
+    "first_name": "Tamsir",
+    "last_name": "Ndieguene",
+    "email": "",
+    "phone": "78157470",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.499Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 24,
+  "fields": {
+    "first_name": "Mbaye",
+    "last_name": "Seck",
+    "email": "",
+    "phone": "70477880",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.503Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 25,
+  "fields": {
+    "first_name": "Loum",
+    "last_name": "Loum",
+    "email": "",
+    "phone": "77207201",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.507Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 26,
+  "fields": {
+    "first_name": "Baye Mor",
+    "last_name": "Ndieguene",
+    "email": "",
+    "phone": "70620371",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.515Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 27,
+  "fields": {
+    "first_name": "El Hadji",
+    "last_name": "Ndieguene",
+    "email": "",
+    "phone": "77632631",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.519Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 28,
+  "fields": {
+    "first_name": "Moussa.W",
+    "last_name": "Ndour",
+    "email": "",
+    "phone": "77612393",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.531Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 29,
+  "fields": {
+    "first_name": "Ndiaga",
+    "last_name": "Sylla",
+    "email": "",
+    "phone": "78152951",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.536Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 30,
+  "fields": {
+    "first_name": "Ousmane",
+    "last_name": "Dieng",
+    "email": "",
+    "phone": "INCONNU-18",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.541Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 31,
+  "fields": {
+    "first_name": "El Hadji S.",
+    "last_name": "Diop",
+    "email": "",
+    "phone": "77795162",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.544Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 32,
+  "fields": {
+    "first_name": "Mbaye",
+    "last_name": "Diouf",
+    "email": "",
+    "phone": "77784531",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.553Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 33,
+  "fields": {
+    "first_name": "Abdou",
+    "last_name": "Niang",
+    "email": "",
+    "phone": "70490644",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.558Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 34,
+  "fields": {
+    "first_name": "Djib",
+    "last_name": "Diouf",
+    "email": "",
+    "phone": "77949772",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.561Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 35,
+  "fields": {
+    "first_name": "S.Omar",
+    "last_name": "Niang",
+    "email": "",
+    "phone": "77306890",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.567Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 36,
+  "fields": {
+    "first_name": "Mamadou",
+    "last_name": "Mbengue",
+    "email": "",
+    "phone": "77890335",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.571Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 37,
+  "fields": {
+    "first_name": "Ousmane",
+    "last_name": "Kane",
+    "email": "",
+    "phone": "77025304",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.575Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 38,
+  "fields": {
+    "first_name": "Mbathie",
+    "last_name": "Seck",
+    "email": "",
+    "phone": "77478110",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.579Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 39,
+  "fields": {
+    "first_name": "Ousmane",
+    "last_name": "Ndiaye",
+    "email": "",
+    "phone": "77688694",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.585Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 40,
+  "fields": {
+    "first_name": "Saliou",
+    "last_name": "Gueye",
+    "email": "",
+    "phone": "77166858",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.589Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 41,
+  "fields": {
+    "first_name": "Aliou",
+    "last_name": "Diallo",
+    "email": "",
+    "phone": "77257865",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:34:34.593Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 43,
+  "fields": {
+    "first_name": "M. Lamine",
+    "last_name": "Seck",
+    "email": "",
+    "phone": "779719566",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.865Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 44,
+  "fields": {
+    "first_name": "Idrissa",
+    "last_name": "Diop",
+    "email": "",
+    "phone": "775148061",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.873Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 45,
+  "fields": {
+    "first_name": "Abdou Khadir",
+    "last_name": "Diouf",
+    "email": "",
+    "phone": "763092159",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.877Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 46,
+  "fields": {
+    "first_name": "Locataire",
+    "last_name": "Boutique 18",
+    "email": "",
+    "phone": "CIF-INCONNU-18",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.881Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 47,
+  "fields": {
+    "first_name": "Djigane",
+    "last_name": "Kama",
+    "email": "",
+    "phone": "769898951",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.886Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 48,
+  "fields": {
+    "first_name": "Aliou",
+    "last_name": "Diallo",
+    "email": "",
+    "phone": "766696371",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.890Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 49,
+  "fields": {
+    "first_name": "Ahmad",
+    "last_name": "Dia",
+    "email": "",
+    "phone": "776883693",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.893Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 50,
+  "fields": {
+    "first_name": "Tidiane",
+    "last_name": "Coulibaly",
+    "email": "",
+    "phone": "782397193",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.898Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 51,
+  "fields": {
+    "first_name": "Didje Vincent",
+    "last_name": "Sina",
+    "email": "",
+    "phone": "763878099",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.902Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 52,
+  "fields": {
+    "first_name": "Pape",
+    "last_name": "Diouf",
+    "email": "",
+    "phone": "774963125",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.905Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 53,
+  "fields": {
+    "first_name": "Cheikhou",
+    "last_name": "Niane",
+    "email": "",
+    "phone": "778769152",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.910Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 54,
+  "fields": {
+    "first_name": "Khadim",
+    "last_name": "Diop",
+    "email": "",
+    "phone": "775914752",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.914Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 55,
+  "fields": {
+    "first_name": "Youssoupha",
+    "last_name": "Thiam",
+    "email": "",
+    "phone": "786619074",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.919Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 56,
+  "fields": {
+    "first_name": "Momath",
+    "last_name": "Seck",
+    "email": "",
+    "phone": "707488670",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.922Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 57,
+  "fields": {
+    "first_name": "Gora",
+    "last_name": "Diagne",
+    "email": "",
+    "phone": "766494319",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.927Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 58,
+  "fields": {
+    "first_name": "Moustapha",
+    "last_name": "Ndiaye",
+    "email": "",
+    "phone": "767767036",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.931Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 59,
+  "fields": {
+    "first_name": "Hassamiou",
+    "last_name": "Soumare",
+    "email": "",
+    "phone": "779538328",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T02:55:33.936Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 60,
+  "fields": {
+    "first_name": "Ousmane Ndongo",
+    "last_name": "Dieng Sarr",
+    "email": "",
+    "phone": "777798589",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.399Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 61,
+  "fields": {
+    "first_name": "Khadim",
+    "last_name": "Gueye",
+    "email": "",
+    "phone": "772765076",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.408Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 62,
+  "fields": {
+    "first_name": "Cheikh Tidiane",
+    "last_name": "Bassoum",
+    "email": "",
+    "phone": "779124689",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.414Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 63,
+  "fields": {
+    "first_name": "Babacar",
+    "last_name": "Ndieguene",
+    "email": "",
+    "phone": "777153316",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.419Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 64,
+  "fields": {
+    "first_name": "S. Fallou Mbacke",
+    "last_name": "Kane",
+    "email": "",
+    "phone": "777745744",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.428Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 65,
+  "fields": {
+    "first_name": "Khouma",
+    "last_name": "Et F",
+    "email": "",
+    "phone": "775715522",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.436Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 66,
+  "fields": {
+    "first_name": "Sens/Can",
+    "last_name": "",
+    "email": "",
+    "phone": "SOU-INCONNU-25A",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.446Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 67,
+  "fields": {
+    "first_name": "Sens/Can",
+    "last_name": "",
+    "email": "",
+    "phone": "SOU-INCONNU-26A",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.453Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 68,
+  "fields": {
+    "first_name": "Modou",
+    "last_name": "Faye",
+    "email": "",
+    "phone": "773662123",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.457Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 69,
+  "fields": {
+    "first_name": "Cheikh Ibrah Abou Latif",
+    "last_name": "Dia",
+    "email": "",
+    "phone": "775168730",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.462Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 70,
+  "fields": {
+    "first_name": "M. Moustapha Tidiane",
+    "last_name": "Diallo Diallo",
+    "email": "",
+    "phone": "774812201",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.467Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 71,
+  "fields": {
+    "first_name": "Babacar",
+    "last_name": "Dia",
+    "email": "",
+    "phone": "776306227",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.472Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 72,
+  "fields": {
+    "first_name": "Sen Express",
+    "last_name": "",
+    "email": "",
+    "phone": "SOU-INCONNU-31A",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.476Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 73,
+  "fields": {
+    "first_name": "Arame",
+    "last_name": "Ndong",
+    "email": "",
+    "phone": "773236626",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.483Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 74,
+  "fields": {
+    "first_name": "Mamoudou",
+    "last_name": "Diallo",
+    "email": "",
+    "phone": "782919582",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.487Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 75,
+  "fields": {
+    "first_name": "Ndiaga",
+    "last_name": "Diallo",
+    "email": "",
+    "phone": "776132669",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.491Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 76,
+  "fields": {
+    "first_name": "Cheikh Omar",
+    "last_name": "Mbaye",
+    "email": "",
+    "phone": "77555",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.497Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 77,
+  "fields": {
+    "first_name": "Modou",
+    "last_name": "Faye",
+    "email": "",
+    "phone": "SOU-INCONNU-18B",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.501Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 78,
+  "fields": {
+    "first_name": "Olimata",
+    "last_name": "Gueye",
+    "email": "",
+    "phone": "774379521",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.505Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 79,
+  "fields": {
+    "first_name": "Sakho",
+    "last_name": "",
+    "email": "",
+    "phone": "773437933",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.509Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 80,
+  "fields": {
+    "first_name": "Moustapha",
+    "last_name": "Cisse",
+    "email": "",
+    "phone": "775595057",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.517Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 81,
+  "fields": {
+    "first_name": "Babacar",
+    "last_name": "Ndiaye",
+    "email": "",
+    "phone": "785513995",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.523Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 82,
+  "fields": {
+    "first_name": "Sens",
+    "last_name": "",
+    "email": "",
+    "phone": "765971515",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.541Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 83,
+  "fields": {
+    "first_name": "Sens",
+    "last_name": "",
+    "email": "",
+    "phone": "SOU-INCONNU-26B",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.550Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 84,
+  "fields": {
+    "first_name": "Mbene",
+    "last_name": "Badiane",
+    "email": "",
+    "phone": "775640212",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.555Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 85,
+  "fields": {
+    "first_name": "Fama",
+    "last_name": "Ndiaye",
+    "email": "",
+    "phone": "774884117",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.569Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 86,
+  "fields": {
+    "first_name": "Ablaye",
+    "last_name": "Faye",
+    "email": "",
+    "phone": "779857939",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.574Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 87,
+  "fields": {
+    "first_name": "Moustapha",
+    "last_name": "Cisse",
+    "email": "",
+    "phone": "775195057",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.583Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 88,
+  "fields": {
+    "first_name": "Amsata",
+    "last_name": "Sall",
+    "email": "",
+    "phone": "763533048",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.597Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.tenant",
+  "pk": 89,
+  "fields": {
+    "first_name": "Mame Maty",
+    "last_name": "Cisse",
+    "email": "",
+    "phone": "773767275",
+    "company_name": "",
+    "id_number": "",
+    "address": "",
+    "created_at": "2026-06-12T03:00:18.609Z",
+    "user": null,
+    "cni_or_passport": "",
+    "ninea_or_rc": ""
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 14,
+  "fields": {
+    "shop": 24,
+    "tenant": 14,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "140000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.457Z",
+    "updated_at": "2026-06-12T02:34:34.457Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 15,
+  "fields": {
+    "shop": 25,
+    "tenant": 15,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "90000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.461Z",
+    "updated_at": "2026-06-12T02:34:34.461Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 16,
+  "fields": {
+    "shop": 26,
+    "tenant": 16,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.467Z",
+    "updated_at": "2026-06-12T02:34:34.467Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 17,
+  "fields": {
+    "shop": 27,
+    "tenant": 17,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.471Z",
+    "updated_at": "2026-06-12T02:34:34.471Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 18,
+  "fields": {
+    "shop": 28,
+    "tenant": 18,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.475Z",
+    "updated_at": "2026-06-12T02:34:34.475Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 19,
+  "fields": {
+    "shop": 29,
+    "tenant": 19,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.479Z",
+    "updated_at": "2026-06-12T02:34:34.479Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 20,
+  "fields": {
+    "shop": 30,
+    "tenant": 20,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.484Z",
+    "updated_at": "2026-06-12T02:34:34.484Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 21,
+  "fields": {
+    "shop": 31,
+    "tenant": 20,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "225000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.487Z",
+    "updated_at": "2026-06-12T02:34:34.487Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 22,
+  "fields": {
+    "shop": 32,
+    "tenant": 21,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.490Z",
+    "updated_at": "2026-06-12T02:34:34.490Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 23,
+  "fields": {
+    "shop": 33,
+    "tenant": 22,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.494Z",
+    "updated_at": "2026-06-12T02:34:34.494Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 24,
+  "fields": {
+    "shop": 34,
+    "tenant": 23,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.500Z",
+    "updated_at": "2026-06-12T02:34:34.500Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 25,
+  "fields": {
+    "shop": 35,
+    "tenant": 24,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.504Z",
+    "updated_at": "2026-06-12T02:34:34.504Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 26,
+  "fields": {
+    "shop": 36,
+    "tenant": 25,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.509Z",
+    "updated_at": "2026-06-12T02:34:34.509Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 27,
+  "fields": {
+    "shop": 37,
+    "tenant": 26,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.516Z",
+    "updated_at": "2026-06-12T02:34:34.516Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 28,
+  "fields": {
+    "shop": 38,
+    "tenant": 27,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "240000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.520Z",
+    "updated_at": "2026-06-12T02:34:34.520Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 29,
+  "fields": {
+    "shop": 39,
+    "tenant": 27,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "225000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.525Z",
+    "updated_at": "2026-06-12T02:34:34.525Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 30,
+  "fields": {
+    "shop": 40,
+    "tenant": 28,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.533Z",
+    "updated_at": "2026-06-12T02:34:34.533Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 31,
+  "fields": {
+    "shop": 41,
+    "tenant": 29,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.538Z",
+    "updated_at": "2026-06-12T02:34:34.538Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 32,
+  "fields": {
+    "shop": 42,
+    "tenant": 30,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.542Z",
+    "updated_at": "2026-06-12T02:34:34.542Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 33,
+  "fields": {
+    "shop": 43,
+    "tenant": 31,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.545Z",
+    "updated_at": "2026-06-12T02:34:34.545Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 34,
+  "fields": {
+    "shop": 44,
+    "tenant": 31,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.550Z",
+    "updated_at": "2026-06-12T02:34:34.550Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 35,
+  "fields": {
+    "shop": 45,
+    "tenant": 32,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.554Z",
+    "updated_at": "2026-06-12T02:34:34.554Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 36,
+  "fields": {
+    "shop": 46,
+    "tenant": 33,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "135000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.559Z",
+    "updated_at": "2026-06-12T02:34:34.559Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 37,
+  "fields": {
+    "shop": 47,
+    "tenant": 34,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.562Z",
+    "updated_at": "2026-06-12T02:34:34.562Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 38,
+  "fields": {
+    "shop": 48,
+    "tenant": 35,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.568Z",
+    "updated_at": "2026-06-12T02:34:34.568Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 39,
+  "fields": {
+    "shop": 49,
+    "tenant": 36,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.572Z",
+    "updated_at": "2026-06-12T02:34:34.572Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 40,
+  "fields": {
+    "shop": 50,
+    "tenant": 37,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.576Z",
+    "updated_at": "2026-06-12T02:34:34.576Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 41,
+  "fields": {
+    "shop": 51,
+    "tenant": 38,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.582Z",
+    "updated_at": "2026-06-12T02:34:34.582Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 42,
+  "fields": {
+    "shop": 52,
+    "tenant": 39,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.586Z",
+    "updated_at": "2026-06-12T02:34:34.586Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 43,
+  "fields": {
+    "shop": 53,
+    "tenant": 40,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.590Z",
+    "updated_at": "2026-06-12T02:34:34.590Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 44,
+  "fields": {
+    "shop": 54,
+    "tenant": 41,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:34:34.594Z",
+    "updated_at": "2026-06-12T02:34:34.594Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 46,
+  "fields": {
+    "shop": 56,
+    "tenant": 43,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "100000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.867Z",
+    "updated_at": "2026-06-12T02:55:33.867Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 47,
+  "fields": {
+    "shop": 57,
+    "tenant": 44,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.874Z",
+    "updated_at": "2026-06-12T02:55:33.874Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 48,
+  "fields": {
+    "shop": 58,
+    "tenant": 45,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.878Z",
+    "updated_at": "2026-06-12T02:55:33.878Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 49,
+  "fields": {
+    "shop": 59,
+    "tenant": 46,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.882Z",
+    "updated_at": "2026-06-12T02:55:33.882Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 50,
+  "fields": {
+    "shop": 60,
+    "tenant": 47,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.887Z",
+    "updated_at": "2026-06-12T02:55:33.887Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 51,
+  "fields": {
+    "shop": 61,
+    "tenant": 48,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.891Z",
+    "updated_at": "2026-06-12T02:55:33.891Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 52,
+  "fields": {
+    "shop": 62,
+    "tenant": 49,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "100000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.894Z",
+    "updated_at": "2026-06-12T02:55:33.894Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 53,
+  "fields": {
+    "shop": 64,
+    "tenant": 50,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.899Z",
+    "updated_at": "2026-06-12T02:55:33.899Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 54,
+  "fields": {
+    "shop": 65,
+    "tenant": 51,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.903Z",
+    "updated_at": "2026-06-12T02:55:33.903Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 55,
+  "fields": {
+    "shop": 66,
+    "tenant": 52,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "75000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.906Z",
+    "updated_at": "2026-06-12T02:55:33.906Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 56,
+  "fields": {
+    "shop": 69,
+    "tenant": 53,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "100000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.911Z",
+    "updated_at": "2026-06-12T02:55:33.911Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 57,
+  "fields": {
+    "shop": 70,
+    "tenant": 54,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "50000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.915Z",
+    "updated_at": "2026-06-12T02:55:33.915Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 58,
+  "fields": {
+    "shop": 72,
+    "tenant": 55,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "50000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.920Z",
+    "updated_at": "2026-06-12T02:55:33.920Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 59,
+  "fields": {
+    "shop": 73,
+    "tenant": 56,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "50000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.923Z",
+    "updated_at": "2026-06-12T02:55:33.923Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 60,
+  "fields": {
+    "shop": 75,
+    "tenant": 57,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "50000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.928Z",
+    "updated_at": "2026-06-12T02:55:33.928Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 61,
+  "fields": {
+    "shop": 76,
+    "tenant": 58,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "50000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.932Z",
+    "updated_at": "2026-06-12T02:55:33.932Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 62,
+  "fields": {
+    "shop": 78,
+    "tenant": 59,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "50000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T02:55:33.936Z",
+    "updated_at": "2026-06-12T02:55:33.936Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 63,
+  "fields": {
+    "shop": 80,
+    "tenant": 60,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.401Z",
+    "updated_at": "2026-06-12T03:00:18.401Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 64,
+  "fields": {
+    "shop": 81,
+    "tenant": 61,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.409Z",
+    "updated_at": "2026-06-12T03:00:18.409Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 65,
+  "fields": {
+    "shop": 82,
+    "tenant": 62,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.416Z",
+    "updated_at": "2026-06-12T03:00:18.416Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 66,
+  "fields": {
+    "shop": 83,
+    "tenant": 63,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.420Z",
+    "updated_at": "2026-06-12T03:00:18.420Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 67,
+  "fields": {
+    "shop": 84,
+    "tenant": 63,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.425Z",
+    "updated_at": "2026-06-12T03:00:18.425Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 68,
+  "fields": {
+    "shop": 85,
+    "tenant": 64,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.429Z",
+    "updated_at": "2026-06-12T03:00:18.429Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 69,
+  "fields": {
+    "shop": 86,
+    "tenant": 64,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.433Z",
+    "updated_at": "2026-06-12T03:00:18.433Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 70,
+  "fields": {
+    "shop": 87,
+    "tenant": 65,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.437Z",
+    "updated_at": "2026-06-12T03:00:18.437Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 71,
+  "fields": {
+    "shop": 88,
+    "tenant": 65,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.442Z",
+    "updated_at": "2026-06-12T03:00:18.442Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 72,
+  "fields": {
+    "shop": 89,
+    "tenant": 66,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.448Z",
+    "updated_at": "2026-06-12T03:00:18.448Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 73,
+  "fields": {
+    "shop": 90,
+    "tenant": 67,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.454Z",
+    "updated_at": "2026-06-12T03:00:18.454Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 74,
+  "fields": {
+    "shop": 91,
+    "tenant": 68,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.458Z",
+    "updated_at": "2026-06-12T03:00:18.458Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 75,
+  "fields": {
+    "shop": 92,
+    "tenant": 69,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.463Z",
+    "updated_at": "2026-06-12T03:00:18.463Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 76,
+  "fields": {
+    "shop": 93,
+    "tenant": 70,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.468Z",
+    "updated_at": "2026-06-12T03:00:18.468Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 77,
+  "fields": {
+    "shop": 94,
+    "tenant": 71,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.473Z",
+    "updated_at": "2026-06-12T03:00:18.473Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 78,
+  "fields": {
+    "shop": 95,
+    "tenant": 72,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.477Z",
+    "updated_at": "2026-06-12T03:00:18.477Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 79,
+  "fields": {
+    "shop": 96,
+    "tenant": 73,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.484Z",
+    "updated_at": "2026-06-12T03:00:18.484Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 80,
+  "fields": {
+    "shop": 97,
+    "tenant": 74,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "250000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.488Z",
+    "updated_at": "2026-06-12T03:00:18.488Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 81,
+  "fields": {
+    "shop": 98,
+    "tenant": 75,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.492Z",
+    "updated_at": "2026-06-12T03:00:18.492Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 82,
+  "fields": {
+    "shop": 99,
+    "tenant": 76,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.498Z",
+    "updated_at": "2026-06-12T03:00:18.498Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 83,
+  "fields": {
+    "shop": 100,
+    "tenant": 77,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.502Z",
+    "updated_at": "2026-06-12T03:00:18.502Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 84,
+  "fields": {
+    "shop": 101,
+    "tenant": 78,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.506Z",
+    "updated_at": "2026-06-12T03:00:18.506Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 85,
+  "fields": {
+    "shop": 102,
+    "tenant": 79,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.510Z",
+    "updated_at": "2026-06-12T03:00:18.510Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 86,
+  "fields": {
+    "shop": 103,
+    "tenant": 80,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.518Z",
+    "updated_at": "2026-06-12T03:00:18.518Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 87,
+  "fields": {
+    "shop": 104,
+    "tenant": 81,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.524Z",
+    "updated_at": "2026-06-12T03:00:18.524Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 88,
+  "fields": {
+    "shop": 105,
+    "tenant": 71,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.530Z",
+    "updated_at": "2026-06-12T03:00:18.530Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 89,
+  "fields": {
+    "shop": 106,
+    "tenant": 71,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.536Z",
+    "updated_at": "2026-06-12T03:00:18.536Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 90,
+  "fields": {
+    "shop": 107,
+    "tenant": 82,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.545Z",
+    "updated_at": "2026-06-12T03:00:18.545Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 91,
+  "fields": {
+    "shop": 108,
+    "tenant": 83,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.551Z",
+    "updated_at": "2026-06-12T03:00:18.551Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 92,
+  "fields": {
+    "shop": 109,
+    "tenant": 84,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.557Z",
+    "updated_at": "2026-06-12T03:00:18.557Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 93,
+  "fields": {
+    "shop": 110,
+    "tenant": 85,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.570Z",
+    "updated_at": "2026-06-12T03:00:18.570Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 94,
+  "fields": {
+    "shop": 111,
+    "tenant": 86,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.575Z",
+    "updated_at": "2026-06-12T03:00:18.575Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 95,
+  "fields": {
+    "shop": 112,
+    "tenant": 87,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.584Z",
+    "updated_at": "2026-06-12T03:00:18.584Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 96,
+  "fields": {
+    "shop": 113,
+    "tenant": 87,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.590Z",
+    "updated_at": "2026-06-12T03:00:18.590Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 97,
+  "fields": {
+    "shop": 114,
+    "tenant": 88,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.601Z",
+    "updated_at": "2026-06-12T03:00:18.601Z"
+  }
+},
+{
+  "model": "tenants.lease",
+  "pk": 98,
+  "fields": {
+    "shop": 115,
+    "tenant": 89,
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "monthly_rent": "85000",
+    "deposit": "0",
+    "status": "active",
+    "conditions": "",
+    "created_at": "2026-06-12T03:00:18.616Z",
+    "updated_at": "2026-06-12T03:00:18.616Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 19,
+  "fields": {
+    "invoice_number": "FAC-2026-0001",
+    "tenant": 14,
+    "shop": 24,
+    "invoice_type": "rent",
+    "amount": "140000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-00",
+    "created_at": "2026-06-12T02:34:34.458Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 20,
+  "fields": {
+    "invoice_number": "FAC-2026-0002",
+    "tenant": 15,
+    "shop": 25,
+    "invoice_type": "rent",
+    "amount": "90000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-01",
+    "created_at": "2026-06-12T02:34:34.463Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 21,
+  "fields": {
+    "invoice_number": "FAC-2026-0003",
+    "tenant": 16,
+    "shop": 26,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-02",
+    "created_at": "2026-06-12T02:34:34.468Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 22,
+  "fields": {
+    "invoice_number": "FAC-2026-0004",
+    "tenant": 17,
+    "shop": 27,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-03",
+    "created_at": "2026-06-12T02:34:34.472Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 23,
+  "fields": {
+    "invoice_number": "FAC-2026-0005",
+    "tenant": 18,
+    "shop": 28,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-04",
+    "created_at": "2026-06-12T02:34:34.476Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 24,
+  "fields": {
+    "invoice_number": "FAC-2026-0006",
+    "tenant": 19,
+    "shop": 29,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-05",
+    "created_at": "2026-06-12T02:34:34.481Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 25,
+  "fields": {
+    "invoice_number": "FAC-2026-0007",
+    "tenant": 20,
+    "shop": 30,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-06",
+    "created_at": "2026-06-12T02:34:34.485Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 26,
+  "fields": {
+    "invoice_number": "FAC-2026-0008",
+    "tenant": 20,
+    "shop": 31,
+    "invoice_type": "rent",
+    "amount": "225000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-07",
+    "created_at": "2026-06-12T02:34:34.487Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 27,
+  "fields": {
+    "invoice_number": "FAC-2026-0009",
+    "tenant": 21,
+    "shop": 32,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-08",
+    "created_at": "2026-06-12T02:34:34.491Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 28,
+  "fields": {
+    "invoice_number": "FAC-2026-0010",
+    "tenant": 22,
+    "shop": 33,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-09",
+    "created_at": "2026-06-12T02:34:34.495Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 29,
+  "fields": {
+    "invoice_number": "FAC-2026-0011",
+    "tenant": 23,
+    "shop": 34,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-10",
+    "created_at": "2026-06-12T02:34:34.501Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 30,
+  "fields": {
+    "invoice_number": "FAC-2026-0012",
+    "tenant": 24,
+    "shop": 35,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-11",
+    "created_at": "2026-06-12T02:34:34.505Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 31,
+  "fields": {
+    "invoice_number": "FAC-2026-0013",
+    "tenant": 25,
+    "shop": 36,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-12",
+    "created_at": "2026-06-12T02:34:34.511Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 32,
+  "fields": {
+    "invoice_number": "FAC-2026-0014",
+    "tenant": 26,
+    "shop": 37,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-13",
+    "created_at": "2026-06-12T02:34:34.517Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 33,
+  "fields": {
+    "invoice_number": "FAC-2026-0015",
+    "tenant": 27,
+    "shop": 38,
+    "invoice_type": "rent",
+    "amount": "240000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-14",
+    "created_at": "2026-06-12T02:34:34.521Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 34,
+  "fields": {
+    "invoice_number": "FAC-2026-0016",
+    "tenant": 27,
+    "shop": 39,
+    "invoice_type": "rent",
+    "amount": "225000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - A-15",
+    "created_at": "2026-06-12T02:34:34.527Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 35,
+  "fields": {
+    "invoice_number": "FAC-2026-0017",
+    "tenant": 28,
+    "shop": 40,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-16",
+    "created_at": "2026-06-12T02:34:34.534Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 36,
+  "fields": {
+    "invoice_number": "FAC-2026-0018",
+    "tenant": 29,
+    "shop": 41,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-17",
+    "created_at": "2026-06-12T02:34:34.539Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 37,
+  "fields": {
+    "invoice_number": "FAC-2026-0019",
+    "tenant": 30,
+    "shop": 42,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-18",
+    "created_at": "2026-06-12T02:34:34.542Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 38,
+  "fields": {
+    "invoice_number": "FAC-2026-0020",
+    "tenant": 31,
+    "shop": 43,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-19",
+    "created_at": "2026-06-12T02:34:34.547Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 39,
+  "fields": {
+    "invoice_number": "FAC-2026-0021",
+    "tenant": 31,
+    "shop": 44,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-20",
+    "created_at": "2026-06-12T02:34:34.551Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 40,
+  "fields": {
+    "invoice_number": "FAC-2026-0022",
+    "tenant": 32,
+    "shop": 45,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-21",
+    "created_at": "2026-06-12T02:34:34.555Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 41,
+  "fields": {
+    "invoice_number": "FAC-2026-0023",
+    "tenant": 33,
+    "shop": 46,
+    "invoice_type": "rent",
+    "amount": "135000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-22",
+    "created_at": "2026-06-12T02:34:34.559Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 42,
+  "fields": {
+    "invoice_number": "FAC-2026-0024",
+    "tenant": 34,
+    "shop": 47,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-23",
+    "created_at": "2026-06-12T02:34:34.565Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 43,
+  "fields": {
+    "invoice_number": "FAC-2026-0025",
+    "tenant": 35,
+    "shop": 48,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-24",
+    "created_at": "2026-06-12T02:34:34.569Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 44,
+  "fields": {
+    "invoice_number": "FAC-2026-0026",
+    "tenant": 36,
+    "shop": 49,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-25",
+    "created_at": "2026-06-12T02:34:34.573Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 45,
+  "fields": {
+    "invoice_number": "FAC-2026-0027",
+    "tenant": 37,
+    "shop": 50,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-26",
+    "created_at": "2026-06-12T02:34:34.577Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 46,
+  "fields": {
+    "invoice_number": "FAC-2026-0028",
+    "tenant": 38,
+    "shop": 51,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-27",
+    "created_at": "2026-06-12T02:34:34.583Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 47,
+  "fields": {
+    "invoice_number": "FAC-2026-0029",
+    "tenant": 39,
+    "shop": 52,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-28",
+    "created_at": "2026-06-12T02:34:34.587Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 48,
+  "fields": {
+    "invoice_number": "FAC-2026-0030",
+    "tenant": 40,
+    "shop": 53,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-29",
+    "created_at": "2026-06-12T02:34:34.591Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 49,
+  "fields": {
+    "invoice_number": "FAC-2026-0031",
+    "tenant": 41,
+    "shop": 54,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - B-30",
+    "created_at": "2026-06-12T02:34:34.595Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 50,
+  "fields": {
+    "invoice_number": "FAC-2026-0032",
+    "tenant": 43,
+    "shop": 56,
+    "invoice_type": "rent",
+    "amount": "100000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-15",
+    "created_at": "2026-06-12T02:55:33.869Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 51,
+  "fields": {
+    "invoice_number": "FAC-2026-0033",
+    "tenant": 44,
+    "shop": 57,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-16",
+    "created_at": "2026-06-12T02:55:33.875Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 52,
+  "fields": {
+    "invoice_number": "FAC-2026-0034",
+    "tenant": 45,
+    "shop": 58,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-17",
+    "created_at": "2026-06-12T02:55:33.879Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 53,
+  "fields": {
+    "invoice_number": "FAC-2026-0035",
+    "tenant": 46,
+    "shop": 59,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-18",
+    "created_at": "2026-06-12T02:55:33.883Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 54,
+  "fields": {
+    "invoice_number": "FAC-2026-0036",
+    "tenant": 47,
+    "shop": 60,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-19",
+    "created_at": "2026-06-12T02:55:33.888Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 55,
+  "fields": {
+    "invoice_number": "FAC-2026-0037",
+    "tenant": 48,
+    "shop": 61,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-20",
+    "created_at": "2026-06-12T02:55:33.891Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 56,
+  "fields": {
+    "invoice_number": "FAC-2026-0038",
+    "tenant": 49,
+    "shop": 62,
+    "invoice_type": "rent",
+    "amount": "100000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-21",
+    "created_at": "2026-06-12T02:55:33.895Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 57,
+  "fields": {
+    "invoice_number": "FAC-2026-0039",
+    "tenant": 50,
+    "shop": 64,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-23",
+    "created_at": "2026-06-12T02:55:33.900Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 58,
+  "fields": {
+    "invoice_number": "FAC-2026-0040",
+    "tenant": 51,
+    "shop": 65,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-24",
+    "created_at": "2026-06-12T02:55:33.903Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 59,
+  "fields": {
+    "invoice_number": "FAC-2026-0041",
+    "tenant": 52,
+    "shop": 66,
+    "invoice_type": "rent",
+    "amount": "75000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-25",
+    "created_at": "2026-06-12T02:55:33.907Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 60,
+  "fields": {
+    "invoice_number": "FAC-2026-0042",
+    "tenant": 53,
+    "shop": 69,
+    "invoice_type": "rent",
+    "amount": "100000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-28",
+    "created_at": "2026-06-12T02:55:33.912Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 61,
+  "fields": {
+    "invoice_number": "FAC-2026-0043",
+    "tenant": 54,
+    "shop": 70,
+    "invoice_type": "rent",
+    "amount": "50000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-29",
+    "created_at": "2026-06-12T02:55:33.916Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 62,
+  "fields": {
+    "invoice_number": "FAC-2026-0044",
+    "tenant": 55,
+    "shop": 72,
+    "invoice_type": "rent",
+    "amount": "50000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-31",
+    "created_at": "2026-06-12T02:55:33.921Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 63,
+  "fields": {
+    "invoice_number": "FAC-2026-0045",
+    "tenant": 56,
+    "shop": 73,
+    "invoice_type": "rent",
+    "amount": "50000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-32",
+    "created_at": "2026-06-12T02:55:33.924Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 64,
+  "fields": {
+    "invoice_number": "FAC-2026-0046",
+    "tenant": 57,
+    "shop": 75,
+    "invoice_type": "rent",
+    "amount": "50000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-34",
+    "created_at": "2026-06-12T02:55:33.929Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 65,
+  "fields": {
+    "invoice_number": "FAC-2026-0047",
+    "tenant": 58,
+    "shop": 76,
+    "invoice_type": "rent",
+    "amount": "50000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-35",
+    "created_at": "2026-06-12T02:55:33.933Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 66,
+  "fields": {
+    "invoice_number": "FAC-2026-0048",
+    "tenant": 59,
+    "shop": 78,
+    "invoice_type": "rent",
+    "amount": "50000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - CIF-37",
+    "created_at": "2026-06-12T02:55:33.937Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 67,
+  "fields": {
+    "invoice_number": "FAC-2026-0049",
+    "tenant": 60,
+    "shop": 80,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-16A",
+    "created_at": "2026-06-12T03:00:18.404Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 68,
+  "fields": {
+    "invoice_number": "FAC-2026-0050",
+    "tenant": 61,
+    "shop": 81,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-17A",
+    "created_at": "2026-06-12T03:00:18.411Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 69,
+  "fields": {
+    "invoice_number": "FAC-2026-0051",
+    "tenant": 62,
+    "shop": 82,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-18A",
+    "created_at": "2026-06-12T03:00:18.417Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 70,
+  "fields": {
+    "invoice_number": "FAC-2026-0052",
+    "tenant": 63,
+    "shop": 83,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-19A",
+    "created_at": "2026-06-12T03:00:18.422Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 71,
+  "fields": {
+    "invoice_number": "FAC-2026-0053",
+    "tenant": 63,
+    "shop": 84,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-20A",
+    "created_at": "2026-06-12T03:00:18.426Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 72,
+  "fields": {
+    "invoice_number": "FAC-2026-0054",
+    "tenant": 64,
+    "shop": 85,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-21A",
+    "created_at": "2026-06-12T03:00:18.430Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 73,
+  "fields": {
+    "invoice_number": "FAC-2026-0055",
+    "tenant": 64,
+    "shop": 86,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-22A",
+    "created_at": "2026-06-12T03:00:18.434Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 74,
+  "fields": {
+    "invoice_number": "FAC-2026-0056",
+    "tenant": 65,
+    "shop": 87,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-23A",
+    "created_at": "2026-06-12T03:00:18.438Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 75,
+  "fields": {
+    "invoice_number": "FAC-2026-0057",
+    "tenant": 65,
+    "shop": 88,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-24A",
+    "created_at": "2026-06-12T03:00:18.443Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 76,
+  "fields": {
+    "invoice_number": "FAC-2026-0058",
+    "tenant": 66,
+    "shop": 89,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-25A",
+    "created_at": "2026-06-12T03:00:18.449Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 77,
+  "fields": {
+    "invoice_number": "FAC-2026-0059",
+    "tenant": 67,
+    "shop": 90,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-26A",
+    "created_at": "2026-06-12T03:00:18.455Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 78,
+  "fields": {
+    "invoice_number": "FAC-2026-0060",
+    "tenant": 68,
+    "shop": 91,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-27A",
+    "created_at": "2026-06-12T03:00:18.459Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 79,
+  "fields": {
+    "invoice_number": "FAC-2026-0061",
+    "tenant": 69,
+    "shop": 92,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-28A",
+    "created_at": "2026-06-12T03:00:18.465Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 80,
+  "fields": {
+    "invoice_number": "FAC-2026-0062",
+    "tenant": 70,
+    "shop": 93,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-29A",
+    "created_at": "2026-06-12T03:00:18.469Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 81,
+  "fields": {
+    "invoice_number": "FAC-2026-0063",
+    "tenant": 71,
+    "shop": 94,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-30A",
+    "created_at": "2026-06-12T03:00:18.474Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 82,
+  "fields": {
+    "invoice_number": "FAC-2026-0064",
+    "tenant": 72,
+    "shop": 95,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-31A",
+    "created_at": "2026-06-12T03:00:18.479Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 83,
+  "fields": {
+    "invoice_number": "FAC-2026-0065",
+    "tenant": 73,
+    "shop": 96,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-32A",
+    "created_at": "2026-06-12T03:00:18.485Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 84,
+  "fields": {
+    "invoice_number": "FAC-2026-0066",
+    "tenant": 74,
+    "shop": 97,
+    "invoice_type": "rent",
+    "amount": "250000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-33A",
+    "created_at": "2026-06-12T03:00:18.489Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 85,
+  "fields": {
+    "invoice_number": "FAC-2026-0067",
+    "tenant": 75,
+    "shop": 98,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-16B",
+    "created_at": "2026-06-12T03:00:18.493Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 86,
+  "fields": {
+    "invoice_number": "FAC-2026-0068",
+    "tenant": 76,
+    "shop": 99,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-17B",
+    "created_at": "2026-06-12T03:00:18.499Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 87,
+  "fields": {
+    "invoice_number": "FAC-2026-0069",
+    "tenant": 77,
+    "shop": 100,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-18B",
+    "created_at": "2026-06-12T03:00:18.503Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 88,
+  "fields": {
+    "invoice_number": "FAC-2026-0070",
+    "tenant": 78,
+    "shop": 101,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-19B",
+    "created_at": "2026-06-12T03:00:18.507Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 89,
+  "fields": {
+    "invoice_number": "FAC-2026-0071",
+    "tenant": 79,
+    "shop": 102,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-20B",
+    "created_at": "2026-06-12T03:00:18.514Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 90,
+  "fields": {
+    "invoice_number": "FAC-2026-0072",
+    "tenant": 80,
+    "shop": 103,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-21B",
+    "created_at": "2026-06-12T03:00:18.520Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 91,
+  "fields": {
+    "invoice_number": "FAC-2026-0073",
+    "tenant": 81,
+    "shop": 104,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-22B",
+    "created_at": "2026-06-12T03:00:18.525Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 92,
+  "fields": {
+    "invoice_number": "FAC-2026-0074",
+    "tenant": 71,
+    "shop": 105,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-23B",
+    "created_at": "2026-06-12T03:00:18.532Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 93,
+  "fields": {
+    "invoice_number": "FAC-2026-0075",
+    "tenant": 71,
+    "shop": 106,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-24B",
+    "created_at": "2026-06-12T03:00:18.538Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 94,
+  "fields": {
+    "invoice_number": "FAC-2026-0076",
+    "tenant": 82,
+    "shop": 107,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-25B",
+    "created_at": "2026-06-12T03:00:18.547Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 95,
+  "fields": {
+    "invoice_number": "FAC-2026-0077",
+    "tenant": 83,
+    "shop": 108,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-26B",
+    "created_at": "2026-06-12T03:00:18.553Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 96,
+  "fields": {
+    "invoice_number": "FAC-2026-0078",
+    "tenant": 84,
+    "shop": 109,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-27B",
+    "created_at": "2026-06-12T03:00:18.559Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 97,
+  "fields": {
+    "invoice_number": "FAC-2026-0079",
+    "tenant": 85,
+    "shop": 110,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-28B",
+    "created_at": "2026-06-12T03:00:18.571Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 98,
+  "fields": {
+    "invoice_number": "FAC-2026-0080",
+    "tenant": 86,
+    "shop": 111,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-29B",
+    "created_at": "2026-06-12T03:00:18.577Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 99,
+  "fields": {
+    "invoice_number": "FAC-2026-0081",
+    "tenant": 87,
+    "shop": 112,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-30B",
+    "created_at": "2026-06-12T03:00:18.586Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 100,
+  "fields": {
+    "invoice_number": "FAC-2026-0082",
+    "tenant": 87,
+    "shop": 113,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-31B",
+    "created_at": "2026-06-12T03:00:18.592Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 101,
+  "fields": {
+    "invoice_number": "FAC-2026-0083",
+    "tenant": 88,
+    "shop": 114,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-32B",
+    "created_at": "2026-06-12T03:00:18.605Z"
+  }
+},
+{
+  "model": "finance.invoice",
+  "pk": 102,
+  "fields": {
+    "invoice_number": "FAC-2026-0084",
+    "tenant": 89,
+    "shop": 115,
+    "invoice_type": "rent",
+    "amount": "85000",
+    "issue_date": "2026-01-01",
+    "due_date": "2026-01-01",
+    "paid_date": "2026-06-12",
+    "status": "paid",
+    "description": "Loyer initial - Janvier 2026 - SOU-33B",
+    "created_at": "2026-06-12T03:00:18.619Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 4,
+  "fields": {
+    "invoice": 19,
+    "amount": "140000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.459Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 5,
+  "fields": {
+    "invoice": 20,
+    "amount": "90000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.464Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 6,
+  "fields": {
+    "invoice": 21,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.469Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 7,
+  "fields": {
+    "invoice": 22,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.472Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 8,
+  "fields": {
+    "invoice": 23,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.476Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 9,
+  "fields": {
+    "invoice": 24,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.481Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 10,
+  "fields": {
+    "invoice": 25,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.485Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 11,
+  "fields": {
+    "invoice": 26,
+    "amount": "225000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.488Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 12,
+  "fields": {
+    "invoice": 27,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.491Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 13,
+  "fields": {
+    "invoice": 28,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.495Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 14,
+  "fields": {
+    "invoice": 29,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.501Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 15,
+  "fields": {
+    "invoice": 30,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.505Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 16,
+  "fields": {
+    "invoice": 31,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.511Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 17,
+  "fields": {
+    "invoice": 32,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.518Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 18,
+  "fields": {
+    "invoice": 33,
+    "amount": "240000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.522Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 19,
+  "fields": {
+    "invoice": 34,
+    "amount": "225000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.527Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 20,
+  "fields": {
+    "invoice": 35,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.535Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 21,
+  "fields": {
+    "invoice": 36,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.539Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 22,
+  "fields": {
+    "invoice": 37,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.543Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 23,
+  "fields": {
+    "invoice": 38,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.548Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 24,
+  "fields": {
+    "invoice": 39,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.551Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 25,
+  "fields": {
+    "invoice": 40,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.556Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 26,
+  "fields": {
+    "invoice": 41,
+    "amount": "135000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.560Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 27,
+  "fields": {
+    "invoice": 42,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.565Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 28,
+  "fields": {
+    "invoice": 43,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.570Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 29,
+  "fields": {
+    "invoice": 44,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.574Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 30,
+  "fields": {
+    "invoice": 45,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.577Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 31,
+  "fields": {
+    "invoice": 46,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.583Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 32,
+  "fields": {
+    "invoice": 47,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.587Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 33,
+  "fields": {
+    "invoice": 48,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.591Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 34,
+  "fields": {
+    "invoice": 49,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale des données",
+    "created_at": "2026-06-12T02:34:34.595Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 35,
+  "fields": {
+    "invoice": 50,
+    "amount": "100000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.870Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 36,
+  "fields": {
+    "invoice": 51,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.875Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 37,
+  "fields": {
+    "invoice": 52,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.879Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 38,
+  "fields": {
+    "invoice": 53,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.884Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 39,
+  "fields": {
+    "invoice": 54,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.888Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 40,
+  "fields": {
+    "invoice": 55,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.892Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 41,
+  "fields": {
+    "invoice": 56,
+    "amount": "100000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.895Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 42,
+  "fields": {
+    "invoice": 57,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.900Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 43,
+  "fields": {
+    "invoice": 58,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.904Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 44,
+  "fields": {
+    "invoice": 59,
+    "amount": "75000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.907Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 45,
+  "fields": {
+    "invoice": 60,
+    "amount": "100000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.912Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 46,
+  "fields": {
+    "invoice": 61,
+    "amount": "50000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.917Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 47,
+  "fields": {
+    "invoice": 62,
+    "amount": "50000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.921Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 48,
+  "fields": {
+    "invoice": 63,
+    "amount": "50000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.925Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 49,
+  "fields": {
+    "invoice": 64,
+    "amount": "50000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.929Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 50,
+  "fields": {
+    "invoice": 65,
+    "amount": "50000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.933Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 51,
+  "fields": {
+    "invoice": 66,
+    "amount": "50000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale CIF",
+    "created_at": "2026-06-12T02:55:33.938Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 52,
+  "fields": {
+    "invoice": 67,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.405Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 53,
+  "fields": {
+    "invoice": 68,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.411Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 54,
+  "fields": {
+    "invoice": 69,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.417Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 55,
+  "fields": {
+    "invoice": 70,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.422Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 56,
+  "fields": {
+    "invoice": 71,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.426Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 57,
+  "fields": {
+    "invoice": 72,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.430Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 58,
+  "fields": {
+    "invoice": 73,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.435Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 59,
+  "fields": {
+    "invoice": 74,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.439Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 60,
+  "fields": {
+    "invoice": 75,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.443Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 61,
+  "fields": {
+    "invoice": 76,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.450Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 62,
+  "fields": {
+    "invoice": 77,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.455Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 63,
+  "fields": {
+    "invoice": 78,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.460Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 64,
+  "fields": {
+    "invoice": 79,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.465Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 65,
+  "fields": {
+    "invoice": 80,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.470Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 66,
+  "fields": {
+    "invoice": 81,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.474Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 67,
+  "fields": {
+    "invoice": 82,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.479Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 68,
+  "fields": {
+    "invoice": 83,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.485Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 69,
+  "fields": {
+    "invoice": 84,
+    "amount": "250000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.489Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 70,
+  "fields": {
+    "invoice": 85,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.494Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 71,
+  "fields": {
+    "invoice": 86,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.499Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 72,
+  "fields": {
+    "invoice": 87,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.503Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 73,
+  "fields": {
+    "invoice": 88,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.507Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 74,
+  "fields": {
+    "invoice": 89,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.514Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 75,
+  "fields": {
+    "invoice": 90,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.520Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 76,
+  "fields": {
+    "invoice": 91,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.526Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 77,
+  "fields": {
+    "invoice": 92,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.533Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 78,
+  "fields": {
+    "invoice": 93,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.539Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 79,
+  "fields": {
+    "invoice": 94,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.547Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 80,
+  "fields": {
+    "invoice": 95,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.553Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 81,
+  "fields": {
+    "invoice": 96,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.564Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 82,
+  "fields": {
+    "invoice": 97,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.572Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 83,
+  "fields": {
+    "invoice": 98,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.578Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 84,
+  "fields": {
+    "invoice": 99,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.587Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 85,
+  "fields": {
+    "invoice": 100,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.593Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 86,
+  "fields": {
+    "invoice": 101,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.606Z"
+  }
+},
+{
+  "model": "finance.payment",
+  "pk": 87,
+  "fields": {
+    "invoice": 102,
+    "amount": "85000",
+    "payment_date": "2026-06-12",
+    "method": "cash",
+    "reference": "",
+    "notes": "Paiement enregistré lors de l'importation initiale SOUHAIBOU",
+    "created_at": "2026-06-12T03:00:18.620Z"
+  }
+},
+{
+  "model": "employees.department",
+  "pk": 9,
+  "fields": {
+    "name": "Sécurité",
+    "description": "Sécurité et gardiennage du centre"
+  }
+},
+{
+  "model": "employees.department",
+  "pk": 10,
+  "fields": {
+    "name": "Technique & Maintenance",
+    "description": "Entretien des installations"
+  }
+},
+{
+  "model": "employees.department",
+  "pk": 11,
+  "fields": {
+    "name": "Nettoyage",
+    "description": "Propreté du centre commercial"
+  }
+},
+{
+  "model": "employees.department",
+  "pk": 12,
+  "fields": {
+    "name": "Administration",
+    "description": "Secrétariat et accueil"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 1,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Abdou",
+    "last_name": "Ndiaye",
+    "email": "abdou@youimmo.com",
+    "phone": "+221 76 543 21 09",
+    "department": null,
+    "position": "Agent de Sécurité Chef",
+    "hire_date": "2024-01-15",
+    "contract_type": "cdi",
+    "salary": "250000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-05-27T17:54:15.112Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 2,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Fatou",
+    "last_name": "Sarr",
+    "email": "fatou@youimmo.com",
+    "phone": "+221 70 876 54 32",
+    "department": null,
+    "position": "Technicienne de Surface",
+    "hire_date": "2024-02-01",
+    "contract_type": "cdd",
+    "salary": "150000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-05-27T17:54:15.125Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 3,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Ibrahima",
+    "last_name": "Diagne",
+    "email": "ibrahima@youimmo.com",
+    "phone": "+221 78 456 12 34",
+    "department": null,
+    "position": "Électricien Principal",
+    "hire_date": "2023-11-01",
+    "contract_type": "cdi",
+    "salary": "350000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-05-27T17:54:15.142Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 4,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Awa",
+    "last_name": "Faye",
+    "email": "awa@youimmo.com",
+    "phone": "+221 77 345 67 89",
+    "department": null,
+    "position": "Hôtesse d'accueil",
+    "hire_date": "2025-01-10",
+    "contract_type": "stage",
+    "salary": "100000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-05-27T17:54:15.154Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 5,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Abdou",
+    "last_name": "Ndiaye",
+    "email": "abdou@youimmo.com",
+    "phone": "+221 76 543 21 09",
+    "department": null,
+    "position": "Agent de Sécurité Chef",
+    "hire_date": "2024-01-15",
+    "contract_type": "cdi",
+    "salary": "250000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:00:58.169Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 6,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Fatou",
+    "last_name": "Sarr",
+    "email": "fatou@youimmo.com",
+    "phone": "+221 70 876 54 32",
+    "department": null,
+    "position": "Technicienne de Surface",
+    "hire_date": "2024-02-01",
+    "contract_type": "cdd",
+    "salary": "150000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:00:58.175Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 7,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Ibrahima",
+    "last_name": "Diagne",
+    "email": "ibrahima@youimmo.com",
+    "phone": "+221 78 456 12 34",
+    "department": null,
+    "position": "Électricien Principal",
+    "hire_date": "2023-11-01",
+    "contract_type": "cdi",
+    "salary": "350000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:00:58.182Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 8,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Awa",
+    "last_name": "Faye",
+    "email": "awa@youimmo.com",
+    "phone": "+221 77 345 67 89",
+    "department": null,
+    "position": "Hôtesse d'accueil",
+    "hire_date": "2025-01-10",
+    "contract_type": "stage",
+    "salary": "100000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:00:58.188Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 9,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Cheikh",
+    "last_name": "Diallo",
+    "email": "cheikh@youimmo.com",
+    "phone": "+221 76 111 22 22",
+    "department": null,
+    "position": "Gardien",
+    "hire_date": "2024-06-01",
+    "contract_type": "cdi",
+    "salary": "180000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:00:58.193Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 10,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Abdou",
+    "last_name": "Ndiaye",
+    "email": "abdou@youimmo.com",
+    "phone": "+221 76 543 21 09",
+    "department": 9,
+    "position": "Agent de Sécurité Chef",
+    "hire_date": "2024-01-15",
+    "contract_type": "cdi",
+    "salary": "250000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:01:37.626Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 11,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Fatou",
+    "last_name": "Sarr",
+    "email": "fatou@youimmo.com",
+    "phone": "+221 70 876 54 32",
+    "department": 11,
+    "position": "Technicienne de Surface",
+    "hire_date": "2024-02-01",
+    "contract_type": "cdd",
+    "salary": "150000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:01:37.631Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 12,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Ibrahima",
+    "last_name": "Diagne",
+    "email": "ibrahima@youimmo.com",
+    "phone": "+221 78 456 12 34",
+    "department": 10,
+    "position": "Électricien Principal",
+    "hire_date": "2023-11-01",
+    "contract_type": "cdi",
+    "salary": "350000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:01:37.639Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 13,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Awa",
+    "last_name": "Faye",
+    "email": "awa@youimmo.com",
+    "phone": "+221 77 345 67 89",
+    "department": 12,
+    "position": "Hôtesse d'accueil",
+    "hire_date": "2025-01-10",
+    "contract_type": "stage",
+    "salary": "100000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:01:37.645Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 14,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "Cheikh",
+    "last_name": "Diallo",
+    "email": "cheikh@youimmo.com",
+    "phone": "+221 76 111 22 22",
+    "department": 9,
+    "position": "Gardien",
+    "hire_date": "2024-06-01",
+    "contract_type": "cdi",
+    "salary": "180000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T19:01:37.650Z"
+  }
+},
+{
+  "model": "employees.employee",
+  "pk": 15,
+  "fields": {
+    "mall": null,
+    "user": null,
+    "first_name": "abdel",
+    "last_name": "seck",
+    "email": "seck@gmail.com",
+    "phone": "777777777",
+    "department": 9,
+    "position": "GARDINNAGE",
+    "hire_date": "2026-06-02",
+    "contract_type": "cdi",
+    "salary": "150000",
+    "status": "active",
+    "address": "",
+    "emergency_contact": "",
+    "emergency_phone": "",
+    "is_accountant": false,
+    "is_maintenance": false,
+    "is_secretary": false,
+    "notes": "",
+    "created_at": "2026-06-02T20:05:15.671Z"
+  }
+}
+]

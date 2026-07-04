@@ -90,9 +90,12 @@
                         <span class="nav-badge">{{ overdue_invoices }}</span>
                         {% endif %}
                     </a>
+                    {% endif %}
+                    
+                    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' or user.profile.role == 'secretary' %}
                     <a href="{% url 'invoices_salaries' %}" class="nav-item {% if active_menu == 'invoices_salaries' %}active{% endif %}">
                         <i data-lucide="file-text" class="nav-icon"></i>
-                        <span>Factures & Salaires</span>
+                        <span>{% if user.profile.role == 'secretary' %}Factures de Loyers{% else %}Factures & Salaires{% endif %}</span>
                     </a>
                     {% endif %}
                     
@@ -119,7 +122,7 @@
                     {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' %}
                     <a href="{% url 'mall_list' %}" class="nav-item {% if active_menu == 'malls' %}active{% endif %}">
                         <i data-lucide="building-2" class="nav-icon"></i>
-                        <span>Centres Commerciaux</span>
+                        <span>Gestion des Propriétés</span>
                     </a>
                     {% endif %}
                     {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'accountant' %}

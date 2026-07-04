@@ -4,19 +4,42 @@ from django.contrib.auth.models import User
 
 
 class Mall(models.Model):
-    """Represents a shopping center."""
-    name = models.CharField(max_length=200, verbose_name='Nom du centre commercial')
+    """Represents a property (shopping center, building, house)."""
+    PROPERTY_TYPES = [
+        ('mall', 'Centre Commercial'),
+        ('building', 'Immeuble'),
+        ('house', 'Maison / Villa'),
+    ]
+
+    name = models.CharField(max_length=200, verbose_name='Nom de la propriété')
+    property_type = models.CharField(max_length=20, choices=PROPERTY_TYPES, default='mall', verbose_name='Type de propriété')
     address = models.TextField(blank=True, verbose_name='Adresse')
     description = models.TextField(blank=True, verbose_name='Description')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['name']
-        verbose_name = 'Centre Commercial'
-        verbose_name_plural = 'Centres Commerciaux'
+        verbose_name = 'Propriété'
+        verbose_name_plural = 'Propriétés'
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new and self.property_type == 'house':
+            # Create a default shop representing the house itself
+            Shop.objects.create(
+                mall=self,
+                name=self.name,
+                shop_number=f"MSN-{self.id:04d}",
+                category='other',
+                surface=0,
+                status='available',
+                description=f"Unité de location principale pour la maison {self.name}"
+            )
+
 
 
 class Floor(models.Model):

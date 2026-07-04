@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %}Boutiques & Places{% endblock %}
-{% block page_title %}Gestion des Boutiques{% endblock %}
+{% block title %}{% if request.active_mall.property_type == 'house' %}Gestion de la Maison{% elif request.active_mall.property_type == 'building' %}Plan des Appartements{% else %}Boutiques & Places{% endif %}{% endblock %}
+{% block page_title %}{% if request.active_mall.property_type == 'house' %}Gestion de la Maison{% elif request.active_mall.property_type == 'building' %}Plan des Appartements / Bureaux{% else %}Gestion des Boutiques{% endif %}{% endblock %}
 
 {% block content %}
 <div class="page-header animate-in">
     <div>
-        <p>Vue d'ensemble des {{ total_shops }} emplacements du centre commercial.</p>
+        <p>Vue d'ensemble des {{ total_shops }} {% if request.active_mall.property_type == 'house' %}unité(s){% elif request.active_mall.property_type == 'building' %}appartement(s) / bureau(x){% else %}emplacement(s){% endif %}.</p>
     </div>
     <div class="page-actions">
+        {% if not request.active_mall or request.active_mall.property_type != 'house' %}
         <a href="{% url 'shop_create' %}" class="btn btn-outline" style="border-color: var(--primary); color: var(--primary);">
-            <i data-lucide="plus"></i> Ajouter un Emplacement
+            <i data-lucide="plus"></i>
+            {% if request.active_mall.property_type == 'building' %}Ajouter un Appartement / Bureau{% else %}Ajouter un Emplacement{% endif %}
         </a>
         <a href="{% url 'shop_import' %}" class="btn btn-outline" style="border-color: var(--accent); color: var(--accent);">
             <i data-lucide="upload"></i> Importer Excel/CSV
         </a>
+        {% endif %}
         <a href="{% url 'tenant_list' %}" class="btn btn-outline">
             <i data-lucide="users"></i> Voir les Locataires
         </a>
@@ -29,7 +32,7 @@
     <div class="stat-card green">
         <div class="stat-icon green"><i data-lucide="store"></i></div>
         <div class="stat-content">
-            <div class="stat-label">Total Emplacements</div>
+            <div class="stat-label">{% if request.active_mall.property_type == 'house' %}Total Unités{% elif request.active_mall.property_type == 'building' %}Total Appartements{% else %}Total Emplacements{% endif %}</div>
             <div class="stat-value">{{ total_shops }}</div>
         </div>
     </div>

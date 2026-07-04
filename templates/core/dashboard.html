@@ -17,6 +17,7 @@
 
 <div class="stats-grid">
     <!-- Stat 1: Revenues -->
+    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
     <div class="stat-card blue animate-in">
         <div class="stat-icon blue">
             <i data-lucide="wallet"></i>
@@ -27,6 +28,7 @@
             <span class="stat-change up">Net: {{ monthly_net }} FCFA</span>
         </div>
     </div>
+    {% endif %}
 
     <!-- Stat 2: Occupancy -->
     <div class="stat-card gold animate-in">
@@ -65,6 +67,7 @@
     </div>
 
     <!-- Stat 5: Masse Salariale -->
+    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
     <div class="stat-card red animate-in">
         <div class="stat-icon red">
             <i data-lucide="contact"></i>
@@ -75,6 +78,7 @@
             <span class="stat-change down">{{ active_employees_count }} employé(s) actif(s)</span>
         </div>
     </div>
+    {% endif %}
 </div>
 
 {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
@@ -115,6 +119,7 @@
 </div>
 {% endif %}
 
+{% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
 {% if total_overdue_count > 0 %}
 <div class="alert-overdue-card card animate-in mb-3" style="border-left: 4px solid var(--danger); background: rgba(239, 68, 68, 0.03);">
     <div class="alert-overdue-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--spacing-sm); margin-bottom: var(--spacing-md);">
@@ -163,6 +168,7 @@
     </div>
 </div>
 {% endif %}
+{% endif %}
 
 <!-- Quick Pay Modal for Dashboard -->
 <div class="modal-overlay" id="payModal" onclick="closePayModal()">
@@ -201,6 +207,7 @@
 
 <div class="grid-2 mb-3">
     <!-- Financial Chart -->
+    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
     <div class="card animate-in">
         <div class="card-header">
             <h3 class="card-title">Aperçu Financier (Revenus vs Dépenses)</h3>
@@ -211,6 +218,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     <!-- Alert / Lease Expiring Widget -->
     <div class="card animate-in">
@@ -298,6 +306,7 @@
     </div>
 
     <!-- Recent Payments/Invoices -->
+    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
     <div class="card animate-in">
         <div class="card-header">
             <h3 class="card-title">Dernières Factures</h3>
@@ -309,33 +318,34 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Facture</th>
-                                <th>Locataire</th>
-                                <th>Montant</th>
-                                <th>Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for inv in recent_invoices %}
-                            <tr>
-                                <td>{{ inv.invoice_number }}</td>
-                                <td>{{ inv.tenant.full_name }}</td>
-                                <td>{{ inv.amount }} FCFA</td>
-                                <td>
-                                    <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
-                                        {{ inv.get_status_display }}
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p class="text-muted">Aucune facture enregistrée.</p>
-            {% endif %}
+                                    <th>Facture</th>
+                                    <th>Locataire</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inv in recent_invoices %}
+                                <tr>
+                                    <td>{{ inv.invoice_number }}</td>
+                                    <td>{{ inv.tenant.full_name }}</td>
+                                    <td>{{ inv.amount }} FCFA</td>
+                                    <td>
+                                        <span class="badge {% if inv.status == 'paid' %}badge-success{% elif inv.status == 'overdue' %}badge-danger{% else %}badge-warning{% endif %}">
+                                            {{ inv.get_status_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Aucune facture enregistrée.</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
+        {% endif %}
 </div>
 {% endblock %}
 

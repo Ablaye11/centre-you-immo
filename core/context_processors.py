@@ -10,7 +10,7 @@ from finance.models import Invoice
 def global_context(request):
     """Add global context variables available in all templates."""
     context = {
-        'app_name': 'Centre Commercial YOU IMMO',
+        'app_name': 'Gestion Immobilière YOU IMMO',
         'app_short_name': 'YOU IMMO',
     }
 

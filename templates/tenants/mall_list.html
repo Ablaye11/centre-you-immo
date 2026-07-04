@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Centres Commerciaux{% endblock %}
-{% block page_title %}Centres Commerciaux{% endblock %}
+{% block title %}Gestion des Propriétés{% endblock %}
+{% block page_title %}Gestion des Propriétés{% endblock %}
 
 {% block content %}
 <div class="page-header animate-in">
     <div>
-        <p>Gérez vos centres commerciaux et basculez entre eux depuis l'en-tête de l'application.</p>
+        <p>Gérez vos propriétés et basculez entre elles depuis l'en-tête de l'application.</p>
     </div>
     <div class="page-actions">
         <a href="{% url 'mall_create' %}" class="btn btn-primary">
-            <i data-lucide="plus"></i> Ajouter un Centre
+            <i data-lucide="plus"></i> Ajouter une Propriété
         </a>
     </div>
 </div>
@@ -21,15 +21,26 @@
     <div class="mall-card">
         <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
             <div class="mall-card-name">
+                {% if mall.property_type == 'house' %}
+                <i data-lucide="home" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;color:var(--success);"></i>
+                {% elif mall.property_type == 'building' %}
+                <i data-lucide="building" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;color:var(--accent-500);"></i>
+                {% else %}
                 <i data-lucide="building-2" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;color:var(--primary-400);"></i>
+                {% endif %}
                 {{ mall.name }}
             </div>
-            {% if mall == request.active_mall %}
-            <span class="mall-active-badge">
-                <i data-lucide="check-circle" style="width:12px;height:12px;"></i>
-                Actif
-            </span>
-            {% endif %}
+            <div style="display:flex; gap:6px; align-items:center;">
+                <span style="font-size:0.68rem; font-weight:600; padding:2px 8px; border-radius:99px; background:rgba(148,163,184,0.12); color:var(--text-muted);">
+                    {{ mall.get_property_type_display }}
+                </span>
+                {% if mall == request.active_mall %}
+                <span class="mall-active-badge">
+                    <i data-lucide="check-circle" style="width:12px;height:12px;"></i>
+                    Actif
+                </span>
+                {% endif %}
+            </div>
         </div>
 
         {% if mall.address %}
@@ -50,11 +61,13 @@
         <div style="display:flex; gap:12px; margin-top:4px;">
             <div style="text-align:center; padding:8px 12px; background:rgba(59,130,246,0.08); border-radius:8px; flex:1;">
                 <div style="font-size:1.1rem; font-weight:700; color:var(--primary-400);">{{ mall.shops.count }}</div>
-                <div style="font-size:0.7rem; color:var(--text-muted);">Boutiques</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">
+                    {% if mall.property_type == 'house' %}Unité{% elif mall.property_type == 'building' %}Appart./Bureaux{% else %}Boutiques{% endif %}
+                </div>
             </div>
             <div style="text-align:center; padding:8px 12px; background:rgba(16,185,129,0.08); border-radius:8px; flex:1;">
-                <div style="font-size:1.1rem; font-weight:700; color:var(--success);">{{ mall.shops.all|length }}</div>
-                <div style="font-size:0.7rem; color:var(--text-muted);">Étages: {{ mall.floors.count }}</div>
+                <div style="font-size:1.1rem; font-weight:700; color:var(--success);">{{ mall.floors.count }}</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">Niveaux / Étages</div>
             </div>
             <div style="text-align:center; padding:8px 12px; background:rgba(245,158,11,0.08); border-radius:8px; flex:1;">
                 <div style="font-size:1.1rem; font-weight:700; color:var(--accent-500);">{{ mall.created_at|date:"Y" }}</div>
@@ -85,10 +98,10 @@
 {% else %}
 <div class="card animate-in" style="text-align:center; padding: 60px 40px;">
     <i data-lucide="building-2" style="width:64px;height:64px;margin:0 auto 20px;color:var(--text-muted);display:block;"></i>
-    <h3 style="font-size:1.3rem; margin-bottom:8px;">Aucun centre commercial enregistré</h3>
-    <p class="text-muted" style="margin-bottom:24px;">Commencez par créer votre premier centre commercial pour gérer les boutiques, locataires et finances.</p>
+    <h3 style="font-size:1.3rem; margin-bottom:8px;">Aucune propriété enregistrée</h3>
+    <p class="text-muted" style="margin-bottom:24px;">Commencez par créer votre première propriété (centre commercial, immeuble ou maison) pour gérer les locataires et les finances.</p>
     <a href="{% url 'mall_create' %}" class="btn btn-primary">
-        <i data-lucide="plus"></i> Créer le premier centre
+        <i data-lucide="plus"></i> Créer la première propriété
     </a>
 </div>
 {% endif %}

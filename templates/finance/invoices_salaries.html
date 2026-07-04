@@ -15,12 +15,14 @@
                 <i data-lucide="refresh-cw"></i> Générer les loyers
             </button>
         </form>
+        {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
         <form method="post" action="{% url 'generate_monthly_salaries' %}" style="margin: 0;">
             {% csrf_token %}
             <button type="submit" class="btn btn-success">
                 <i data-lucide="users"></i> Générer les salaires
             </button>
         </form>
+        {% endif %}
         <a href="{% url 'invoice_create' %}" class="btn btn-outline">
             <i data-lucide="plus-circle"></i> Émettre une Facture
         </a>
@@ -53,6 +55,7 @@
     </div>
 
     <!-- Stat 3: Masse Salariale -->
+    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
     <div class="stat-card red animate-in">
         <div class="stat-icon red">
             <i data-lucide="contact"></i>
@@ -75,6 +78,7 @@
             <div class="stat-label mt-1">Bénéfice opérationnel direct</div>
         </div>
     </div>
+    {% endif %}
 </div>
 
 {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
@@ -185,6 +189,7 @@
     </div>
 
     <!-- Salaries List -->
+    {% if user.is_superuser or user.profile.role == 'admin' or user.profile.role == 'manager' or user.profile.role == 'accountant' %}
     <div class="card animate-in">
         <div class="card-header">
             <h3 class="card-title">Fiches de Salaires Payés</h3>
@@ -224,6 +229,7 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
 </div>
 
 <!-- Quick Pay Modal -->
