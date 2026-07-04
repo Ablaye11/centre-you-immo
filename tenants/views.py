@@ -195,9 +195,9 @@ class ShopListView(LoginRequiredMixin, TemplateView):
 
         active_mall = self.request.active_mall
         if active_mall:
-            all_shops = Shop.objects.filter(mall=active_mall).order_by('floor', 'shop_number')
+            all_shops = Shop.objects.filter(mall=active_mall).select_related('floor').order_by('floor', 'shop_number')
         else:
-            all_shops = Shop.objects.all().order_by('floor', 'shop_number')
+            all_shops = Shop.objects.all().select_related('floor').order_by('floor', 'shop_number')
         context['shops'] = all_shops
 
         # Stats

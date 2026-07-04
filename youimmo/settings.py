@@ -73,15 +73,33 @@ WSGI_APPLICATION = 'youimmo.wsgi.application'
 
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db_v4.sqlite3',
-        'OPTIONS': {
-            'timeout': 30,  # Attendre jusqu'à 30 secondes si la DB est verrouillée (NFS PythonAnywhere)
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+
+if DB_NAME and DB_USER and DB_PASSWORD and DB_HOST:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': DB_HOST,
+            'PORT': os.getenv('DB_PORT', '3306'),
         }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db_v4.sqlite3',
+            'OPTIONS': {
+                'timeout': 30,  # Attendre jusqu'à 30 secondes si la DB est verrouillée (NFS PythonAnywhere)
+            }
+        }
+    }
+
 
 # Sessions stockées dans des cookies signés (pas d'écriture en base de données)
 # Cela évite les timeouts liés aux verrous SQLite sur PythonAnywhere
