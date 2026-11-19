@@ -827,7 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 data: rawData.map(d => d.value),
                 backgroundColor: palette.slice(0, rawData.length),
-                borderColor: 'rgba(15,23,42,0.8)',
+                borderColor: '#ffffff',
                 borderWidth: 2,
                 hoverOffset: 6,
             }]
@@ -839,10 +839,10 @@ document.addEventListener('DOMContentLoaded', () => {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: 'rgba(15,23,42,0.95)',
-                    titleColor: '#f1f5f9',
-                    bodyColor: '#94a3b8',
-                    borderColor: 'rgba(148,163,184,0.2)',
+                    backgroundColor: '#ffffff',
+                    titleColor: '#0f172a',
+                    bodyColor: '#475569',
+                    borderColor: '#e2e8f0',
                     borderWidth: 1, padding: 10, cornerRadius: 8,
                     callbacks: {
                         label: function(ctx) {

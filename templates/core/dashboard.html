@@ -368,8 +368,8 @@
                         {
                             label: 'Revenus (FCFA)',
                             data: revenues,
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderColor: 'rgba(5, 150, 105, 1)',
                             borderWidth: 1,
                             borderRadius: 6,
                             barPercentage: 0.6,
@@ -377,8 +377,8 @@
                         {
                             label: 'Dépenses (FCFA)',
                             data: expenses,
-                            backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                            borderColor: 'rgba(239, 68, 68, 1)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.75)',
+                            borderColor: 'rgba(220, 38, 38, 1)',
                             borderWidth: 1,
                             borderRadius: 6,
                             barPercentage: 0.6,
@@ -396,7 +396,7 @@
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: '#94a3b8',
+                                color: '#475569',
                                 font: { family: 'Inter', size: 12 },
                                 padding: 20,
                                 usePointStyle: true,
@@ -404,15 +404,16 @@
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                            titleColor: '#f1f5f9',
-                            bodyColor: '#94a3b8',
-                            borderColor: 'rgba(148, 163, 184, 0.2)',
+                            backgroundColor: '#ffffff',
+                            titleColor: '#0f172a',
+                            bodyColor: '#475569',
+                            borderColor: '#e2e8f0',
                             borderWidth: 1,
                             padding: 12,
                             cornerRadius: 8,
                             titleFont: { family: 'Inter', weight: '600' },
                             bodyFont: { family: 'Inter' },
+                            boxShadow: '0 10px 25px -4px rgba(15, 23, 42, 0.1)',
                             callbacks: {
                                 label: function(context) {
                                     return context.dataset.label + ': ' + context.parsed.y.toLocaleString('fr-FR') + ' FCFA';
@@ -422,13 +423,13 @@
                     },
                     scales: {
                         x: {
-                            grid: { color: 'rgba(148, 163, 184, 0.08)' },
-                            ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                            grid: { color: 'rgba(226, 232, 240, 0.6)' },
+                            ticks: { color: '#64748b', font: { family: 'Inter', size: 11 } }
                         },
                         y: {
-                            grid: { color: 'rgba(148, 163, 184, 0.08)' },
+                            grid: { color: 'rgba(226, 232, 240, 0.6)' },
                             ticks: {
-                                color: '#94a3b8',
+                                color: '#64748b',
                                 font: { family: 'Inter', size: 11 },
                                 callback: function(value) {
                                     if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
