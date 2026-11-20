@@ -1,4 +1,6 @@
 import io
+import os
+from django.conf import settings
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -10,7 +12,7 @@ from .models import Invoice
 
 
 class InvoicePDFView(LoginRequiredMixin, View):
-    """Generates a professional PDF for a given invoice."""
+    """Generates a professional PDF for a given invoice with the official YOU IMMO logo."""
 
     def get(self, request, invoice_id):
         invoice = get_object_or_404(Invoice, pk=invoice_id)
@@ -25,28 +27,70 @@ class InvoicePDFView(LoginRequiredMixin, View):
         # Document margins and layout setups
         width, height = letter
 
-        # Draw a custom premium gold/orange header
-        p.setFillColor(colors.HexColor('#0d1321')) # Deep Blue Dark Theme Accent
-        p.rect(0, height - 120, width, 120, fill=True, stroke=False)
+        # Draw a custom premium white / emerald & dark header
+        p.setFillColor(colors.HexColor('#064e3b')) # Dark Emerald Green
+        p.rect(0, height - 125, width, 125, fill=True, stroke=False)
 
-        # Header Text
+        # Thin gold/accent accent bar under the header
+        p.setFillColor(colors.HexColor('#f59e0b'))
+        p.rect(0, height - 128, width, 3, fill=True, stroke=False)
+
+        # Draw the official YOU IMMO Logo in the header
+        logo_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'logo.png')
+        header_text_x = 40
+        if os.path.exists(logo_path):
+            try:
+                # White background pill behind the logo for perfect contrast & pop
+                p.setFillColor(colors.white)
+                p.roundRect(35, height - 110, 150, 75, 6, fill=True, stroke=False)
+                # Draw high-res logo image
+                p.drawImage(logo_path, 40, height - 105, width=140, height=65, mask='auto', preserveAspectRatio=True)
+                header_text_x = 200
+            except Exception:
+                header_text_x = 40
+
+        # Header Text (Company Details)
         p.setFillColor(colors.white)
-        p.setFont("Helvetica-Bold", 16)
-        mall_name = invoice.shop.mall.name.upper() if (invoice.shop and invoice.shop.mall) else "YOU-IMMO"
-        p.drawString(40, height - 60, mall_name)
-        
-        p.setFont("Helvetica", 9)
-        p.drawString(40, height - 85, "YOU-IMMO - Une autre idée de l'immobilier")
-        p.drawString(40, height - 98, "Rond Point Keur Massar, Route de Diaxay | Tél: 76 754 30 30 / 77 873 01 00")
-
-        # Invoice Status Banner
-        p.setFillColor(colors.HexColor('#f59e0b')) # Gold Accent
         p.setFont("Helvetica-Bold", 14)
-        p.drawRightString(width - 40, height - 60, f"FACTURE : {invoice.invoice_number}")
+        mall_name = invoice.shop.mall.name.upper() if (invoice.shop and invoice.shop.mall) else "ENTREPRISE YOU TECHNOLOGIE"
+        p.drawString(header_text_x, height - 55, mall_name)
+        
+        p.setFont("Helvetica-Bold", 8)
+        p.setFillColor(colors.HexColor('#a7f3d0')) # Soft Emerald
+        p.drawString(header_text_x, height - 72, "YOU IMMO - UNE AUTRE IDÉE DE L'IMMOBILIER")
+
+        p.setFont("Helvetica", 8)
+        p.setFillColor(colors.white)
+        p.drawString(header_text_x, height - 87, "SN.DKR.2018.A.15166 | N.I.N.E.A : 006866282")
+        p.drawString(header_text_x, height - 101, "Route de Jaxaay, Rond-Point Keur Massar | Tél: 77 873 01 00 / 76 754 30 30")
+
+        # Invoice Status Banner (Right side of header)
+        p.setFillColor(colors.HexColor('#fef08a')) # Warm Yellow / Gold
+        p.setFont("Helvetica-Bold", 13)
+        p.drawRightString(width - 35, height - 55, f"FACTURE N° {invoice.invoice_number}")
         
         status_text = invoice.get_status_display().upper()
-        p.setFont("Helvetica", 11)
-        p.drawRightString(width - 40, height - 85, f"STATUT : {status_text}")
+        p.setFont("Helvetica-Bold", 10)
+        if invoice.status == 'paid':
+            p.setFillColor(colors.HexColor('#86efac')) # Light green
+            p.drawRightString(width - 35, height - 75, f"STATUT : {status_text} ✓")
+        elif invoice.status == 'overdue':
+            p.setFillColor(colors.HexColor('#fca5a5')) # Light red
+            p.drawRightString(width - 35, height - 75, f"STATUT : {status_text} ⚠")
+        else:
+            p.setFillColor(colors.HexColor('#fed7aa')) # Light orange
+            p.drawRightString(width - 35, height - 75, f"STATUT : {status_text}")
+
+        # Optional watermark in the center of the page if watermark.png exists
+        watermark_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'watermark.png')
+        if os.path.exists(watermark_path):
+            try:
+                p.saveState()
+                p.setFillAlpha(0.08)
+                p.drawImage(watermark_path, (width - 320) / 2, (height - 320) / 2, width=320, height=320, mask='auto', preserveAspectRatio=True)
+                p.restoreState()
+            except Exception:
+                pass
 
         # Grid separator
         p.setStrokeColor(colors.HexColor('#e2e8f0'))
