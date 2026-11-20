@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,7 +47,8 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .no-print-bar a, .no-print-bar button {
+        .no-print-bar a,
+        .no-print-bar button {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -137,7 +139,7 @@
         }
 
         .logo-wrap img {
-            max-width: 155px;
+            max-width: 175px;
             height: auto;
             object-fit: contain;
         }
@@ -185,7 +187,8 @@
             text-transform: uppercase;
         }
 
-        p, .clause-text {
+        p,
+        .clause-text {
             font-size: 0.93rem;
             text-align: justify;
             margin-bottom: 8px;
@@ -278,6 +281,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Barre d'outils / Impression -->
@@ -286,7 +290,8 @@
             ← Revenir au dossier
         </a>
         <div style="font-size: 0.88rem; color: #6b7280;">
-            Locataire : <strong>{{ lease.tenant.full_name }}</strong> &bull; Magasin N° <strong>{{ lease.shop.shop_number }}</strong>
+            Locataire : <strong>{{ lease.tenant.full_name }}</strong> &bull; Magasin N° <strong>{{
+                lease.shop.shop_number }}</strong>
         </div>
         <button onclick="window.print()" class="btn-print">
             🖨️ Imprimer le contrat
@@ -320,13 +325,17 @@
 
                 <!-- Parties contractantes -->
                 <div class="section-title">LE PRESENT CONTRAT EST CONCLU ENTRE LES SOUSSIGNES :</div>
-                
+
                 <p>
                     <span class="bold">❖ 1/ LE BAILLEUR (Propriétaire) présenté par son mandataire :</span><br>
-                    L’Agence dénommée « <span class="bold">YOU IMMO</span> », ayant son siège social, Keur Massar Route de Diaxay au Rond-point Keur massar, dûment représentée par son Directeur Général, Monsieur <span class="bold">YOUSSOU ADOUWA</span>.<br>
+                    L’Agence dénommée « <span class="bold">YOU IMMO</span> », ayant son siège social, Keur Massar Route
+                    de Diaxay au Rond-point Keur massar, dûment représentée par son Directeur Général, Monsieur <span
+                        class="bold">YOUSSOU ADOUWA</span>.<br>
                     Téléphone : 77 873 01 00 / 76 754 30 30 / 33 878 46 14<br>
                     Email : Youimmobtp@gmail.com<br>
-                    Agissant au nom et pour le compte de <span class="bold">{% if lease.shop.mall.name %}{{ lease.shop.mall.name }}{% else %}SENS{% endif %}</span>, propriétaire du bien. <span class="bold">D’une Part.</span>
+                    Agissant au nom et pour le compte de <span class="bold">{% if lease.shop.mall.name %}{{
+                        lease.shop.mall.name }}{% else %}SENS{% endif %}</span>, propriétaire du bien. <span
+                        class="bold">D’une Part.</span>
                 </p>
 
                 <p style="margin-top: 10px;">
@@ -335,7 +344,8 @@
                     <span class="bold">CNI :</span> {{ lease.tenant.id_number|default:"Non spécifiée" }}<br>
                     <span class="bold">ADRESSE :</span> {{ lease.tenant.address|default:"Dakar, Sénégal" }}<br>
                     <span class="bold">TELEPHONE :</span> {{ lease.tenant.phone }}<br>
-                    <span class="bold">PROFESSION :</span> {{ lease.tenant.company_name|default:"Commerçant" }}, <span class="bold">D’autre Part.</span>
+                    <span class="bold">PROFESSION :</span> {{ lease.tenant.company_name|default:"Commerçant" }}, <span
+                        class="bold">D’autre Part.</span>
                 </p>
 
                 <p style="margin-top: 12px; font-style: italic;">
@@ -345,8 +355,10 @@
                 <!-- Article 1 -->
                 <div class="article-title">ARTICLE 1: DESIGNATION</div>
                 <p>
-                    Je donne en location à <span class="bold uppercase">{% if lease.tenant.first_name %}MONSIEUR / MADAME {{ lease.tenant.full_name|upper }}{% else %}MONSIEUR MBAYE SECK{% endif %}</span><br>
-                    Qui accepte la somme de <span class="bold uppercase">{{ monthly_rent_words }}</span> francs CFA (<span class="bold">{{ rent_formatted }} F CFA</span>) par mois.<br>
+                    Je donne en location à <span class="bold uppercase">{% if lease.tenant.first_name %}MONSIEUR /
+                        MADAME {{ lease.tenant.full_name|upper }}{% else %}MONSIEUR MBAYE SECK{% endif %}</span><br>
+                    Qui accepte la somme de <span class="bold uppercase">{{ monthly_rent_words }}</span> francs CFA
+                    (<span class="bold">{{ rent_formatted }} F CFA</span>) par mois.<br>
                     Numéro : <span class="bold">{{ lease.tenant.phone }}</span><br>
                     <span class="bold uppercase">MAGASIN OCCUPER : N° {{ lease.shop.shop_number }}</span>
                 </p>
@@ -354,13 +366,23 @@
                 <!-- Article 2 -->
                 <div class="article-title">ARTICLE 2 : Taxes</div>
                 <p>
-                    Le preneur devra payer toutes les taxes ou contributions lui incombant (taxes municipales, Patente et autres).
+                    Le preneur devra payer toutes les taxes ou contributions lui incombant (taxes municipales, Patente
+                    et autres).
                 </p>
 
                 <!-- Article 3 (Début) -->
                 <div class="article-title">ARTICLE 3 : LOYER ET CAUTION</div>
                 <p>
-                    La présente location est acceptée et consentie moyennant un loyer mensuel de <span class="bold uppercase">{{ monthly_rent_words }}</span> Francs CFA (<span class="bold">{{ rent_formatted }} F CFA</span>). Et des charges forfaitaires de <span class="bold">{{ charges_formatted }} F CFA</span> (gardiennage matin / soir, nettoyages, gestion toilettes) soit un montant total de <span class="bold uppercase">{{ total_monthly_words }}</span> Francs CFA (<span class="bold">{{ total_monthly_formatted }} F CFA</span>).{% if deposit and deposit > 0 %} À titre de caution et dépôt de garantie, le preneur verse ce jour la somme de <span class="bold uppercase">{{ deposit_words }}</span> Francs CFA (<span class="bold">{{ deposit_formatted }} F CFA</span>) remboursable à l'expiration du bail sous réserve de parfaite exécution des obligations.{% endif %}
+                    La présente location est acceptée et consentie moyennant un loyer mensuel de <span
+                        class="bold uppercase">{{ monthly_rent_words }}</span> Francs CFA (<span class="bold">{{
+                        rent_formatted }} F CFA</span>). Et des charges forfaitaires de <span class="bold">{{
+                        charges_formatted }} F CFA</span> (gardiennage matin / soir, nettoyages, gestion toilettes) soit
+                    un montant total de <span class="bold uppercase">{{ total_monthly_words }}</span> Francs CFA (<span
+                        class="bold">{{ total_monthly_formatted }} F CFA</span>).{% if deposit and deposit > 0 %} À
+                    titre de caution et dépôt de garantie, le preneur verse ce jour la somme de <span
+                        class="bold uppercase">{{ deposit_words }}</span> Francs CFA (<span class="bold">{{
+                        deposit_formatted }} F CFA</span>) remboursable à l'expiration du bail sous réserve de parfaite
+                    exécution des obligations.{% endif %}
                 </p>
             </div>
             <div class="page-number">1</div>
@@ -371,37 +393,57 @@
             <div class="page-content">
                 <!-- Suite Article 3 -->
                 <p style="margin-top: 10px;">
-                    Le montant du loyer ne pourra être révisé avant la fin du bail. Elle sera révisée tous les <span class="bold">trois (03) ans</span> conformément à l'article 84 et suivant l'acte uniforme relatif au droit commercial général de l'OHADA. <span class="bold">BIEN NOTER</span> que les loyers sont portables à l'agence et non quérable (sauf cas exceptionnel) au plus tard le 5 de chaque début de mois sous peine de pénalités d'une somme de <span class="bold">10 000 F CFA</span> pour tout paiement de loyer <span class="bold">au-delà du 05 et au-delà du 10</span>. Elles seront exigibles et irrévocables.
+                    Le montant du loyer ne pourra être révisé avant la fin du bail. Elle sera révisée tous les <span
+                        class="bold">trois (03) ans</span> conformément à l'article 84 et suivant l'acte uniforme
+                    relatif au droit commercial général de l'OHADA. <span class="bold">BIEN NOTER</span> que les loyers
+                    sont portables à l'agence et non quérable (sauf cas exceptionnel) au plus tard le 5 de chaque début
+                    de mois sous peine de pénalités d'une somme de <span class="bold">10 000 F CFA</span> pour tout
+                    paiement de loyer <span class="bold">au-delà du 05 et au-delà du 10</span>. Elles seront exigibles
+                    et irrévocables.
                 </p>
 
                 <!-- Article 4 -->
                 <div class="article-title">ARTICLE 4 : DUREE</div>
                 <p>
-                    Le présent bail est consenti pour <span class="bold">une durée de {{ duration_years_str }}ans</span> prenant effet le <span class="bold">{{ lease.start_date|date:"d/m/Y" }}</span>. Il est renouvelable par tacite reconduction pour une durée d’égale durée, chacune des parties ayant la faculté de le dénoncer en notifiant à l’autre un congé d’un mois à l’avance.
+                    Le présent bail est consenti pour <span class="bold">une durée de {{ duration_years_str }}ans</span>
+                    prenant effet le <span class="bold">{{ lease.start_date|date:"d/m/Y" }}</span>. Il est renouvelable
+                    par tacite reconduction pour une durée d’égale durée, chacune des parties ayant la faculté de le
+                    dénoncer en notifiant à l’autre un congé d’un mois à l’avance.
                 </p>
 
                 <!-- Article 5 -->
                 <div class="article-title">ARTICLE 5 : CHARGES ET CONDITIONS</div>
                 <p>
-                    Le locataire devra tenir les lieux en état de propreté et ne pourra faire aucune transformation sans l'autorisation préalable écrite du propriétaire. Il est strictement interdit aux locataires de fabriquer ou vendre de la boisson alcoolisée sous toutes ses formes dans l'enceinte du centre commercial. Il est formellement interdit de fumer ou d'allumer du feu dans les Magasins. Le locataire satisfera à toutes les prescriptions des services de police, de voirie et d'hygiène afin que le propriétaire ne soit nullement inquiété à ce sujet. Les gaz ou objets pouvant provoquer quelconque dégât matériel sont totalement interdits dans le centre. Il est bien entendu que les factures d'eau et d'électricité sont à la charge du locataire.
+                    Le locataire devra tenir les lieux en état de propreté et ne pourra faire aucune transformation sans
+                    l'autorisation préalable écrite du propriétaire. Il est strictement interdit aux locataires de
+                    fabriquer ou vendre de la boisson alcoolisée sous toutes ses formes dans l'enceinte du centre
+                    commercial. Il est formellement interdit de fumer ou d'allumer du feu dans les Magasins. Le
+                    locataire satisfera à toutes les prescriptions des services de police, de voirie et d'hygiène afin
+                    que le propriétaire ne soit nullement inquiété à ce sujet. Les gaz ou objets pouvant provoquer
+                    quelconque dégât matériel sont totalement interdits dans le centre. Il est bien entendu que les
+                    factures d'eau et d'électricité sont à la charge du locataire.
                 </p>
 
                 <!-- Article 6 -->
                 <div class="article-title">ARTICLE 6 : CLAUSE EN CAS DE NON-PAIEMENT</div>
-                
+
                 <div class="sub-clause">
                     <strong>1. Défaut de paiement :</strong><br>
-                    En cas de non-paiement total ou partiel du loyer ou des charges à la date prévue, le locataire sera considéré comme en défaut à compter de 10 jours après la date d'échéance.
+                    En cas de non-paiement total ou partiel du loyer ou des charges à la date prévue, le locataire sera
+                    considéré comme en défaut à compter de 10 jours après la date d'échéance.
                 </div>
 
                 <div class="sub-clause">
                     <strong>2. Pénalités de retard :</strong><br>
-                    Un intérêt de retard de 5% du loyer mensuel sera appliqué pour chaque jour de retard jusqu'à régularisation.
+                    Un intérêt de retard de 5% du loyer mensuel sera appliqué pour chaque jour de retard jusqu'à
+                    régularisation.
                 </div>
 
                 <div class="sub-clause">
                     <strong>3. Mise en demeure :</strong><br>
-                    Les bailleurs adresseront une mise en demeure au locataire par lettre recommandée avec accusé de réception ou tout autre moyen légal, lui accordant un délai de 15 jours pour régulariser la situation.
+                    Les bailleurs adresseront une mise en demeure au locataire par lettre recommandée avec accusé de
+                    réception ou tout autre moyen légal, lui accordant un délai de 15 jours pour régulariser la
+                    situation.
                 </div>
             </div>
             <div class="page-number">2</div>
@@ -413,29 +455,39 @@
                 <!-- Suite Article 6 -->
                 <div class="sub-clause" style="margin-top: 10px;">
                     <strong>4. Résiliation et expulsion :</strong><br>
-                    Si le locataire ne régularise pas la situation dans le délai imparti, les bailleurs pourront résilier le contrat de plein droit. Le locataire devra quitter les lieux dans un délai de 30 jours, faute de quoi une procédure d'expulsion sera engagée devant les autorités compétentes.
+                    Si le locataire ne régularise pas la situation dans le délai imparti, les bailleurs pourront
+                    résilier le contrat de plein droit. Le locataire devra quitter les lieux dans un délai de 30 jours,
+                    faute de quoi une procédure d'expulsion sera engagée devant les autorités compétentes.
                 </div>
 
                 <div class="sub-clause">
                     <strong>5. Recours judiciaire :</strong><br>
-                    En cas de litige relatif au non-paiement, les parties conviennent que le tribunal compétent pour statuer sera le Tribunal de Grande Instance de Dakar, et ce, conformément aux lois en vigueur au Sénégal.
+                    En cas de litige relatif au non-paiement, les parties conviennent que le tribunal compétent pour
+                    statuer sera le Tribunal de Grande Instance de Dakar, et ce, conformément aux lois en vigueur au
+                    Sénégal.
                 </div>
 
                 <div class="sub-clause">
                     <strong>6. Frais engagés :</strong><br>
-                    Tous les frais liés aux procédures de recouvrement, de résiliation ou d'expulsion (y compris les frais judiciaires) seront à la charge du locataire.
+                    Tous les frais liés aux procédures de recouvrement, de résiliation ou d'expulsion (y compris les
+                    frais judiciaires) seront à la charge du locataire.
                 </div>
 
                 <!-- Article 7 -->
                 <div class="article-title">ARTICLE 7 : CLAUSES REVENTE PAS DE PORTE</div>
                 <p>
-                    En cas de désir du preneur de céder ou de revendre le droit d’entrée celui-ci s’engage à notifier le bailleur par écrit au moins un mois avant la réalisation de la transaction, cette notification devra inclure les coordonnées du futur acquéreur et une copie de l’accord ou du projet de cession. En cas de revente du droit de porte le preneur devra aussi s’acquitter des frais de mutation de 5% du prix de revente (à négocier).
+                    En cas de désir du preneur de céder ou de revendre le droit d’entrée celui-ci s’engage à notifier le
+                    bailleur par écrit au moins un mois avant la réalisation de la transaction, cette notification devra
+                    inclure les coordonnées du futur acquéreur et une copie de l’accord ou du projet de cession. En cas
+                    de revente du droit de porte le preneur devra aussi s’acquitter des frais de mutation de 5% du prix
+                    de revente (à négocier).
                 </p>
 
                 <!-- Article 8 -->
                 <div class="article-title">ARTICLE 8 : MODIFICATION</div>
                 <p>
-                    Aucune modification ne pourra être apportée à ce présent contrat sans l'accord des deux parties. L’enregistrement du bail ; la TVA ainsi que le TOM seront à la charge du preneur.
+                    Aucune modification ne pourra être apportée à ce présent contrat sans l'accord des deux parties.
+                    L’enregistrement du bail ; la TVA ainsi que le TOM seront à la charge du preneur.
                 </p>
 
                 <p style="margin-top: 15px; font-weight: 500;">
@@ -447,7 +499,8 @@
                 </div>
 
                 <div style="margin-top: 20px; text-align: right; font-weight: 700; text-decoration: underline;">
-                    Fait à Dakar, le {% if lease.start_date %}{{ lease.start_date|date:"d/m/Y" }}{% else %}{{ today|date:"d/m/Y" }}{% endif %}
+                    Fait à Dakar, le {% if lease.start_date %}{{ lease.start_date|date:"d/m/Y" }}{% else %}{{
+                    today|date:"d/m/Y" }}{% endif %}
                 </div>
 
                 <!-- Signatures -->
@@ -466,4 +519,5 @@
     </div>
 
 </body>
+
 </html>
