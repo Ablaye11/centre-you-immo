@@ -11,22 +11,59 @@
             <i data-lucide="arrow-left"></i> Retour au dossier
         </a>
         <h2 style="margin-top: 8px;">Configurer le Contrat de Bail</h2>
-        <p>Locataire : <strong>{{ lease.tenant.full_name }}</strong> &bull; Magasin N° <strong>{{ lease.shop.shop_number }}</strong></p>
+        <p>Locataire : <strong>{{ lease.tenant.full_name }}</strong> &bull; {% if lease.shop.mall.property_type == 'house' %}Logement / Maison{% else %}Magasin{% endif %} N° <strong>{{ lease.shop.shop_number }}</strong></p>
     </div>
 </div>
 
-<div class="grid-2 animate-in" style="max-width: 900px; margin: 0 auto;">
+<div class="grid-2 animate-in" style="max-width: 960px; margin: 0 auto;">
 
     <!-- Formulaire de configuration -->
     <div class="card" style="grid-column: 1;">
         <div class="card-header">
             <h3 class="card-title">
                 <i data-lucide="settings" style="width:18px;height:18px;margin-right:8px;vertical-align:middle;color:var(--primary-600);"></i>
-                Montants du Contrat
+                Options du Contrat
             </h3>
         </div>
         <form method="post" id="configForm">
             {% csrf_token %}
+
+            <!-- Sélection du type de contrat -->
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">
+                    <i data-lucide="file-signature" style="width:15px;height:15px;vertical-align:middle;margin-right:4px;color:var(--primary-600);"></i>
+                    Modèle de Contrat
+                </label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <!-- Option Centre Commercial -->
+                    <label id="card-centre" style="display: flex; flex-direction: column; padding: 12px; border: 2px solid {% if default_contract_type == 'centre' %}var(--primary-600){% else %}var(--border-color){% endif %}; background: {% if default_contract_type == 'centre' %}rgba(16, 185, 129, 0.08){% else %}var(--bg-card){% endif %}; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">
+                                🏢 Centre Commercial
+                            </span>
+                            <input type="radio" name="contract_type" value="centre" {% if default_contract_type == 'centre' %}checked{% endif %} onchange="onContractTypeChange('centre')" style="accent-color: var(--primary-600);">
+                        </div>
+                        <span style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.3;">
+                            Magasin, charges communes (gardiennage/toilettes), clauses OHADA & pas de porte.
+                        </span>
+                    </label>
+
+                    <!-- Option Maison / Habitation -->
+                    <label id="card-maison" style="display: flex; flex-direction: column; padding: 12px; border: 2px solid {% if default_contract_type == 'maison' %}var(--primary-600){% else %}var(--border-color){% endif %}; background: {% if default_contract_type == 'maison' %}rgba(16, 185, 129, 0.08){% else %}var(--bg-card){% endif %}; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                            <span style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">
+                                🏡 Maison / Habitation
+                            </span>
+                            <input type="radio" name="contract_type" value="maison" {% if default_contract_type == 'maison' %}checked{% endif %} onchange="onContractTypeChange('maison')" style="accent-color: var(--primary-600);">
+                        </div>
+                        <span style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.3;">
+                            Usage résidentiel famille, bon père de famille, restitution caution & quitus SENELEC/SEN'EAU.
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Loyer mensuel -->
             <div class="form-group">
                 <label class="form-label">
                     <i data-lucide="wallet" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
@@ -43,9 +80,10 @@
                     required
                     oninput="updatePreview()"
                 >
-                <small style="color: var(--text-muted); font-size: 0.8rem;">Hors charges</small>
+                <small style="color: var(--text-muted); font-size: 0.8rem;">Montant hors charges</small>
             </div>
 
+            <!-- Charges forfaitaires -->
             <div class="form-group">
                 <label class="form-label">
                     <i data-lucide="settings-2" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
@@ -61,9 +99,12 @@
                     step="1000"
                     oninput="updatePreview()"
                 >
-                <small style="color: var(--text-muted); font-size: 0.8rem;">Gardiennage, nettoyage, toilettes</small>
+                <small id="charges-helper" style="color: var(--text-muted); font-size: 0.8rem;">
+                    {% if default_contract_type == 'maison' %}Laisser à 0 si le locataire gère ses propres compteurs (Woyofal / SEN'EAU){% else %}Gardiennage matin/soir, nettoyage, toilettes{% endif %}
+                </small>
             </div>
 
+            <!-- Caution -->
             <div class="form-group">
                 <label class="form-label">
                     <i data-lucide="shield" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
@@ -79,35 +120,37 @@
                     step="1000"
                     oninput="updatePreview()"
                 >
-                <small style="color: var(--text-muted); font-size: 0.8rem;">Remboursable en fin de bail</small>
+                <small style="color: var(--text-muted); font-size: 0.8rem;">Remboursable en fin de bail selon les clauses du contrat</small>
             </div>
 
+            <!-- Durée du bail -->
             <div class="form-group">
                 <label class="form-label">
                     <i data-lucide="calendar" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
                     Durée du bail (années)
                 </label>
                 <select name="duration" id="duration" class="form-control" onchange="updatePreview()">
-                    <option value="1" {% if default_duration == 1 %}selected{% endif %}>1 an</option>
+                    <option value="1" {% if default_duration == 1 %}selected{% endif %}>1 an (Standard Habitation)</option>
                     <option value="2" {% if default_duration == 2 %}selected{% endif %}>2 ans</option>
-                    <option value="3" {% if default_duration == 3 %}selected{% endif %}>3 ans</option>
+                    <option value="3" {% if default_duration == 3 %}selected{% endif %}>3 ans (Standard Commercial OHADA)</option>
                     <option value="5" {% if default_duration == 5 %}selected{% endif %}>5 ans</option>
                     <option value="7" {% if default_duration == 7 %}selected{% endif %}>7 ans</option>
                     <option value="10" {% if default_duration == 10 %}selected{% endif %}>10 ans</option>
                 </select>
             </div>
 
+            <!-- Enregistrer dans le dossier -->
             <div class="form-group" style="margin-top: var(--spacing-md); padding: 10px; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md);">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 500; margin: 0;">
                     <input type="checkbox" name="save_to_lease" value="1" checked style="width: 16px; height: 16px; accent-color: var(--primary-600);">
-                    <span>Enregistrer également ces montants (loyer & caution) dans le dossier du bail</span>
+                    <span>Enregistrer ces montants (loyer & caution) dans le dossier du bail</span>
                 </label>
             </div>
 
             <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm);">
                 <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">
                     <i data-lucide="file-text"></i>
-                    Générer le Contrat
+                    Générer et Imprimer le Contrat
                 </button>
             </div>
         </form>
@@ -118,8 +161,18 @@
         <div class="card-header">
             <h3 class="card-title">
                 <i data-lucide="eye" style="width:18px;height:18px;margin-right:8px;vertical-align:middle;color:var(--primary-600);"></i>
-                Aperçu des Montants
+                Aperçu du Modèle
             </h3>
+        </div>
+
+        <!-- Badges d'état du contrat -->
+        <div style="margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <span id="badge-contract-type" class="badge badge-success" style="font-size: 0.85rem; padding: 6px 10px;">
+                {% if default_contract_type == 'maison' %}🏡 Bail Maison / Habitation{% else %}🏢 Bail Commercial (Centre){% endif %}
+            </span>
+            <span class="badge badge-info">
+                {% if lease.shop.mall.name %}{{ lease.shop.mall.name }}{% else %}YOU IMMO{% endif %}
+            </span>
         </div>
 
         <!-- Infos locataire (fixes) -->
@@ -134,7 +187,7 @@
                 </div>
             </div>
             <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                <span class="badge badge-info">Magasin N° {{ lease.shop.shop_number }}</span>
+                <span class="badge badge-info"><span id="preview-unit-label">{% if default_contract_type == 'maison' %}Porte / Logement{% else %}Magasin{% endif %}</span> N° {{ lease.shop.shop_number }}</span>
                 {% if lease.shop.floor %}<span class="badge badge-secondary">{{ lease.shop.floor.name }}</span>{% endif %}
                 {% if lease.shop.surface %}<span class="badge badge-secondary">{{ lease.shop.surface }} m²</span>{% endif %}
             </div>
@@ -159,8 +212,8 @@
                 <span style="font-weight: 600; color: var(--warning);" id="preview-deposit">{{ default_deposit|floatformat:0 }} F CFA</span>
             </div>
             <div class="info-row" style="display: flex; justify-content: space-between; padding: 10px 0;">
-                <span style="color: var(--text-muted); font-size: 0.88rem;">Durée</span>
-                <span style="font-weight: 600;" id="preview-duration">{{ default_duration }} ans ({{ lease.start_date|date:"d/m/Y" }} → {{ lease.end_date|date:"d/m/Y" }})</span>
+                <span style="color: var(--text-muted); font-size: 0.88rem;">Durée du contrat</span>
+                <span style="font-weight: 600;" id="preview-duration">{{ default_duration }} an(s)</span>
             </div>
         </div>
 
@@ -170,13 +223,23 @@
             &nbsp; La caution est à 0 F CFA. Vérifiez si c'est intentionnel.
         </div>
 
-        <!-- Dates du bail -->
-        <div style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-body); border-radius: var(--radius-md); border: 1px solid var(--border-color); font-size: 0.85rem;">
-            <div style="display: flex; gap: 8px; align-items: center; color: var(--text-muted);">
-                <i data-lucide="calendar-range" style="width:14px;height:14px;"></i>
-                <strong>Période du bail :</strong>
-                {{ lease.start_date|date:"d F Y" }} → {{ lease.end_date|date:"d F Y" }}
+        <!-- Particularités du type de contrat choisi -->
+        <div id="contract-features-box" style="margin-top: var(--spacing-md); padding: 12px; background: var(--bg-body); border-radius: var(--radius-md); border: 1px solid var(--border-color); font-size: 0.83rem;">
+            <div style="font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="info" style="width:14px;height:14px;color:var(--primary-600);"></i>
+                <span id="features-title">Spécificités juridiques incluses :</span>
             </div>
+            <ul id="features-list" style="margin-left: 18px; line-height: 1.5; color: var(--text-secondary);">
+                {% if default_contract_type == 'maison' %}
+                <li>Usage exclusivement résidentiel & familial</li>
+                <li>Jouissance en bon père de famille & interdiction de sous-location</li>
+                <li>Restitution caution sous 30 jours après quitus SENELEC/SEN'EAU</li>
+                {% else %}
+                <li>Bail commercial régi par l'Acte uniforme OHADA</li>
+                <li>Charges de copropriété (gardiennage & sanitaires)</li>
+                <li>Clause de cession et revente de pas de porte (mutation 5%)</li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 
@@ -187,11 +250,74 @@ function formatNumber(n) {
     return new Intl.NumberFormat('fr-FR').format(n).replace(/\u202f/g, '.');
 }
 
+let currentContractType = "{{ default_contract_type|default:'centre' }}";
+
+function onContractTypeChange(type) {
+    currentContractType = type;
+    const cardCentre = document.getElementById('card-centre');
+    const cardMaison = document.getElementById('card-maison');
+    const badge = document.getElementById('badge-contract-type');
+    const unitLabel = document.getElementById('preview-unit-label');
+    const helper = document.getElementById('charges-helper');
+    const featuresList = document.getElementById('features-list');
+    const durationInput = document.getElementById('duration');
+    const chargesInput = document.getElementById('charges');
+
+    if (type === 'maison') {
+        cardMaison.style.borderColor = 'var(--primary-600)';
+        cardMaison.style.background = 'rgba(16, 185, 129, 0.08)';
+        cardCentre.style.borderColor = 'var(--border-color)';
+        cardCentre.style.background = 'var(--bg-card)';
+
+        badge.textContent = "🏡 Bail Maison / Habitation";
+        unitLabel.textContent = "Logement";
+        helper.textContent = "Laisser à 0 si le locataire gère ses propres compteurs (Woyofal / SEN'EAU)";
+        
+        // Si charges était à 10000 ou 15000 par défaut commercial, proposer 0
+        if (chargesInput.value === '10000' || chargesInput.value === '15000') {
+            chargesInput.value = '0';
+        }
+        if (durationInput.value === '3') {
+            durationInput.value = '1';
+        }
+
+        featuresList.innerHTML = `
+            <li>Usage exclusivement résidentiel & familial</li>
+            <li>Jouissance en bon père de famille & interdiction de sous-location</li>
+            <li>Restitution caution sous 30 jours après quitus SENELEC/SEN'EAU</li>
+        `;
+    } else {
+        cardCentre.style.borderColor = 'var(--primary-600)';
+        cardCentre.style.background = 'rgba(16, 185, 129, 0.08)';
+        cardMaison.style.borderColor = 'var(--border-color)';
+        cardMaison.style.background = 'var(--bg-card)';
+
+        badge.textContent = "🏢 Bail Commercial (Centre)";
+        unitLabel.textContent = "Magasin";
+        helper.textContent = "Gardiennage matin/soir, nettoyage, toilettes";
+
+        const rent = parseInt(document.getElementById('rent').value) || 0;
+        if (chargesInput.value === '0') {
+            chargesInput.value = rent >= 150000 ? '15000' : '10000';
+        }
+        if (durationInput.value === '1') {
+            durationInput.value = '3';
+        }
+
+        featuresList.innerHTML = `
+            <li>Bail commercial régi par l'Acte uniforme OHADA</li>
+            <li>Charges de copropriété (gardiennage & sanitaires)</li>
+            <li>Clause de cession et revente de pas de porte (mutation 5%)</li>
+        `;
+    }
+    updatePreview();
+}
+
 function updatePreview() {
     const rent     = parseInt(document.getElementById('rent').value)     || 0;
     const charges  = parseInt(document.getElementById('charges').value)  || 0;
     const deposit  = parseInt(document.getElementById('deposit').value)  || 0;
-    const duration = parseInt(document.getElementById('duration').value) || 3;
+    const duration = parseInt(document.getElementById('duration').value) || 1;
 
     const total = rent + charges;
 
@@ -210,4 +336,3 @@ updatePreview();
 </script>
 
 {% endblock %}
-

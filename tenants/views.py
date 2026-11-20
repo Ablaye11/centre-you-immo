@@ -426,19 +426,24 @@ class MallDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class LeasePrintConfigView(LoginRequiredMixin, View):
-    """Page de configuration des montants avant impression du contrat de bail."""
+    """Page de configuration des montants et du type de contrat avant impression."""
 
     def get(self, request, pk):
         lease = get_object_or_404(Lease, pk=pk)
         rent = int(lease.monthly_rent)
         deposit = int(lease.deposit)
-        default_charges = 15000 if rent >= 150000 else 10000
+
+        # Détection automatique du type de contrat (maison / habitation ou centre commercial)
+        is_house = bool(lease.shop.mall and lease.shop.mall.property_type == 'house')
+        default_contract_type = 'maison' if is_house else 'centre'
+
+        default_charges = 0 if is_house else (15000 if rent >= 150000 else 10000)
 
         # Durée par défaut
         if lease.start_date and lease.end_date:
             duration_years = max(1, round((lease.end_date - lease.start_date).days / 365.25))
         else:
-            duration_years = 3
+            duration_years = 1 if is_house else 3
 
         return render(request, 'tenants/lease_print_config.html', {
             'lease': lease,
@@ -446,16 +451,18 @@ class LeasePrintConfigView(LoginRequiredMixin, View):
             'default_charges': default_charges,
             'default_deposit': deposit,
             'default_duration': duration_years,
+            'default_contract_type': default_contract_type,
             'active_menu': 'tenants',
         })
 
     def post(self, request, pk):
-        """Redirige vers l'impression avec les montants personnalisés en paramètres GET."""
+        """Redirige vers l'impression avec les montants personnalisés et le type de contrat."""
         try:
             rent = int(request.POST.get('rent', 0))
             charges = int(request.POST.get('charges', 0))
             deposit = int(request.POST.get('deposit', 0))
             duration = int(request.POST.get('duration', 3))
+            contract_type = request.POST.get('contract_type', 'centre')
         except (ValueError, TypeError):
             messages.error(request, "Veuillez saisir des montants valides.")
             return redirect('lease_print_config', pk=pk)
@@ -467,7 +474,7 @@ class LeasePrintConfigView(LoginRequiredMixin, View):
             lease.deposit = deposit
             lease.save(update_fields=['monthly_rent', 'deposit'])
 
-        url = f"/locataires/baux/{pk}/imprimer/?rent={rent}&charges={charges}&deposit={deposit}&duration={duration}"
+        url = f"/locataires/baux/{pk}/imprimer/?rent={rent}&charges={charges}&deposit={deposit}&duration={duration}&contract_type={contract_type}"
         return redirect(url)
 
 
@@ -482,6 +489,15 @@ class LeasePrintView(LoginRequiredMixin, DetailView):
         context['active_menu'] = 'tenants'
         context['today'] = timezone.now().date()
 
+        # Type de contrat : 'centre' (Centre Commercial) ou 'maison' (Maison / Habitation)
+        contract_type = self.request.GET.get('contract_type')
+        if not contract_type:
+            if lease.shop.mall and lease.shop.mall.property_type == 'house':
+                contract_type = 'maison'
+            else:
+                contract_type = 'centre'
+        context['contract_type'] = contract_type
+
         # Lecture des montants depuis les paramètres GET (si configuré) ou depuis la BDD
         try:
             rent = int(self.request.GET.get('rent') or lease.monthly_rent)
@@ -489,9 +505,13 @@ class LeasePrintView(LoginRequiredMixin, DetailView):
             rent = int(lease.monthly_rent)
 
         try:
-            charges = int(self.request.GET.get('charges') or (15000 if rent >= 150000 else 10000))
+            if contract_type == 'maison':
+                default_ch = 0
+            else:
+                default_ch = 15000 if rent >= 150000 else 10000
+            charges = int(self.request.GET.get('charges') if self.request.GET.get('charges') is not None else default_ch)
         except (ValueError, TypeError):
-            charges = 15000 if rent >= 150000 else 10000
+            charges = 0 if contract_type == 'maison' else (15000 if rent >= 150000 else 10000)
 
         try:
             deposit = int(self.request.GET.get('deposit') or lease.deposit)
@@ -499,12 +519,12 @@ class LeasePrintView(LoginRequiredMixin, DetailView):
             deposit = int(lease.deposit)
 
         try:
-            duration_years = int(self.request.GET.get('duration') or 3)
+            duration_years = int(self.request.GET.get('duration') or (1 if contract_type == 'maison' else 3))
         except (ValueError, TypeError):
             if lease.start_date and lease.end_date:
                 duration_years = max(1, round((lease.end_date - lease.start_date).days / 365.25))
             else:
-                duration_years = 3
+                duration_years = 1 if contract_type == 'maison' else 3
 
         total_monthly = rent + charges
 
