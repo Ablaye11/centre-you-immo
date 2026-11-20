@@ -426,10 +426,13 @@ class MallDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class MallRegisterPrintView(LoginRequiredMixin, View):
-    """Registre d'impression des locataires d'un centre commercial (style PDF YOU IMMO)."""
+    """Registre d'impression des locataires d'un centre commercial (style PDF YOU IMMO avec statut de paiement et fin de contrat)."""
 
     def get(self, request, pk):
         mall = get_object_or_404(Mall, pk=pk)
+        today = timezone.now().date()
+        current_year = today.year
+        current_month = today.month
 
         # Récupérer toutes les boutiques du mall triées par numéro
         shops = mall.shops.select_related('floor').prefetch_related(
@@ -440,15 +443,62 @@ class MallRegisterPrintView(LoginRequiredMixin, View):
         for shop in shops:
             active_lease = shop.leases.filter(status='active').first()
             if active_lease:
+                tenant = active_lease.tenant
+
+                # Vérifier statut du paiement du mois en cours
+                # Recherche d'une facture de loyer pour ce mois et cette boutique
+                month_invoice = Invoice.objects.filter(
+                    shop=shop,
+                    tenant=tenant,
+                    invoice_type='rent',
+                    issue_date__year=current_year,
+                    issue_date__month=current_month
+                ).first()
+
+                if month_invoice:
+                    if month_invoice.status == 'paid':
+                        payment_status = 'paid'
+                        payment_status_display = 'PAYÉ'
+                    elif month_invoice.status == 'overdue' or today > month_invoice.due_date:
+                        payment_status = 'overdue'
+                        payment_status_display = 'IMPAYÉ'
+                    else:
+                        payment_status = 'pending'
+                        payment_status_display = 'EN ATTENTE'
+                else:
+                    payment_status = 'unbilled'
+                    payment_status_display = 'NON FACTURÉ'
+
+                # Vérifier fin de contrat
+                days_left = (active_lease.end_date - today).days if active_lease.end_date else 999
+                is_expiring = (0 <= days_left <= 45)
+                is_expired = (days_left < 0)
+
+                if is_expired:
+                    contract_status = 'expired'
+                    contract_status_display = f"EXPIRÉ ({active_lease.end_date.strftime('%d/%m/%Y')})"
+                elif is_expiring:
+                    contract_status = 'expiring'
+                    contract_status_display = f"FIN CONTRAT : {active_lease.end_date.strftime('%d/%m/%Y')}"
+                else:
+                    contract_status = 'ok'
+                    contract_status_display = f"Jusqu'au {active_lease.end_date.strftime('%d/%m/%Y')}" if active_lease.end_date else "En cours"
+
                 rows.append({
                     'shop_number': shop.shop_number,
-                    'first_name': active_lease.tenant.first_name.upper(),
-                    'last_name': active_lease.tenant.last_name.upper(),
-                    'phone': active_lease.tenant.phone,
+                    'first_name': tenant.first_name.upper(),
+                    'last_name': tenant.last_name.upper(),
+                    'phone': tenant.phone,
                     'monthly_rent': int(active_lease.monthly_rent),
                     'rent_formatted': f"{int(active_lease.monthly_rent):,}".replace(",", "."),
                     'is_vacant': False,
                     'floor': shop.floor.name if shop.floor else '',
+                    'payment_status': payment_status,
+                    'payment_status_display': payment_status_display,
+                    'contract_status': contract_status,
+                    'contract_status_display': contract_status_display,
+                    'end_date': active_lease.end_date,
+                    'days_left': days_left,
                 })
             else:
                 rows.append({
@@ -460,14 +510,23 @@ class MallRegisterPrintView(LoginRequiredMixin, View):
                     'rent_formatted': '',
                     'is_vacant': True,
                     'floor': shop.floor.name if shop.floor else '',
+                    'payment_status': 'vacant',
+                    'payment_status_display': 'DISPONIBLE',
+                    'contract_status': 'none',
+                    'contract_status_display': 'AUCUN BAIL',
+                    'end_date': None,
+                    'days_left': None,
                 })
 
         return render(request, 'tenants/mall_register_print.html', {
             'mall': mall,
             'rows': rows,
-            'today': timezone.now().date(),
+            'today': today,
+            'current_month_name': today.strftime("%B %Y"),
             'total_occupied': sum(1 for r in rows if not r['is_vacant']),
             'total_vacant': sum(1 for r in rows if r['is_vacant']),
+            'total_paid': sum(1 for r in rows if r.get('payment_status') == 'paid'),
+            'total_expiring': sum(1 for r in rows if r.get('contract_status') in ['expiring', 'expired']),
             'total_rows': len(rows),
         })
 
