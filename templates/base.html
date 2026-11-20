@@ -21,7 +21,9 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo">
-                <img src="{% static 'images/logo.png' %}?v={% now 'U' %}" alt="YOU IMMO" style="width: 100%; max-width: 110px; height: auto; object-fit: contain; border-radius: 8px;">
+                <a href="{% if user.tenant %}{% url 'tenant_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" title="YOU IMMO" style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                    <img src="{% static 'images/logo.png' %}?v={% now 'U' %}" alt="YOU IMMO - Une autre idée de l'immobilier" style="max-height: 54px; max-width: 170px; width: auto; height: auto; object-fit: contain;">
+                </a>
             </div>
             
             <nav class="sidebar-nav">

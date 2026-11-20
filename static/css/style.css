@@ -183,12 +183,33 @@ a:hover {
 }
 
 .sidebar-logo {
-    padding: var(--spacing-lg);
+    padding: 16px var(--spacing-lg);
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    justify-content: center;
     border-bottom: 1px solid var(--border-color);
     min-height: var(--header-height);
+    background: #ffffff;
+}
+
+.sidebar-logo a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.sidebar-logo img {
+    max-height: 52px;
+    max-width: 170px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: transform var(--transition-fast);
+}
+
+.sidebar-logo img:hover {
+    transform: scale(1.02);
 }
 
 .sidebar-logo .logo-icon {
