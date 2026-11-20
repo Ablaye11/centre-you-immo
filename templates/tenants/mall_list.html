@@ -85,6 +85,9 @@
                 </button>
             </form>
             {% endif %}
+            <a href="{% url 'mall_register_print' mall.pk %}" class="btn btn-outline btn-sm" title="Imprimer le registre des locataires">
+                <i data-lucide="printer"></i> Registre
+            </a>
             <a href="{% url 'mall_update' mall.pk %}" class="btn btn-outline btn-sm">
                 <i data-lucide="pencil"></i> Modifier
             </a>

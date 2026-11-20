@@ -27,4 +27,5 @@ urlpatterns = [
     path('centres/creer/', views.MallCreateView.as_view(), name='mall_create'),
     path('centres/<int:pk>/modifier/', views.MallUpdateView.as_view(), name='mall_update'),
     path('centres/<int:pk>/supprimer/', views.MallDeleteView.as_view(), name='mall_delete'),
+    path('centres/<int:pk>/registre/', views.MallRegisterPrintView.as_view(), name='mall_register_print'),
 ]

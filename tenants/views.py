@@ -425,6 +425,53 @@ class MallDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
+class MallRegisterPrintView(LoginRequiredMixin, View):
+    """Registre d'impression des locataires d'un centre commercial (style PDF YOU IMMO)."""
+
+    def get(self, request, pk):
+        mall = get_object_or_404(Mall, pk=pk)
+
+        # Récupérer toutes les boutiques du mall triées par numéro
+        shops = mall.shops.select_related('floor').prefetch_related(
+            'leases__tenant'
+        ).order_by('shop_number')
+
+        rows = []
+        for shop in shops:
+            active_lease = shop.leases.filter(status='active').first()
+            if active_lease:
+                rows.append({
+                    'shop_number': shop.shop_number,
+                    'first_name': active_lease.tenant.first_name.upper(),
+                    'last_name': active_lease.tenant.last_name.upper(),
+                    'phone': active_lease.tenant.phone,
+                    'monthly_rent': int(active_lease.monthly_rent),
+                    'rent_formatted': f"{int(active_lease.monthly_rent):,}".replace(",", "."),
+                    'is_vacant': False,
+                    'floor': shop.floor.name if shop.floor else '',
+                })
+            else:
+                rows.append({
+                    'shop_number': shop.shop_number,
+                    'first_name': 'VIDE',
+                    'last_name': '',
+                    'phone': '',
+                    'monthly_rent': 0,
+                    'rent_formatted': '',
+                    'is_vacant': True,
+                    'floor': shop.floor.name if shop.floor else '',
+                })
+
+        return render(request, 'tenants/mall_register_print.html', {
+            'mall': mall,
+            'rows': rows,
+            'today': timezone.now().date(),
+            'total_occupied': sum(1 for r in rows if not r['is_vacant']),
+            'total_vacant': sum(1 for r in rows if r['is_vacant']),
+            'total_rows': len(rows),
+        })
+
+
 class LeasePrintConfigView(LoginRequiredMixin, View):
     """Page de configuration des montants et du type de contrat avant impression."""
 

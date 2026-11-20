@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre des Locataires - {{ mall.name }} | YOU IMMO</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+            background: #f1f5f9;
+            color: #000;
+            padding: 20px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Barre d'outils / actions (non imprimée) */
+        .toolbar {
+            max-width: 1050px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 12px 24px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toolbar a, .toolbar button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-back {
+            background: #f1f5f9;
+            color: #334155;
+            border-color: #cbd5e1;
+        }
+        .btn-back:hover { background: #e2e8f0; }
+
+        .btn-print {
+            background: #059669;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+        }
+        .btn-print:hover { background: #047857; }
+
+        /* Palette de couleurs de thèmes */
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .color-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #cbd5e1;
+            cursor: pointer;
+        }
+
+        /* Page d'impression format paysage (A4 Landscape) */
+        .sheet {
+            background: #ffffff;
+            max-width: 1050px;
+            margin: 0 auto 30px auto;
+            padding: 40px 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            min-height: 720px;
+        }
+
+        /* Titre du centre */
+        .sheet-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        /* Tableau exact conforme aux PDF */
+        table.register-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            color: #000;
+            border: 1.5px solid #000;
+        }
+
+        table.register-table th,
+        table.register-table td {
+            border: 1px solid #000;
+            padding: 5px 8px;
+            vertical-align: middle;
+        }
+
+        /* En-tête du tableau (Couleur Orange/Ambre par défaut de SOUHAIBOU ou Bleu de FALLOU NDIAYE) */
+        table.register-table th {
+            background-color: var(--theme-header, #eb7d31);
+            color: #000;
+            font-weight: 800;
+            text-align: left;
+            text-transform: uppercase;
+            font-size: 0.92rem;
+            letter-spacing: 0.5px;
+            height: 32px;
+        }
+
+        table.register-table th.center,
+        table.register-table td.center {
+            text-align: center;
+        }
+
+        table.register-table th.right,
+        table.register-table td.right {
+            text-align: right;
+        }
+
+        /* Colonne N° C (Numéro de cellule / magasin) */
+        table.register-table td.cell-num {
+            background-color: var(--theme-header, #eb7d31);
+            color: #000;
+            font-weight: 800;
+            text-align: center;
+            width: 8%;
+            font-size: 0.95rem;
+        }
+
+        table.register-table td.col-prenoms {
+            width: 25%;
+            font-weight: 600;
+        }
+
+        table.register-table td.col-noms {
+            width: 25%;
+            font-weight: 600;
+        }
+
+        table.register-table td.col-telephones {
+            width: 22%;
+            font-family: Calibri, Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        table.register-table td.col-mensualites {
+            width: 20%;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Lignes avec magasins réservés / particuliers comme SENS/CAN ou SEN EXPRESS */
+        tr.highlight-green td {
+            background-color: #8bc34a !important;
+            font-weight: 700;
+        }
+
+        tr.row-vacant td {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+                margin: 0;
+            }
+            .toolbar {
+                display: none !important;
+            }
+            .sheet {
+                box-shadow: none;
+                border: none;
+                padding: 10mm 15mm;
+                margin: 0;
+                max-width: 100%;
+                page-break-after: auto;
+            }
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+        }
+    </style>
+</head>
+<body style="--theme-header: #eb7d31;">
+
+    <!-- Barre d'outils -->
+    <div class="toolbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <a href="{% url 'mall_list' %}" class="btn-back">
+                ← Retour aux centres
+            </a>
+            <div style="font-size: 0.9rem; color: #334155; font-weight: 600;">
+                Registre : <strong>{{ mall.name }}</strong> &bull; {{ total_occupied }} occupés / {{ total_rows }} boutiques
+            </div>
+        </div>
+
+        <!-- Sélecteur de couleur d'en-tête pour correspondre exactement aux PDF -->
+        <div class="color-picker">
+            <span>Style du tableau :</span>
+            <button class="color-btn" style="background:#eb7d31;" title="Orange (Style SOUHAIBOU)" onclick="setTheme('#eb7d31')"></button>
+            <button class="color-btn" style="background:#2e75b6;" title="Bleu Classique (Style FALLOU NDIAYE)" onclick="setTheme('#2e75b6')"></button>
+            <button class="color-btn" style="background:#00b0f0;" title="Bleu Vif (Style CCCIF)" onclick="setTheme('#00b0f0')"></button>
+            <button class="color-btn" style="background:#10b981;" title="Vert Émeraude YOU IMMO" onclick="setTheme('#10b981')"></button>
+        </div>
+
+        <button onclick="window.print()" class="btn-print">
+            🖨️ Imprimer le Registre
+        </button>
+    </div>
+
+    <!-- Feuille du registre -->
+    <div class="sheet">
+        <!-- Titre du centre commercial en haut à gauche -->
+        <div class="sheet-title">
+            {{ mall.name|upper }}
+        </div>
+
+        <!-- Tableau exact -->
+        <table class="register-table">
+            <thead>
+                <tr>
+                    <th class="center" style="width: 8%;">N° C</th>
+                    <th style="width: 25%;">PRENOMS</th>
+                    <th style="width: 25%;">NOMS</th>
+                    <th style="width: 22%;">TELEPHONES</th>
+                    <th style="width: 20%;">MENSUALITES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr class="{% if 'SENS' in row.first_name or 'SEN EXPRESS' in row.first_name %}highlight-green{% elif row.is_vacant %}row-vacant{% endif %}">
+                    <td class="cell-num">{{ row.shop_number }}</td>
+                    <td class="col-prenoms">{{ row.first_name }}</td>
+                    <td class="col-noms">{{ row.last_name }}</td>
+                    <td class="col-telephones">{{ row.phone }}</td>
+                    <td class="col-mensualites">{% if row.monthly_rent > 0 %}{{ row.rent_formatted }} F{% elif row.is_vacant %}{% else %}—{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 25px; color: #64748b;">
+                        Aucune boutique enregistrée pour ce centre commercial.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function setTheme(color) {
+            document.body.style.setProperty('--theme-header', color);
+        }
+    </script>
+</body>
+</html>
