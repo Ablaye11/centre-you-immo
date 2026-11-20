@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from .models import Tenant, Shop, Lease, Floor, Mall
 from .forms import ShopForm, TenantForm, FloorForm, MallForm
+from .utils import number_to_words_fr
 from finance.models import Invoice, Payment
 
 
@@ -431,8 +432,34 @@ class LeasePrintView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        lease = self.object
         context['active_menu'] = 'tenants'
         context['today'] = timezone.now().date()
+
+        # Montants loyer et charges
+        rent = int(lease.monthly_rent)
+        # Selon les contrats modèles YOU IMMO : 15 000 F CFA pour loyers >= 150 000, sinon 10 000 F CFA
+        charges = 15000 if rent >= 150000 else 10000
+        total_monthly = rent + charges
+
+        # Durée du bail
+        if lease.start_date and lease.end_date:
+            duration_years = max(1, round((lease.end_date - lease.start_date).days / 365.25))
+        else:
+            duration_years = 3
+
+        context['rent'] = rent
+        context['rent_formatted'] = f"{rent:,}".replace(",", ".")
+        context['charges'] = charges
+        context['charges_formatted'] = f"{charges:,}".replace(",", ".")
+        context['total_monthly'] = total_monthly
+        context['total_monthly_formatted'] = f"{total_monthly:,}".replace(",", ".")
+
+        context['monthly_rent_words'] = number_to_words_fr(rent)
+        context['charges_words'] = number_to_words_fr(charges)
+        context['total_monthly_words'] = number_to_words_fr(total_monthly)
+        context['duration_years_str'] = f"{duration_years:02d}"
+
         return context
 
 

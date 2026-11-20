@@ -4,304 +4,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contrat de Bail - Boutique {{ lease.shop.shop_number }}</title>
+    <title>Contrat de Location - Magasin N° {{ lease.shop.shop_number }} | YOU IMMO</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
         :root {
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --primary: #0d1321;
-            --text: #1e293b;
-            --border: #cbd5e1;
+            --primary: #0f172a;
+            --accent: #059669;
+            --text-dark: #111827;
+            --border: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: var(--font-family);
-            color: var(--text);
-            line-height: 1.6;
-            margin: 0;
-            padding: 40px;
-            background: #f8fafc;
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            color: var(--text-dark);
+            line-height: 1.45;
+            background: #f3f4f6;
+            padding: 30px 10px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
-        .action-bar {
-            max-width: 800px;
-            margin: 0 auto 30px auto;
+        /* Barre d'action supérieure (non imprimée) */
+        .no-print-bar {
+            max-width: 820px;
+            margin: 0 auto 25px auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 12px 24px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            font-family: 'Inter', sans-serif;
         }
 
-        .btn {
-            font-family: var(--font-family);
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
+        .no-print-bar a, .no-print-bar button {
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
             transition: all 0.2s ease;
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
+        .btn-back {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
         }
 
-        .btn-outline:hover {
-            background: rgba(0, 0, 0, 0.05);
+        .btn-back:hover {
+            background: #e5e7eb;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            border: 1px solid var(--primary);
-            color: white;
+        .btn-print {
+            background: #059669;
+            color: #ffffff;
+            border: 1px solid #059669;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
         }
 
-        .btn-primary:hover {
-            opacity: 0.9;
+        .btn-print:hover {
+            background: #047857;
         }
 
-        .document-wrapper {
-            max-width: 800px;
+        /* Feuille de contrat A4 */
+        .contract-container {
+            max-width: 820px;
             margin: 0 auto;
-            background: white;
-            padding: 60px 80px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
         }
 
-        .header {
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 20px;
-            margin-bottom: 40px;
+        .contract-page {
+            position: relative;
+            background: #ffffff;
+            width: 100%;
+            min-height: 1120px;
+            padding: 50px 65px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: flex-end;
+            overflow: hidden;
         }
 
-        .header-left h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: var(--primary);
-            font-weight: 800;
-            letter-spacing: -0.025em;
+        /* Filigrane centré sur chaque page */
+        .contract-page::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            height: 480px;
+            background-image: url("{% static 'images/logo.png' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .header-left p {
-            margin: 5px 0 0 0;
-            font-size: 0.85rem;
-            color: #64748b;
+        .page-content {
+            position: relative;
+            z-index: 1;
         }
 
-        .header-right {
-            text-align: right;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .doc-title {
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 40px;
-            color: var(--primary);
-        }
-
-        .doc-title h2 {
-            font-size: 1.6rem;
-            margin: 0;
-            font-weight: 800;
-        }
-
-        .doc-title p {
-            margin: 5px 0 0 0;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .parties-section {
-            margin-bottom: 40px;
-            font-size: 0.95rem;
-        }
-
-        .parties-section h3 {
-            font-size: 1.1rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        .articles {
-            margin-bottom: 40px;
-        }
-
-        .article {
+        /* En-tête */
+        .contract-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             margin-bottom: 25px;
-            text-align: justify;
         }
 
-        .article h4 {
-            margin: 0 0 8px 0;
+        .logo-wrap {
+            margin-bottom: 8px;
+        }
+
+        .logo-wrap img {
+            max-width: 130px;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .company-info {
+            font-size: 0.88rem;
+            line-height: 1.35;
+            color: #111827;
+        }
+
+        .company-info .company-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Titre du contrat */
+        .contract-title-wrap {
+            text-align: center;
+            margin: 20px 0 25px 0;
+        }
+
+        .contract-title {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.65rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-decoration: underline;
+            text-transform: uppercase;
+            color: #000000;
+        }
+
+        /* Paragraphes et articles */
+        .section-title {
+            font-weight: 700;
+            text-decoration: underline;
+            margin: 15px 0 8px 0;
+            font-size: 0.98rem;
+        }
+
+        .article-title {
+            font-weight: 700;
+            text-decoration: underline;
+            margin: 14px 0 4px 0;
             font-size: 1rem;
-            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        p, .clause-text {
+            font-size: 0.93rem;
+            text-align: justify;
+            margin-bottom: 8px;
+            line-height: 1.48;
+        }
+
+        .sub-clause {
+            margin: 8px 0 8px 12px;
+            font-size: 0.92rem;
+            text-align: justify;
+            line-height: 1.45;
+        }
+
+        .sub-clause strong {
             font-weight: 700;
         }
 
-        .signatures-section {
-            margin-top: 60px;
+        .bold {
+            font-weight: 700;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        /* Signatures */
+        .signatures-grid {
+            margin-top: 40px;
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
         }
 
-        .signature-box {
+        .signature-col {
             width: 45%;
-            border-top: 1px solid #cbd5e1;
-            padding-top: 15px;
-            min-height: 120px;
         }
 
-        .signature-box h5 {
-            margin: 0 0 10px 0;
+        .signature-col h4 {
             font-size: 0.95rem;
-            color: var(--primary);
+            font-weight: 700;
+            text-decoration: underline;
+            margin-bottom: 60px;
         }
 
-        .signature-box p {
-            margin: 0;
-            font-size: 0.8rem;
-            color: #64748b;
-            font-style: italic;
+        .page-number {
+            text-align: center;
+            font-size: 0.82rem;
+            color: #6b7280;
+            margin-top: 15px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* Styles d'impression */
         @media print {
             body {
-                background: white;
+                background: #ffffff;
                 padding: 0;
+                margin: 0;
             }
 
-            .action-bar {
-                display: none;
+            .no-print-bar {
+                display: none !important;
             }
 
-            .document-wrapper {
-                border: none;
+            .contract-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .contract-page {
                 box-shadow: none;
-                padding: 0;
+                border: none;
+                margin: 0;
+                padding: 40px 50px;
+                min-height: 100vh;
+                page-break-after: always;
+                break-after: page;
             }
 
-            .btn {
-                display: none;
+            .contract-page:last-child {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 12mm 15mm;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="action-bar">
-        <a href="javascript:history.back()" class="btn btn-outline">
-            ← Retour
+    <!-- Barre d'outils / Impression -->
+    <div class="no-print-bar">
+        <a href="javascript:history.back()" class="btn-back">
+            ← Revenir au dossier
         </a>
-        <button onclick="window.print()" class="btn btn-primary">
+        <div style="font-size: 0.88rem; color: #6b7280;">
+            Locataire : <strong>{{ lease.tenant.full_name }}</strong> &bull; Magasin N° <strong>{{ lease.shop.shop_number }}</strong>
+        </div>
+        <button onclick="window.print()" class="btn-print">
             🖨️ Imprimer le contrat
         </button>
     </div>
 
-    <div class="document-wrapper">
-        <div class="header">
-            <div class="header-left">
-                <h1>YOU IMMO</h1>
-                <p>Gestion Immobilière & Commerciale</p>
+    <div class="contract-container">
+
+        <!-- ================= PAGE 1 ================= -->
+        <div class="contract-page">
+            <div class="page-content">
+                <!-- En-tête officiel YOU IMMO -->
+                <div class="contract-header">
+                    <div class="logo-wrap">
+                        <img src="{% static 'images/logo.png' %}" alt="YOU IMMO - Une autre idée de l'immobilier">
+                    </div>
+                    <div class="company-info">
+                        <div class="company-name">Entreprise You Technologie</div>
+                        <div>SN.DKR.2018.A.15166</div>
+                        <div>N.I.N.E.A : 006866282</div>
+                        <div>Route de jaxaay Rond-point keur Massar</div>
+                        <div>Tel : 77 873 01 00 / 76 754 30 30 / 33 878 46 14</div>
+                        <div>Email : Youimmobtp@gmail.com</div>
+                    </div>
+                </div>
+
+                <!-- Titre -->
+                <div class="contract-title-wrap">
+                    <h1 class="contract-title">CONTRAT DE LOCATION</h1>
+                </div>
+
+                <!-- Parties contractantes -->
+                <div class="section-title">LE PRESENT CONTRAT EST CONCLU ENTRE LES SOUSSIGNES :</div>
+                
+                <p>
+                    <span class="bold">❖ 1/ LE BAILLEUR (Propriétaire) présenté par son mandataire :</span><br>
+                    L’Agence dénommée « <span class="bold">YOU IMMO</span> », ayant son siège social, Keur Massar Route de Diaxay au Rond-point Keur massar, dûment représentée par son Directeur Général, Monsieur <span class="bold">YOUSSOU ADOUWA</span>.<br>
+                    Téléphone : 77 873 01 00 / 76 754 30 30 / 33 878 46 14<br>
+                    Email : Youimmobtp@gmail.com<br>
+                    Agissant au nom et pour le compte de <span class="bold">{% if lease.shop.mall.name %}{{ lease.shop.mall.name }}{% else %}SENS{% endif %}</span>, propriétaire du bien. <span class="bold">D’une Part.</span>
+                </p>
+
+                <p style="margin-top: 10px;">
+                    <span class="bold">❖ 2/ Le Preneur (Locataire) :</span><br>
+                    <span class="bold">PRENOM ET NOM :</span> {{ lease.tenant.full_name|upper }}<br>
+                    <span class="bold">CNI :</span> {{ lease.tenant.id_number|default:"Non spécifiée" }}<br>
+                    <span class="bold">ADRESSE :</span> {{ lease.tenant.address|default:"Dakar, Sénégal" }}<br>
+                    <span class="bold">TELEPHONE :</span> {{ lease.tenant.phone }}<br>
+                    <span class="bold">PROFESSION :</span> {{ lease.tenant.company_name|default:"Commerçant" }}, <span class="bold">D’autre Part.</span>
+                </p>
+
+                <p style="margin-top: 12px; font-style: italic;">
+                    Il a été arrêté et convenu ce qui suit :
+                </p>
+
+                <!-- Article 1 -->
+                <div class="article-title">ARTICLE 1: DESIGNATION</div>
+                <p>
+                    Je donne en location à <span class="bold uppercase">{% if lease.tenant.first_name %}MONSIEUR / MADAME {{ lease.tenant.full_name|upper }}{% else %}MONSIEUR MBAYE SECK{% endif %}</span><br>
+                    Qui accepte la somme de <span class="bold uppercase">{{ monthly_rent_words }}</span> francs CFA (<span class="bold">{{ rent_formatted }} F CFA</span>) par mois.<br>
+                    Numéro : <span class="bold">{{ lease.tenant.phone }}</span><br>
+                    <span class="bold uppercase">MAGASIN OCCUPER : N° {{ lease.shop.shop_number }}</span>
+                </p>
+
+                <!-- Article 2 -->
+                <div class="article-title">ARTICLE 2 : Taxes</div>
+                <p>
+                    Le preneur devra payer toutes les taxes ou contributions lui incombant (taxes municipales, Patente et autres).
+                </p>
+
+                <!-- Article 3 (Début) -->
+                <div class="article-title">ARTICLE 3 : LOYER</div>
+                <p>
+                    La présente location est acceptée et consentie moyennant un loyer mensuel de <span class="bold uppercase">{{ monthly_rent_words }}</span> Francs CFA (<span class="bold">{{ rent_formatted }} F CFA</span>). Et des charges forfaitaires de <span class="bold">{{ charges_formatted }} F CFA</span> (gardiennage matin / soir, nettoyages, gestion toilettes) soit un montant total de <span class="bold uppercase">{{ total_monthly_words }}</span> Francs CFA (<span class="bold">{{ total_monthly_formatted }} F CFA</span>).
+                </p>
             </div>
-            <div class="header-right">
-                <strong>{{ lease.shop.mall.name }}</strong><br>
-                {{ lease.shop.mall.address|default:"Dakar, Sénégal" }}
-            </div>
+            <div class="page-number">1</div>
         </div>
 
-        <div class="doc-title">
-            <h2>CONTRAT DE BAIL COMMERCIAL</h2>
-            <p>Réf: CON-{{ lease.pk|stringformat:"05d" }}</p>
+        <!-- ================= PAGE 2 ================= -->
+        <div class="contract-page">
+            <div class="page-content">
+                <!-- Suite Article 3 -->
+                <p style="margin-top: 10px;">
+                    Le montant du loyer ne pourra être révisé avant la fin du bail. Elle sera révisée tous les <span class="bold">trois (03) ans</span> conformément à l'article 84 et suivant l'acte uniforme relatif au droit commercial général de l'OHADA. <span class="bold">BIEN NOTER</span> que les loyers sont portables à l'agence et non quérable (sauf cas exceptionnel) au plus tard le 5 de chaque début de mois sous peine de pénalités d'une somme de <span class="bold">10 000 F CFA</span> pour tout paiement de loyer <span class="bold">au-delà du 05 et au-delà du 10</span>. Elles seront exigibles et irrévocables.
+                </p>
+
+                <!-- Article 4 -->
+                <div class="article-title">ARTICLE 4 : DUREE</div>
+                <p>
+                    Le présent bail est consenti pour <span class="bold">une durée de {{ duration_years_str }}ans</span> prenant effet le <span class="bold">{{ lease.start_date|date:"d/m/Y" }}</span>. Il est renouvelable par tacite reconduction pour une durée d’égale durée, chacune des parties ayant la faculté de le dénoncer en notifiant à l’autre un congé d’un mois à l’avance.
+                </p>
+
+                <!-- Article 5 -->
+                <div class="article-title">ARTICLE 5 : CHARGES ET CONDITIONS</div>
+                <p>
+                    Le locataire devra tenir les lieux en état de propreté et ne pourra faire aucune transformation sans l'autorisation préalable écrite du propriétaire. Il est strictement interdit aux locataires de fabriquer ou vendre de la boisson alcoolisée sous toutes ses formes dans l'enceinte du centre commercial. Il est formellement interdit de fumer ou d'allumer du feu dans les Magasins. Le locataire satisfera à toutes les prescriptions des services de police, de voirie et d'hygiène afin que le propriétaire ne soit nullement inquiété à ce sujet. Les gaz ou objets pouvant provoquer quelconque dégât matériel sont totalement interdits dans le centre. Il est bien entendu que les factures d'eau et d'électricité sont à la charge du locataire.
+                </p>
+
+                <!-- Article 6 -->
+                <div class="article-title">ARTICLE 6 : CLAUSE EN CAS DE NON-PAIEMENT</div>
+                
+                <div class="sub-clause">
+                    <strong>1. Défaut de paiement :</strong><br>
+                    En cas de non-paiement total ou partiel du loyer ou des charges à la date prévue, le locataire sera considéré comme en défaut à compter de 10 jours après la date d'échéance.
+                </div>
+
+                <div class="sub-clause">
+                    <strong>2. Pénalités de retard :</strong><br>
+                    Un intérêt de retard de 5% du loyer mensuel sera appliqué pour chaque jour de retard jusqu'à régularisation.
+                </div>
+
+                <div class="sub-clause">
+                    <strong>3. Mise en demeure :</strong><br>
+                    Les bailleurs adresseront une mise en demeure au locataire par lettre recommandée avec accusé de réception ou tout autre moyen légal, lui accordant un délai de 15 jours pour régulariser la situation.
+                </div>
+            </div>
+            <div class="page-number">2</div>
         </div>
 
-        <div class="parties-section">
-            <h3>ENTRE LES SOUSSIGNÉS :</h3>
-            <p><strong>Le Bailleur :</strong> L'administration du Centre Commercial <strong>{{ lease.shop.mall.name }}</strong> (YOU IMMO), représentée par son Directeur de gestion.</p>
-            <p><strong>D'une part,</strong></p>
-            <p><strong>Et Le Preneur (Locataire) :</strong> 
-               M./Mme <strong>{{ lease.tenant.full_name }}</strong>, 
-               téléphone: <strong>{{ lease.tenant.phone }}</strong>,
-               {% if lease.tenant.company_name %}
-               agissant pour le compte de l'entreprise/commerce <strong>{{ lease.tenant.company_name }}</strong>,
-               {% endif %}
-               pièce d'identité N° <strong>{{ lease.tenant.id_number|default:"Non spécifiée" }}</strong>.
-            </p>
-            <p><strong>D'autre part,</strong></p>
-            <p>Il a été convenu et arrêté le présent contrat de bail régif par les clauses et conditions générales suivantes :</p>
+        <!-- ================= PAGE 3 ================= -->
+        <div class="contract-page">
+            <div class="page-content">
+                <!-- Suite Article 6 -->
+                <div class="sub-clause" style="margin-top: 10px;">
+                    <strong>4. Résiliation et expulsion :</strong><br>
+                    Si le locataire ne régularise pas la situation dans le délai imparti, les bailleurs pourront résilier le contrat de plein droit. Le locataire devra quitter les lieux dans un délai de 30 jours, faute de quoi une procédure d'expulsion sera engagée devant les autorités compétentes.
+                </div>
+
+                <div class="sub-clause">
+                    <strong>5. Recours judiciaire :</strong><br>
+                    En cas de litige relatif au non-paiement, les parties conviennent que le tribunal compétent pour statuer sera le Tribunal de Grande Instance de Dakar, et ce, conformément aux lois en vigueur au Sénégal.
+                </div>
+
+                <div class="sub-clause">
+                    <strong>6. Frais engagés :</strong><br>
+                    Tous les frais liés aux procédures de recouvrement, de résiliation ou d'expulsion (y compris les frais judiciaires) seront à la charge du locataire.
+                </div>
+
+                <!-- Article 7 -->
+                <div class="article-title">ARTICLE 7 : CLAUSES REVENTE PAS DE PORTE</div>
+                <p>
+                    En cas de désir du preneur de céder ou de revendre le droit d’entrée celui-ci s’engage à notifier le bailleur par écrit au moins un mois avant la réalisation de la transaction, cette notification devra inclure les coordonnées du futur acquéreur et une copie de l’accord ou du projet de cession. En cas de revente du droit de porte le preneur devra aussi s’acquitter des frais de mutation de 5% du prix de revente (à négocier).
+                </p>
+
+                <!-- Article 8 -->
+                <div class="article-title">ARTICLE 8 : MODIFICATION</div>
+                <p>
+                    Aucune modification ne pourra être apportée à ce présent contrat sans l'accord des deux parties. L’enregistrement du bail ; la TVA ainsi que le TOM seront à la charge du preneur.
+                </p>
+
+                <p style="margin-top: 15px; font-weight: 500;">
+                    Le locataire certifie avoir lu et accepter les conditions générales de ce présent contrat.
+                </p>
+
+                <div style="margin-top: 25px; text-align: center; font-weight: 700; letter-spacing: 0.5px;">
+                    FAIT EN DEUX EXEMPLAIRES ORIGINAUX LU ET APPROUVE
+                </div>
+
+                <div style="margin-top: 20px; text-align: right; font-weight: 700; text-decoration: underline;">
+                    Fait à Dakar, le {% if lease.start_date %}{{ lease.start_date|date:"d/m/Y" }}{% else %}{{ today|date:"d/m/Y" }}{% endif %}
+                </div>
+
+                <!-- Signatures -->
+                <div class="signatures-grid">
+                    <div class="signature-col">
+                        <h4>LE DIRECTEUR</h4>
+                    </div>
+                    <div class="signature-col" style="text-align: right;">
+                        <h4 style="display: inline-block;">LE PRENEUR</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="page-number">3</div>
         </div>
 
-        <div class="articles">
-            <div class="article">
-                <h4>Article 1 : Objet et désignation des locaux</h4>
-                Le Bailleur donne en location commerciale au Preneur qui l'accepte, la boutique désignée sous le numéro <strong>{{ lease.shop.shop_number }}</strong> nommée "<strong>{{ lease.shop.name }}</strong>", située au niveau <strong>{{ lease.shop.floor.name }}</strong> d'une surface commerciale de <strong>{{ lease.shop.surface }} m²</strong>. Les locaux devront être affectés exclusivement à l'activité de type <strong>{{ lease.shop.get_category_display }}</strong>.
-            </div>
-
-            <div class="article">
-                <h4>Article 2 : Durée du bail</h4>
-                Le présent bail est consenti pour une durée déterminée commençant le <strong>{{ lease.start_date|date:"d F Y" }}</strong> et se terminant le <strong>{{ lease.end_date|date:"d F Y" }}</strong>. Au terme de cette période, le bail pourra être renouvelé par accord écrit entre les parties.
-            </div>
-
-            <div class="article">
-                <h4>Article 3 : Conditions financières</h4>
-                Le présent bail est consenti moyennant un loyer mensuel net de <strong>{{ lease.monthly_rent }} FCFA</strong> payé d'avance au plus tard le 5 de chaque mois. En garantie de la bonne exécution des obligations, le Preneur verse ce jour au Bailleur un dépôt de garantie (caution) de <strong>{{ lease.deposit }} FCFA</strong>. Ce dépôt sera restitué en fin de bail, déduction faite de toute somme due au Bailleur.
-            </div>
-
-            <div class="article">
-                <h4>Article 4 : Obligations du preneur</h4>
-                Le Preneur s'oblige à :
-                <ul>
-                    <li>Payer le loyer et les charges communes aux échéances prévues.</li>
-                    <li>Conserver les locaux en bon état d'entretien et effectuer les menues réparations quotidiennes.</li>
-                    <li>Ne faire aucune modification structurelle ou aménagement lourd sans l'accord écrit préalable du Bailleur.</li>
-                    <li>Respecter le règlement intérieur du centre commercial {{ lease.shop.mall.name }}.</li>
-                </ul>
-            </div>
-
-            <div class="article">
-                <h4>Article 5 : Résiliation</h4>
-                Le contrat sera résilié de plein droit en cas de non-paiement d'un seul terme de loyer à son échéance ou en cas d'infraction à l'une des clauses du présent contrat, un mois après une mise en demeure restée infructueuse.
-            </div>
-            
-            {% if lease.conditions %}
-            <div class="article">
-                <h4>Article 6 : Conditions particulières</h4>
-                {{ lease.conditions|linebreaks }}
-            </div>
-            {% endif %}
-        </div>
-
-        <p style="font-size: 0.85rem; margin-top: 40px; text-align: right;">Fait à Dakar, le <strong>{{ today|date:"d F Y" }}</strong> en deux exemplaires originaux.</p>
-
-        <div class="signatures-section">
-            <div class="signature-box">
-                <h5>Le Preneur</h5>
-                <p>Précéder de la mention manuscrite "Lu et approuvé"</p>
-            </div>
-            <div class="signature-box">
-                <h5>Le Bailleur</h5>
-                <p>Signature et Cachet de l'administration</p>
-            </div>
-        </div>
     </div>
 
 </body>
