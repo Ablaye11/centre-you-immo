@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Configurer le Contrat de Bail{% endblock %}
+{% block page_title %}Configurer le Contrat de Bail{% endblock %}
+
+{% block content %}
+<div class="page-header animate-in">
+    <div>
+        <a href="{% url 'tenant_detail' lease.tenant.pk %}" class="btn btn-outline btn-sm mb-2">
+            <i data-lucide="arrow-left"></i> Retour au dossier
+        </a>
+        <h2 style="margin-top: 8px;">Configurer le Contrat de Bail</h2>
+        <p>Locataire : <strong>{{ lease.tenant.full_name }}</strong> &bull; Magasin N° <strong>{{ lease.shop.shop_number }}</strong></p>
+    </div>
+</div>
+
+<div class="grid-2 animate-in" style="max-width: 900px; margin: 0 auto;">
+
+    <!-- Formulaire de configuration -->
+    <div class="card" style="grid-column: 1;">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i data-lucide="settings" style="width:18px;height:18px;margin-right:8px;vertical-align:middle;color:var(--primary-600);"></i>
+                Montants du Contrat
+            </h3>
+        </div>
+        <form method="post" id="configForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">
+                    <i data-lucide="wallet" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+                    Loyer mensuel (F CFA)
+                </label>
+                <input
+                    type="number"
+                    name="rent"
+                    id="rent"
+                    class="form-control"
+                    value="{{ default_rent }}"
+                    min="0"
+                    step="1000"
+                    required
+                    oninput="updatePreview()"
+                >
+                <small style="color: var(--text-muted); font-size: 0.8rem;">Hors charges</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i data-lucide="settings-2" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+                    Charges forfaitaires (F CFA)
+                </label>
+                <input
+                    type="number"
+                    name="charges"
+                    id="charges"
+                    class="form-control"
+                    value="{{ default_charges }}"
+                    min="0"
+                    step="1000"
+                    oninput="updatePreview()"
+                >
+                <small style="color: var(--text-muted); font-size: 0.8rem;">Gardiennage, nettoyage, toilettes</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i data-lucide="shield" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+                    Caution / Dépôt de garantie (F CFA)
+                </label>
+                <input
+                    type="number"
+                    name="deposit"
+                    id="deposit"
+                    class="form-control"
+                    value="{{ default_deposit }}"
+                    min="0"
+                    step="1000"
+                    oninput="updatePreview()"
+                >
+                <small style="color: var(--text-muted); font-size: 0.8rem;">Remboursable en fin de bail</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i data-lucide="calendar" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+                    Durée du bail (années)
+                </label>
+                <select name="duration" id="duration" class="form-control" onchange="updatePreview()">
+                    <option value="1" {% if default_duration == 1 %}selected{% endif %}>1 an</option>
+                    <option value="2" {% if default_duration == 2 %}selected{% endif %}>2 ans</option>
+                    <option value="3" {% if default_duration == 3 %}selected{% endif %}>3 ans</option>
+                    <option value="5" {% if default_duration == 5 %}selected{% endif %}>5 ans</option>
+                    <option value="7" {% if default_duration == 7 %}selected{% endif %}>7 ans</option>
+                    <option value="10" {% if default_duration == 10 %}selected{% endif %}>10 ans</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-top: var(--spacing-md); padding: 10px; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: var(--radius-md);">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.88rem; font-weight: 500; margin: 0;">
+                    <input type="checkbox" name="save_to_lease" value="1" checked style="width: 16px; height: 16px; accent-color: var(--primary-600);">
+                    <span>Enregistrer également ces montants (loyer & caution) dans le dossier du bail</span>
+                </label>
+            </div>
+
+            <div style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-sm);">
+                <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">
+                    <i data-lucide="file-text"></i>
+                    Générer le Contrat
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Aperçu en temps réel -->
+    <div class="card" style="grid-column: 2;">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i data-lucide="eye" style="width:18px;height:18px;margin-right:8px;vertical-align:middle;color:var(--primary-600);"></i>
+                Aperçu des Montants
+            </h3>
+        </div>
+
+        <!-- Infos locataire (fixes) -->
+        <div style="background: var(--bg-body); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-md); border: 1px solid var(--border-color);">
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-500), var(--primary-700)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.95rem;">
+                    {{ lease.tenant.first_name|first }}{{ lease.tenant.last_name|first }}
+                </div>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">{{ lease.tenant.full_name }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ lease.tenant.phone }}</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
+                <span class="badge badge-info">Magasin N° {{ lease.shop.shop_number }}</span>
+                {% if lease.shop.floor %}<span class="badge badge-secondary">{{ lease.shop.floor.name }}</span>{% endif %}
+                {% if lease.shop.surface %}<span class="badge badge-secondary">{{ lease.shop.surface }} m²</span>{% endif %}
+            </div>
+        </div>
+
+        <!-- Récapitulatif montants (mis à jour dynamiquement) -->
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="info-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-muted); font-size: 0.88rem;">Loyer mensuel</span>
+                <span style="font-weight: 700;" id="preview-rent">{{ default_rent|floatformat:0 }} F CFA</span>
+            </div>
+            <div class="info-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-muted); font-size: 0.88rem;">Charges forfaitaires</span>
+                <span style="font-weight: 600; color: var(--text-secondary);" id="preview-charges">{{ default_charges|floatformat:0 }} F CFA</span>
+            </div>
+            <div class="info-row" style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 2px solid var(--primary-500); background: rgba(16,185,129,0.04); padding-left: 8px; border-radius: 4px;">
+                <span style="font-weight: 700;">Total mensuel</span>
+                <span style="font-weight: 800; font-size: 1.1rem; color: var(--primary-700);" id="preview-total">— F CFA</span>
+            </div>
+            <div class="info-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                <span style="color: var(--text-muted); font-size: 0.88rem;">Caution</span>
+                <span style="font-weight: 600; color: var(--warning);" id="preview-deposit">{{ default_deposit|floatformat:0 }} F CFA</span>
+            </div>
+            <div class="info-row" style="display: flex; justify-content: space-between; padding: 10px 0;">
+                <span style="color: var(--text-muted); font-size: 0.88rem;">Durée</span>
+                <span style="font-weight: 600;" id="preview-duration">{{ default_duration }} ans ({{ lease.start_date|date:"d/m/Y" }} → {{ lease.end_date|date:"d/m/Y" }})</span>
+            </div>
+        </div>
+
+        <!-- Alerte si caution = 0 -->
+        <div id="deposit-warning" class="alert alert-warning" style="margin-top: var(--spacing-md); display: {% if default_deposit == 0 %}flex{% else %}none{% endif %};">
+            <i data-lucide="alert-triangle" style="width:16px;height:16px;flex-shrink:0;"></i>
+            &nbsp; La caution est à 0 F CFA. Vérifiez si c'est intentionnel.
+        </div>
+
+        <!-- Dates du bail -->
+        <div style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: var(--bg-body); border-radius: var(--radius-md); border: 1px solid var(--border-color); font-size: 0.85rem;">
+            <div style="display: flex; gap: 8px; align-items: center; color: var(--text-muted);">
+                <i data-lucide="calendar-range" style="width:14px;height:14px;"></i>
+                <strong>Période du bail :</strong>
+                {{ lease.start_date|date:"d F Y" }} → {{ lease.end_date|date:"d F Y" }}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function formatNumber(n) {
+    return new Intl.NumberFormat('fr-FR').format(n).replace(/\u202f/g, '.');
+}
+
+function updatePreview() {
+    const rent     = parseInt(document.getElementById('rent').value)     || 0;
+    const charges  = parseInt(document.getElementById('charges').value)  || 0;
+    const deposit  = parseInt(document.getElementById('deposit').value)  || 0;
+    const duration = parseInt(document.getElementById('duration').value) || 3;
+
+    const total = rent + charges;
+
+    document.getElementById('preview-rent').textContent    = formatNumber(rent)    + ' F CFA';
+    document.getElementById('preview-charges').textContent = formatNumber(charges)  + ' F CFA';
+    document.getElementById('preview-total').textContent   = formatNumber(total)   + ' F CFA';
+    document.getElementById('preview-deposit').textContent = formatNumber(deposit)  + ' F CFA';
+    document.getElementById('preview-duration').textContent = duration + ' an' + (duration > 1 ? 's' : '');
+
+    const warn = document.getElementById('deposit-warning');
+    warn.style.display = deposit === 0 ? 'flex' : 'none';
+}
+
+// Initialisation
+updatePreview();
+</script>
+
+{% endblock %}
+

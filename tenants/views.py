@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db import transaction
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from .models import Tenant, Shop, Lease, Floor, Mall
 from .forms import ShopForm, TenantForm, FloorForm, MallForm
@@ -425,6 +425,52 @@ class MallDeleteView(LoginRequiredMixin, DeleteView):
         return super().form_valid(form)
 
 
+class LeasePrintConfigView(LoginRequiredMixin, View):
+    """Page de configuration des montants avant impression du contrat de bail."""
+
+    def get(self, request, pk):
+        lease = get_object_or_404(Lease, pk=pk)
+        rent = int(lease.monthly_rent)
+        deposit = int(lease.deposit)
+        default_charges = 15000 if rent >= 150000 else 10000
+
+        # Durée par défaut
+        if lease.start_date and lease.end_date:
+            duration_years = max(1, round((lease.end_date - lease.start_date).days / 365.25))
+        else:
+            duration_years = 3
+
+        return render(request, 'tenants/lease_print_config.html', {
+            'lease': lease,
+            'default_rent': rent,
+            'default_charges': default_charges,
+            'default_deposit': deposit,
+            'default_duration': duration_years,
+            'active_menu': 'tenants',
+        })
+
+    def post(self, request, pk):
+        """Redirige vers l'impression avec les montants personnalisés en paramètres GET."""
+        try:
+            rent = int(request.POST.get('rent', 0))
+            charges = int(request.POST.get('charges', 0))
+            deposit = int(request.POST.get('deposit', 0))
+            duration = int(request.POST.get('duration', 3))
+        except (ValueError, TypeError):
+            messages.error(request, "Veuillez saisir des montants valides.")
+            return redirect('lease_print_config', pk=pk)
+
+        # Optionnellement mettre à jour le bail en BDD
+        if request.POST.get('save_to_lease'):
+            lease = get_object_or_404(Lease, pk=pk)
+            lease.monthly_rent = rent
+            lease.deposit = deposit
+            lease.save(update_fields=['monthly_rent', 'deposit'])
+
+        url = f"/locataires/baux/{pk}/imprimer/?rent={rent}&charges={charges}&deposit={deposit}&duration={duration}"
+        return redirect(url)
+
+
 class LeasePrintView(LoginRequiredMixin, DetailView):
     model = Lease
     template_name = 'tenants/lease_print.html'
@@ -436,29 +482,50 @@ class LeasePrintView(LoginRequiredMixin, DetailView):
         context['active_menu'] = 'tenants'
         context['today'] = timezone.now().date()
 
-        # Montants loyer et charges
-        rent = int(lease.monthly_rent)
-        # Selon les contrats modèles YOU IMMO : 15 000 F CFA pour loyers >= 150 000, sinon 10 000 F CFA
-        charges = 15000 if rent >= 150000 else 10000
+        # Lecture des montants depuis les paramètres GET (si configuré) ou depuis la BDD
+        try:
+            rent = int(self.request.GET.get('rent') or lease.monthly_rent)
+        except (ValueError, TypeError):
+            rent = int(lease.monthly_rent)
+
+        try:
+            charges = int(self.request.GET.get('charges') or (15000 if rent >= 150000 else 10000))
+        except (ValueError, TypeError):
+            charges = 15000 if rent >= 150000 else 10000
+
+        try:
+            deposit = int(self.request.GET.get('deposit') or lease.deposit)
+        except (ValueError, TypeError):
+            deposit = int(lease.deposit)
+
+        try:
+            duration_years = int(self.request.GET.get('duration') or 3)
+        except (ValueError, TypeError):
+            if lease.start_date and lease.end_date:
+                duration_years = max(1, round((lease.end_date - lease.start_date).days / 365.25))
+            else:
+                duration_years = 3
+
         total_monthly = rent + charges
 
-        # Durée du bail
-        if lease.start_date and lease.end_date:
-            duration_years = max(1, round((lease.end_date - lease.start_date).days / 365.25))
-        else:
-            duration_years = 3
+        def fmt(n):
+            return f"{n:,}".replace(",", ".")
 
         context['rent'] = rent
-        context['rent_formatted'] = f"{rent:,}".replace(",", ".")
+        context['rent_formatted'] = fmt(rent)
         context['charges'] = charges
-        context['charges_formatted'] = f"{charges:,}".replace(",", ".")
+        context['charges_formatted'] = fmt(charges)
+        context['deposit'] = deposit
+        context['deposit_formatted'] = fmt(deposit)
         context['total_monthly'] = total_monthly
-        context['total_monthly_formatted'] = f"{total_monthly:,}".replace(",", ".")
+        context['total_monthly_formatted'] = fmt(total_monthly)
 
         context['monthly_rent_words'] = number_to_words_fr(rent)
         context['charges_words'] = number_to_words_fr(charges)
+        context['deposit_words'] = number_to_words_fr(deposit)
         context['total_monthly_words'] = number_to_words_fr(total_monthly)
         context['duration_years_str'] = f"{duration_years:02d}"
+        context['duration_years'] = duration_years
 
         return context
 
